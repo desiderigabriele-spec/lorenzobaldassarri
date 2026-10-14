@@ -3,6 +3,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { porte, piani } from '../data/sito.js';
+import { guida, giaVista, quandoVisibile } from './coach.js';
 
 gsap.registerPlugin(ScrollTrigger);
 const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -55,6 +56,7 @@ function battito(x) {
 /* Pulsante "Tieni premuto": la pressione cresce finché tieni, poi torna la calma */
 const tieni = document.querySelector('[data-tieni]');
 let tenuto = false;
+let dimostra = false; // la guida "preme" al posto tuo
 let caricoTieni = 0;
 let prossimoBattito = 0;
 function premi(e) { if (e) e.preventDefault(); tenuto = true; tieni.classList.add('premuto', 'usato'); }
@@ -71,7 +73,7 @@ function tick(ora) {
   const dt = Math.min((ora - prec) / 1000, 0.05);
   prec = ora;
   // tenere premuto fa salire la pressione in circa 2 secondi; lasciare la fa scendere
-  caricoTieni = tenuto ? Math.min(1, caricoTieni + dt * 0.55) : Math.max(0, caricoTieni - dt * 2);
+  caricoTieni = (tenuto || dimostra) ? Math.min(1, caricoTieni + dt * 0.55) : Math.max(0, caricoTieni - dt * 2);
   if (caricoTieni > 0) spinta = Math.max(spinta, caricoTieni);
   if (tieni) tieni.style.setProperty('--p', caricoTieni.toFixed(3));
   // vibrazione a ritmo di battito, dove il telefono la supporta
@@ -117,6 +119,27 @@ function tick(ora) {
     }
   }
   requestAnimationFrame(tick);
+
+/* Guida della sfera: mostra il gesto e fa reagire davvero la sfera */
+const touch = window.matchMedia('(pointer: coarse)').matches;
+function guidaMente() {
+  const passi = touch ? [
+    { bersaglio: '[data-tieni]', testo: 'Tieni premuto questo pulsante', gesto: 'tieni', durata: 2600, entra: () => { dimostra = true; } },
+    { bersaglio: '.mente-ancora', testo: 'Guarda la sfera: sotto pressione i quattro piani si separano', durata: 2600 },
+    { bersaglio: '[data-tieni]', testo: 'Ora lascia: tornano insieme', gesto: 'tocca', durata: 2600, entra: () => { dimostra = false; } },
+    { bersaglio: '.mente-ancora', testo: 'Tocca a te!', durata: 1600 },
+  ] : [
+    { bersaglio: '.mente-ancora', testo: 'Muovi il cursore veloce sopra la sfera', gesto: 'muovi', durata: 3000, entra: () => { dimostra = true; } },
+    { bersaglio: '.mente-ancora', testo: 'Visto? Sotto pressione i quattro piani si separano', durata: 2400 },
+    { bersaglio: '.mente-ancora', testo: 'Ora fermati: tornano insieme', durata: 2800, entra: () => { dimostra = false; } },
+    { bersaglio: '.mente-ancora', testo: 'Prova tu: muovi il mouse', durata: 1600 },
+  ];
+  guida({ chiave: 'mente', passi, onFine: () => { dimostra = false; } });
+}
+if (mente) {
+  if (!giaVista('mente') && !ridotto) quandoVisibile(mente, () => setTimeout(guidaMente, 700));
+  mente.querySelector('[data-guida="mente"]')?.addEventListener('click', (e) => { e.stopPropagation(); setTimeout(guidaMente, 50); });
+}
 }
 requestAnimationFrame(tick);
 
@@ -242,9 +265,10 @@ let scelto = 'pensiero';
 const TRASCINA = 0.55;
 // verde → ambra → rosso in base alla distanza dal centro
 function coloreStato(d) {
-  const t = Math.min(1, d);
-  const h = 168 - 168 * Math.min(1, t * 1.25);
-  return `hsl(${Math.max(0, h).toFixed(0)} 88% ${t < 0.5 ? 55 : 64}%)`;
+  // stesse soglie delle scritte: verde in equilibrio, poi ambra, poi rosso
+  if (d < 0.18) return 'hsl(168 78% 52%)';
+  const t = Math.min(1, (d - 0.18) / 0.42);
+  return `hsl(${(44 - 44 * t).toFixed(0)} 95% ${(60 + 4 * t).toFixed(0)}%)`;
 }
 function aggiornaCruscotto() {
   const valori = {};
@@ -275,9 +299,10 @@ function aggiornaCruscotto() {
   out.style.setProperty('--stato-sel', coloreStato(dSel));
   slider.setAttribute('aria-valuetext', `${piani.find((x) => x.id === scelto).nome}: ${statoSel}`);
   segnali.cruscotto = clamp(somma / 4);
-  dettaglio.classList.toggle('equilibrio', nomiFuori.length === 0 && somma / 4 < 0.15);
+  const tuttiVerdi = Object.values(valori).every((v) => Math.abs(v - 50) / 50 < 0.18);
+  dettaglio.classList.toggle('equilibrio', tuttiVerdi);
   dettaglio.classList.toggle('allarme', nomiFuori.length > 1);
-  if (nomiFuori.length === 0) dettaglio.textContent = somma / 4 < 0.15 ? 'Tutto verde: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
+  if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto verde: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
   else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} fuori asse: guarda, si spostano anche gli altri.`;
   else dettaglio.textContent = 'Un piano fuori asse trascina gli altri. Per questo li alleno insieme.';
 }
@@ -301,21 +326,36 @@ document.querySelector('[data-equilibrio]')?.addEventListener('click', () => {
     aggiornaCruscotto();
   } });
 });
+let demoTween = null;
+function animaPiano(id, a, durata = 1.8) {
+  demoTween?.kill();
+  const o = { v: base[id] };
+  demoTween = gsap.to(o, { v: a, duration: ridotto ? 0 : durata, ease: 'power2.inOut', onUpdate: () => {
+    base[id] = o.v;
+    if (scelto === id) slider.value = String(Math.round(o.v));
+    aggiornaCruscotto();
+  } });
+}
+function guidaCruscotto() {
+  for (const id of Object.keys(base)) base[id] = 50;
+  scegli('pensiero');
+  guida({
+    chiave: 'cruscotto',
+    passi: [
+      { bersaglio: '[data-strumento="emozione"]', testo: 'Tocca un piano, per esempio Emozione', gesto: 'tocca', durata: 2400, entra: () => setTimeout(() => scegli('emozione'), 900) },
+      { bersaglio: '.pressione input', testo: 'Spostalo: troppo in là diventa rosso', gesto: 'trascina', durata: 2800, entra: () => animaPiano('emozione', 94, 2) },
+      { bersaglio: '.cruscotto-grid', testo: 'Guarda: anche gli altri piani cambiano colore', durata: 2800 },
+      { bersaglio: '[data-equilibrio]', testo: 'Riportalo al centro: tutto torna verde', gesto: 'tocca', durata: 2800, entra: () => animaPiano('emozione', 50, 1.6) },
+      { bersaglio: '.cruscotto-grid', testo: 'Tocca a te!', durata: 1600 },
+    ],
+    onFine: () => { demoTween?.kill(); },
+  });
+}
 if (slider) {
   scegli('pensiero');
-  if (!ridotto) {
-    // dimostrazione unica: il pensiero va fuori asse e trascina gli altri, poi torna al centro
-    ScrollTrigger.create({
-      trigger: '.cruscotto-grid', start: 'top 70%', once: true,
-      onEnter: () => {
-        const o = { v: 50 };
-        const passo = () => { if (!toccato) { base.pensiero = o.v; slider.value = String(Math.round(o.v)); aggiornaCruscotto(); } };
-        gsap.timeline()
-          .to(o, { v: 92, duration: 2.2, ease: 'power2.inOut', onUpdate: passo })
-          .to(o, { v: 50, duration: 2.2, ease: 'power2.inOut', delay: 1.2, onUpdate: passo });
-      },
-    });
-  }
+  const sez = document.getElementById('cruscotto');
+  if (!giaVista('cruscotto') && !ridotto) quandoVisibile(sez, () => setTimeout(guidaCruscotto, 600), 0.5);
+  sez?.querySelector('[data-guida="cruscotto"]')?.addEventListener('click', (e) => { e.stopPropagation(); setTimeout(guidaCruscotto, 50); });
 }
 
 /* ======================================================================

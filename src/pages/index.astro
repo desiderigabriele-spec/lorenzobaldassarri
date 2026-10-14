@@ -147,6 +147,7 @@ const media = [
         <p class="eyebrow" data-reveal>Prova adesso</p>
         <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
         <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
+        <button type="button" class="come-si-usa" data-guida="mente"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
       <div class="mente-stage">
         <div class="mente-ancora" data-ancora>
@@ -251,6 +252,7 @@ const media = [
         <p class="eyebrow" data-reveal>Il metodo · quattro piani</p>
         <h2 id="cruscotto-titolo" data-reveal>Non basta pensare positivo.</h2>
         <p class="lead" data-reveal>Tocca un piano e spostalo. Al centro è verde: equilibrio. Se lo porti troppo in là va in rosso, e trascina con sé anche gli altri.</p>
+        <button type="button" class="come-si-usa" data-guida="cruscotto"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
 
       <div class="cruscotto-grid">
@@ -880,7 +882,7 @@ const media = [
     .hero { min-height: 100svh; padding-top: 4.6rem; padding-bottom: 1rem; display: grid; align-content: center; }
     .hero-grid { gap: 1.4rem; }
     .hero-testo { gap: .95rem; }
-    .hero-foto { width: min(40vw, 19svh); padding: .3rem; }
+    .hero-foto { width: min(76vw, 44svh); padding: .3rem; }
     .hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); max-width: none; }
     .hero .lead { font-size: 1rem; }
     .pill { font-size: .78rem; padding: .32rem .65rem; }
@@ -909,7 +911,7 @@ const media = [
     .mente-testo .lead { font-size: 1rem; }
     .mente-legenda { display: none; }
     .mente-stage { gap: 1.25rem; }
-    .mente-ancora { width: min(68vw, 26svh); }
+    .mente-ancora { width: min(88vw, 40svh); }
     .angolo { font-size: .74rem; padding: .22rem .55rem; }
     .a1, .a2 { top: -2%; } .a3, .a4 { bottom: -2%; }
     .a1, .a3 { left: -9%; } .a2, .a4 { right: -9%; }
@@ -936,17 +938,18 @@ const media = [
     .cruscotto { min-height: 100svh; display: grid; align-content: center; }
     .cruscotto-layout { gap: .6rem; }
     .cruscotto-head { margin-bottom: .25rem; }
-    .cruscotto-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: 'ancora ancora ancora ancora' 's1 s2 s3 s4'; gap: .4rem; }
-    .cruscotto-ancora { width: min(40vw, 16svh); }
-    .strumento { padding: .55rem .25rem .45rem; gap: .15rem; border-radius: 14px; }
-    .strumento-nome { font-size: .72rem; }
+    .cruscotto-grid { grid-template-columns: 1fr 1fr; grid-template-areas: 's1 s2' 's3 s4'; gap: .7rem; }
+    .cruscotto-ancora { display: none; }
+    
+    .strumento { padding: .9rem .6rem .75rem; gap: .3rem; border-radius: 16px; }
+    .strumento svg { max-width: 110px !important; }
+    .strumento-nome { font-size: 1rem; }
     .strumento-nome::before { width: 6px; height: 6px; margin-right: .25rem; }
     .strumento-val { font-size: .66rem; }
     .pressione { margin-top: .25rem; gap: .25rem .75rem; }
     .pressione input { height: 2.25rem; }
     .cruscotto-dettaglio { margin-top: 0; min-height: 2.6em; font-size: .85rem; line-height: 1.35; }
     .cruscotto .lead { font-size: .95rem; }
-    .strumento svg { max-width: 64px; }
     .cruscotto-chiusa { margin-top: 0; gap: .4rem; }
     .cruscotto-chiusa .h3 { font-size: 1.1rem; }
 
@@ -997,7 +1000,7 @@ const media = [
   .pressione-lab { grid-column: 1 / -1; }
   .pressione-out { min-width: 0; }
   .strumento-val { font-family: var(--f-text) !important; letter-spacing: 0 !important; font-size: .78rem !important; line-height: 1.2; text-align: center; }
-  @media (max-width: 820px) { .pressione { grid-template-columns: minmax(0, 1fr) 8.5rem; } .strumento-val { font-size: .68rem !important; } }
+  @media (max-width: 820px) { .pressione { grid-template-columns: minmax(0, 1fr) 8.5rem; } .strumento-val { font-size: .85rem !important; } }
   .pressione input::-webkit-slider-runnable-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #FF5A5F, #FFB547 28%, #2EE6C0 50%, #FFB547 72%, #FF5A5F); }
   .pressione input::-moz-range-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, #FF5A5F, #FFB547 28%, #2EE6C0 50%, #FFB547 72%, #FF5A5F); }
   .pressione input::-webkit-slider-thumb { margin-top: -9px; }
@@ -1006,4 +1009,25 @@ const media = [
   .pressione-reset:hover { color: var(--testo-scuro); }
   .cruscotto-dettaglio.equilibrio { color: var(--telemetria); }
   .cruscotto-dettaglio.allarme { color: #FF8A8E; }
+  /* istruzioni nel testo: le parole "fanno" quello che dicono */
+  .mente .evidenziatore.hint-fine { display: inline-block; }
+  .mente .evidenziatore.hint-touch { display: none; }
+  @media (pointer: coarse) { .mente .evidenziatore.hint-fine { display: none; } .mente .evidenziatore.hint-touch { display: inline-block; } }
+  .mente.vista:not(.provato) .hint-fine.evidenziatore:not(.e2) { animation: parola-veloce 3.6s var(--respiro) 1.4s infinite; }
+  .mente.vista:not(.provato) .hint-fine.e2 { animation: parola-ferma 3.6s var(--respiro) 1.4s infinite; }
+  .mente.vista:not(.provato) .hint-touch.evidenziatore:not(.e2) { animation: parola-preme 3.2s var(--respiro) 1.4s infinite; }
+  .mente.vista:not(.provato) .hint-touch.e2 { animation: parola-lascia 3.2s var(--respiro) 1.4s infinite; }
+  @keyframes parola-veloce {
+    0%, 36%, 100% { transform: none; text-shadow: none; }
+    4% { transform: translateX(-5px) skewX(-8deg); text-shadow: 6px 0 0 rgba(36, 67, 214, .25), 12px 0 0 rgba(36, 67, 214, .12); }
+    8% { transform: translateX(5px) skewX(8deg); text-shadow: -6px 0 0 rgba(36, 67, 214, .25), -12px 0 0 rgba(36, 67, 214, .12); }
+    12% { transform: translateX(-4px) skewX(-6deg); } 16% { transform: translateX(4px) skewX(6deg); }
+    20% { transform: translateX(-2px); } 24% { transform: none; }
+  }
+  @keyframes parola-ferma { 0%, 40%, 100% { transform: none; color: inherit; } 48%, 70% { transform: scale(1.12); color: var(--terracotta); } }
+  @keyframes parola-preme { 0%, 100% { transform: none; color: inherit; } 12%, 45% { transform: scale(.92); color: var(--terracotta); } }
+  @keyframes parola-lascia { 0%, 50%, 100% { transform: none; } 58% { transform: translateY(-4px) scale(1.08); } 66% { transform: none; } }
+  .mente-testo .come-si-usa { margin-top: .2rem; }
+  .cruscotto-head .come-si-usa { margin-top: .4rem; }
+  @media (prefers-reduced-motion: reduce) { .mente .evidenziatore { animation: none !important; } }
 </style>
