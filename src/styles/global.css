@@ -240,8 +240,11 @@ p { text-wrap: pretty; }
 main { overflow-x: clip; }
 
 /* ---------- Stacco tra sezioni: ogni sezione è una scheda che sale sulla precedente ---------- */
+main > section.sezione { --raggio: clamp(22px, 3.4vw, 44px); }
+/* la scheda successiva copre il fondo della precedente: lo spazio si compensa, così nulla resta appiccicato */
+main > section.sezione:not(.pista):not(:last-of-type) { padding-bottom: calc(var(--sezione) + var(--raggio)); }
+main > section.sezione:not(:first-of-type):not(.pista) { padding-top: calc(var(--sezione) + var(--raggio) * .7); }
 main > section.sezione:not(:first-of-type):not(.pista) {
-  --raggio: clamp(22px, 3.4vw, 44px);
   margin-top: calc(-1 * var(--raggio));
   border-radius: var(--raggio) var(--raggio) 0 0;
   box-shadow: 0 -22px 44px -30px rgba(11, 18, 48, .35);
@@ -447,7 +450,10 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
 
 /* ---------- PC: titoli e spazi in proporzione all'altezza dello schermo ---------- */
 @media (min-width: 1024px) {
-  :root { --sezione: clamp(3rem, 8vh, 6.5rem); }
+  :root { --sezione: clamp(2.75rem, 7vh, 6rem); }
+}
+@media (min-width: 1024px) and (max-height: 960px) {
+  :root { --sezione: clamp(2.25rem, 5.6vh, 6rem); }
   h1, .h1 { font-size: min(clamp(2.6rem, 1.4rem + 6vw, 6.2rem), 10vh); }
   h2, .h2 { font-size: min(clamp(2rem, 1.2rem + 3.6vw, 4.2rem), 6.6vh); }
   .lead { font-size: min(clamp(1.1rem, 1rem + .45vw, 1.35rem), 2.7vh); }

@@ -136,6 +136,9 @@ const media = [
       <div class="hero-foto" data-reveal style="--d:.12s">
         <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
         <FotoGuida tipo="ritratto" src={contatti.foto} alt="Il Dott. Lorenzo Baldassarri nel suo studio di Montecatini Terme" classe="foto-hero" fuoco="50% 22%" eager guida={['Verticale 4:5, mezzo busto', 'Sguardo verso sinistra (verso il titolo)', 'Luce laterale morbida, sfondo neutro']} />
+        <span class="badge badge-1"><span class="mono">dal 2011</span> Psicologo · Psicoterapeuta</span>
+        <span class="badge badge-2"><span class="mono">Creatore</span> Psicologia del Potenziamento®</span>
+        <span class="badge badge-3"><span class="mono">2013–16</span> Formula Medicine</span>
       </div>
     </div>
   </section>
@@ -649,7 +652,7 @@ const media = [
     .cruscotto-dettaglio { grid-area: dettaglio; text-align: left !important; margin: 0 !important; }
     .cruscotto-chiusa { grid-area: chiusa; margin-top: .5rem; justify-items: start; }
     .cruscotto-chiusa .h3 { text-align: left !important; }
-    .cruscotto-ancora { width: min(100%, 40vh) !important; justify-self: center; }
+    .cruscotto-ancora { width: min(100%, 34vh) !important; justify-self: center; }
     .strumento { padding: .9rem .75rem .75rem !important; }
     .strumento svg { max-width: min(150px, 15vh) !important; }
   }
@@ -802,7 +805,7 @@ const media = [
     .piani-pill { margin-top: -.2rem; }
 
     .mente { min-height: 100svh; display: grid; align-content: center; }
-    .mente-ancora { width: min(520px, 50vh); }
+    .mente-ancora { width: min(520px, 45vh); }
     .mente-legenda { gap: clamp(.6rem, 2vh, 1.4rem); }
     .legenda { gap: 0; }
     .legenda li { padding: clamp(.35rem, 1.1vh, .7rem) 0; }
@@ -1030,4 +1033,29 @@ const media = [
   .mente-testo .come-si-usa { margin-top: .2rem; }
   .cruscotto-head .come-si-usa { margin-top: .4rem; }
   @media (prefers-reduced-motion: reduce) { .mente .evidenziatore { animation: none !important; } }
+  /* etichette sulla foto */
+  .badge { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .95rem; border-radius: 999px; background: color-mix(in srgb, #FFFFFF 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 14px 32px -16px rgba(11, 18, 48, .45); font-family: var(--f-display); font-weight: 600; font-size: .86rem; color: var(--inchiostro); white-space: nowrap; animation: galleggia 7s var(--respiro) infinite alternate; }
+  .badge .mono { font-size: .68rem; letter-spacing: .06em; color: var(--terracotta); font-weight: 600; text-transform: uppercase; }
+  .badge-1 { left: -10%; top: 14%; }
+  .badge-2 { right: -14%; top: 48%; animation-delay: -2.5s; }
+  .badge-3 { left: -8%; bottom: 12%; animation-delay: -5s; }
+  @keyframes galleggia { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+  /* la scheda "Creatore della…" è già sulla foto: sotto il titolo resta MindUP */
+  :global(.hero-cred li:last-child) { display: none; }
+  :global(.hero-cred) { grid-template-columns: auto !important; }
+  @media (max-width: 860px) {
+    .badge { font-size: .7rem; padding: .36rem .65rem; gap: .35rem; }
+    .badge .mono { font-size: .56rem; }
+    .badge-1 { left: -6%; top: 9%; } .badge-2 { right: -7%; top: 50%; } .badge-3 { left: -5%; bottom: 9%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .badge { animation: none; } }
+  /* PC con schermo basso (es. 1366×768): tutto entra comunque */
+  @media (min-width: 1024px) and (max-height: 960px) {
+    .mente-ancora { width: min(520px, 40vh); }
+    .legenda li { padding: .3rem 0; }
+    .mente-legenda { gap: .6rem; }
+    .cruscotto-ancora { width: min(100%, 30vh) !important; }
+    .strumento svg { max-width: min(150px, 12vh) !important; }
+    .cruscotto-layout { row-gap: .5rem !important; }
+  }
 </style>
