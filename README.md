@@ -8,6 +8,7 @@
 |---|---|
 | [`docs/01-dossier-lorenzo-baldassarri.md`](docs/01-dossier-lorenzo-baldassarri.md) | Tutte le informazioni raccolte su Lorenzo, con fonti, date e livello di affidabilità (🟢🟡🔴) e checklist di verifica |
 | [`docs/02-proposta-sito-web.md`](docs/02-proposta-sito-web.md) | Strategia e progetto del sito: posizionamento, architettura, Home sezione per sezione, identità visiva, SEO, conversione, stack tecnico, compliance, roadmap, decisioni aperte |
+| [`docs/03-prompt-sito.md`](docs/03-prompt-sito.md) | Prompt maestro pronto da copiare per generare o commissionare il sito: concetto, colori, font, movimento, 6 interazioni firma, copy, leve psicologiche etiche, tecnologia, criteri di accettazione |
 | [`docs/fonti/01-materiale-fornito-dall-utente.md`](docs/fonti/01-materiale-fornito-dall-utente.md) | Bio "Iscrizione Albo" e Esperienza/Formazione LinkedIn, in testo integrale (fonte primaria) |
 
 ## In sintesi
