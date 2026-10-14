@@ -10,14 +10,18 @@ interface Props {
   guida?: string[];
   classe?: string;
   eager?: boolean;
+  fuoco?: string;
 }
-const { tipo, src = null, alt = '', titolo = 'Foto da scattare', guida = [], classe = '', eager = false } = Astro.props;
+const { tipo, src = null, alt = '', titolo = 'Foto da scattare', guida = [], classe = '', eager = false, fuoco = '50% 35%' } = Astro.props;
 const verticale = tipo === 'ritratto' || tipo === 'studio';
 const id = `fg-${tipo}`;
 ---
 <figure class={`foto-guida ${verticale ? 'v' : 'h'} ${classe}`}>
   {src ? (
-    <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    <picture>
+      <source srcset={src.replace(/\.jpe?g$/, '.webp')} type="image/webp" />
+      <img src={src} alt={alt} width="512" height="512" style={`object-position:${fuoco}`} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    </picture>
   ) : (
     <>
       <svg class="scena" viewBox={verticale ? '0 0 400 500' : '0 0 600 400'} preserveAspectRatio="xMidYMid slice" aria-hidden="true">

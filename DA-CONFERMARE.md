@@ -18,7 +18,7 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Nessun cliente è nominato: decidere se e dove, solo con liberatoria scritta
 
 ## Materiali da fornire
-- [ ] Ritratto professionale: verticale 4:5, almeno 1200×1500 px, sguardo verso sinistra (verso il titolo). Metterlo in `public/img/` e indicarne il percorso in `src/data/sito.js` → `contatti.foto`. Compare nell'hero e in Chi sono
+- [ ] Ritratto: in uso una foto provvisoria in studio (512×512 px, `public/img/lorenzo-studio.jpg`). Serve l'originale ad alta risoluzione (almeno 1600 px sul lato corto) e il consenso alla pubblicazione. Indicazioni per altri scatti: verticale 4:5, almeno 1200×1500 px, sguardo verso sinistra (verso il titolo). Metterlo in `public/img/` e indicarne il percorso in `src/data/sito.js` → `contatti.foto`. Compare nell'hero e in Chi sono
 - [ ] Foto di campo/pista/aula con liberatorie
 - [ ] Case study anonimi autorizzati (la sezione "Storie senza nomi" è stata omessa)
 

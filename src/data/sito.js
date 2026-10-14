@@ -7,7 +7,7 @@ export const contatti = {
   piva: '[da inserire]',
   // Ritratto: mettere il file in public/img/ e scrivere qui il percorso, es. '/img/lorenzo.jpg'
   // (verticale 4:5, almeno 1200×1500 px, sguardo rivolto verso sinistra, cioè verso il titolo)
-  foto: null,
+  foto: '/img/lorenzo-studio.jpg', // provvisoria 512×512: serve l'originale ad alta risoluzione
 };
 
 // Le cinque "porte": una per pubblico, una sola azione principale ciascuna.
