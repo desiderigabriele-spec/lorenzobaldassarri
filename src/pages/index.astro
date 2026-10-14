@@ -1088,9 +1088,10 @@ const media = [
   /* etichette sulla foto */
   .badge { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .95rem; border-radius: 999px; background: color-mix(in srgb, #FFFFFF 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 14px 32px -16px rgba(11, 18, 48, .45); font-family: var(--f-display); font-weight: 600; font-size: .86rem; color: var(--inchiostro); white-space: nowrap; animation: galleggia 7s var(--respiro) infinite alternate; }
   .badge .mono { font-size: .68rem; letter-spacing: .06em; color: var(--terracotta); font-weight: 600; text-transform: uppercase; }
-  .badge-1 { left: -10%; top: 14%; }
-  .badge-2 { right: -14%; top: 48%; animation-delay: -2.5s; }
-  .badge-3 { left: -8%; bottom: 12%; animation-delay: -5s; }
+  /* il viso sta nella parte alta della foto: le etichette stanno sotto, sul busto */
+  .badge-1 { left: -16%; top: 50%; }
+  .badge-2 { right: -14%; top: 66%; animation-delay: -2.5s; }
+  .badge-3 { left: -10%; bottom: 6%; animation-delay: -5s; }
   @keyframes galleggia { from { transform: translateY(0); } to { transform: translateY(-8px); } }
   /* la scheda "Creatore della…" è già sulla foto: sotto il titolo resta MindUP */
   :global(.hero-cred li:last-child) { display: none; }
@@ -1098,7 +1099,7 @@ const media = [
   @media (max-width: 860px) {
     .badge { font-size: .7rem; padding: .36rem .65rem; gap: .35rem; }
     .badge .mono { font-size: .56rem; }
-    .badge-1 { left: -6%; top: 9%; } .badge-2 { right: -7%; top: 50%; } .badge-3 { left: -5%; bottom: 9%; }
+    .badge-1 { left: -5%; top: 50%; } .badge-2 { right: -6%; top: 65%; } .badge-3 { left: -4%; bottom: 5%; }
   }
   @media (prefers-reduced-motion: reduce) { .badge { animation: none; } }
   /* PC con schermo basso (es. 1366×768): tutto entra comunque */
