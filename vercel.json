@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/", "has": [{ "type": "query", "key": "page_id", "value": "161" }], "destination": "/chi-sono", "permanent": true },
+    { "source": "/", "has": [{ "type": "query", "key": "page_id", "value": "335" }], "destination": "/metodo", "permanent": true },
+    { "source": "/psicologia-del-potenziamento", "destination": "/metodo", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+      { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+    ] }
+  ]
+}

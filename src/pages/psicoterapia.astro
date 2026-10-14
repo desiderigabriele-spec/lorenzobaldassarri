@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import { contatti } from '../data/sito.js';
+
+// Pagina clinica: solo "Carta". Nessun linguaggio da prestazione, ritmo lento.
+const quando = [
+  'Ansia che anticipa ogni impegno',
+  'Stress che non si spegne a fine giornata',
+  'Tensione nel corpo, sonno disturbato',
+  'Un momento difficile da attraversare',
+];
+const passi = [
+  { t: 'Il primo incontro', d: 'Mi racconti cosa ti porta qui. Senza fretta, senza giudizio.' },
+  { t: 'Un percorso chiaro', d: 'Insieme definiamo obiettivi, tempi e frequenza degli incontri.' },
+  { t: 'Mente e corpo', d: 'L’approccio funzionale lavora su pensieri, emozioni, corpo e respiro.' },
+];
+---
+<Base title="Psicologo e psicoterapeuta a Montecatini Terme — Lorenzo Baldassarri" description="Psicoterapia ad indirizzo funzionale per ansia e stress cronico. Studio a Montecatini Terme e colloqui online. Dott. Lorenzo Baldassarri, psicologo-psicoterapeuta." path="/psicoterapia">
+  <section class="sezione page-hero" data-theme="carta">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Psicoterapia · Montecatini Terme</p>
+      <h1 data-reveal style="--d:.08s">Un passo alla volta.</h1>
+      <p class="lead" data-reveal style="--d:.16s">Quando ansia e stress pesano ogni giorno, si può tornare a respirare. Ti accompagno con calma e metodo.</p>
+      <div class="azioni" data-reveal style="--d:.24s">
+        <a class="btn btn-primario" href="/contatti?per=psicoterapia">Prenota una prima visita</a>
+      </div>
+      <div class="onda" aria-hidden="true">
+        <svg viewBox="0 0 1000 80" preserveAspectRatio="none"><path d="M0 40 C 125 10, 250 70, 375 40 S 625 10, 750 40 S 925 60, 1000 40" /></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme="carta">
+    <div class="wrap duo">
+      <div>
+        <p class="eyebrow" data-reveal>Quando può servire</p>
+        <h2 data-reveal>Non serve un'emergenza per chiedere aiuto.</h2>
+      </div>
+      <ul class="lista" role="list">
+        {quando.map((q, i) => <li data-reveal style={`--d:${i * 0.06}s`}>{q}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme="carta">
+    <div class="wrap">
+      <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Come lavoro</p>
+        <h2 data-reveal>Con calma, e con metodo.</h2>
+      </div>
+      <ol class="griglia-3" role="list">
+        {passi.map((p, i) => (
+          <li class="scheda passo" data-reveal style={`--d:${i * 0.07}s`}>
+            <span class="mono passo-n">0{i + 1}</span>
+            <h3>{p.t}</h3>
+            <p class="muted">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme="carta">
+    <div class="wrap duo">
+      <div>
+        <p class="eyebrow" data-reveal>Dove</p>
+        <h2 data-reveal>In studio o online.</h2>
+        <p class="lead" style="margin-top:1.5rem" data-reveal>{contatti.indirizzo}, {contatti.citta}.</p>
+      </div>
+      <div class="info" data-reveal>
+        <dl>
+          <div><dt class="mono">Titolo</dt><dd>Psicologo-Psicoterapeuta ad indirizzo Funzionale</dd></div>
+          <div><dt class="mono">Iscrizione</dt><dd>Ordine degli Psicologi della Toscana n. {contatti.albo}</dd></div>
+          <div><dt class="mono">In studio dal</dt><dd>2011</dd></div>
+          <div><dt class="mono">Onorari</dt><dd>Indicati al primo contatto [da confermare]</dd></div>
+        </dl>
+        <p class="avviso">In caso di emergenza chiama il 112. Il modulo di contatto non è adatto a situazioni urgenti.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione chiusa" data-theme="carta">
+    <div class="wrap">
+      <h2 data-reveal>Quando vuoi, sono qui.</h2>
+      <a class="btn btn-primario" href="/contatti?per=psicoterapia" data-reveal>Prenota una prima visita</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => window.__applicaPorta?.('psicoterapia'));
+</script>
+
+<style>
+  .page-hero h1 { max-width: 12ch; margin-top: 1.5rem; }
+  .azioni { margin-top: 2rem; }
+  .onda svg { width: 100%; height: 70px; margin-top: 3rem; overflow: visible; }
+  .onda path { fill: none; stroke: var(--terracotta); stroke-width: 1.5; vector-effect: non-scaling-stroke; animation: onda 9s ease-in-out infinite alternate; transform-origin: center; }
+  @keyframes onda { from { transform: scaleY(1); } to { transform: scaleY(.35); } }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .duo h2 { margin-top: 1rem; }
+  .lista { display: grid; border-top: 1px solid var(--line); }
+  .lista li { padding: 1.15rem 0; border-bottom: 1px solid var(--line); font-family: var(--f-display); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.015em; }
+  .passo { display: grid; gap: .75rem; }
+  .passo-n { font-size: .72rem; color: var(--fg-2); }
+  .info { display: grid; gap: 1.5rem; }
+  .info dl { display: grid; border-top: 1px solid var(--line); }
+  .info dl div { display: grid; grid-template-columns: 9rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .info dt { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); padding-top: .2rem; }
+  .info dd { margin: 0; }
+  .chiusa .wrap { display: grid; gap: 2rem; justify-items: start; }
+  @media (max-width: 820px) { .duo { grid-template-columns: 1fr; } .info dl div { grid-template-columns: 1fr; gap: .25rem; } }
+  @media (prefers-reduced-motion: reduce) { .onda path { animation: none; } }
+</style>

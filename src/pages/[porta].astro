@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
+import Battito from '../components/Battito.astro';
+import { paginePorta, piani, porte } from '../data/sito.js';
+
+export function getStaticPaths() {
+  return Object.keys(paginePorta).map((porta) => ({ params: { porta } }));
+}
+
+const { porta } = Astro.params;
+const d = paginePorta[porta];
+const tema = d.tema;
+const cta = porte.find((p) => p.id === d.id).cta;
+const nomePiano = (id) => piani.find((p) => p.id === id);
+---
+<Base title={d.title} description={d.description} path={`/${porta}`} headerOn={tema}>
+  <section class="sezione page-hero" data-theme={tema}>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+      <h1 data-reveal style="--d:.08s">{d.h1}</h1>
+      <p class="lead" data-reveal style="--d:.16s">{d.lead}</p>
+      <div class="azioni" data-reveal style="--d:.24s">
+        <a class="btn btn-primario" href={cta.href}>{cta.label}</a>
+        <a class="btn btn-secondario" href="/metodo">Il metodo</a>
+      </div>
+      <Battito tono={tema} />
+    </div>
+  </section>
+
+  <section class="sezione" data-theme={tema}>
+    <div class="wrap">
+      <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Cosa alleniamo</p>
+        <h2 data-reveal>Quattro piani, un obiettivo.</h2>
+      </div>
+      <ul class="piani-griglia" role="list">
+        {d.alleniamo.map((a, i) => (
+          <li class="scheda piano-scheda" data-reveal style={`--d:${i * 0.07}s`}>
+            <span class="mono piano-etichetta"><span class="piano-punto"></span>{nomePiano(a.piano).nome}</span>
+            <h3>{a.titolo}</h3>
+            <p class="muted">{a.testo}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme={tema}>
+    <div class="wrap duo">
+      <div>
+        <p class="eyebrow" data-reveal>Come</p>
+        <h2 data-reveal>I formati.</h2>
+        <ul class="formati" role="list">
+          {d.formati.map((f, i) => <li data-reveal style={`--d:${i * 0.06}s`}><span class="mono">0{i + 1}</span>{f}</li>)}
+        </ul>
+        <p class="avviso" data-reveal>{d.nota}</p>
+      </div>
+      <div>
+        <p class="eyebrow" data-reveal>Perché fidarsi</p>
+        <h2 data-reveal>Le prove.</h2>
+        <ul class="prove" role="list">
+          {d.prove.map((p, i) => (
+            <li data-reveal style={`--d:${i * 0.06}s`}>
+              <span class="prova-dato display">{p.dato}</span>
+              <span class="muted">{p.testo}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Banda tema={tema === 'cruscotto' ? 'carta' : 'cruscotto'} />
+</Base>
+
+<script define:vars={{ id: d.id }}>
+  // Visitare una porta equivale a sceglierla: le CTA del sito si adattano
+  window.addEventListener('DOMContentLoaded', () => window.__applicaPorta?.(id));
+</script>
+
+<style>
+  .page-hero h1 { max-width: 13ch; margin-top: 1.5rem; }
+  .azioni { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .piani-griglia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .piano-scheda { display: grid; gap: .75rem; align-content: start; min-height: 13rem; }
+  .piano-etichetta { display: inline-flex; align-items: center; gap: .5rem; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-2); }
+  .piano-punto { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 7vw, 6rem); }
+  .duo h2 { margin: 1rem 0 2rem; }
+  .formati { display: grid; border-top: 1px solid var(--line); margin-bottom: 1.5rem; }
+  .formati li { display: flex; gap: 1.25rem; align-items: baseline; padding: 1.1rem 0; border-bottom: 1px solid var(--line); font-family: var(--f-display); font-weight: 600; font-size: 1.2rem; letter-spacing: -0.015em; }
+  .formati .mono { font-size: .72rem; color: var(--fg-2); font-weight: 400; }
+  .prove { display: grid; gap: 1.75rem; }
+  .prove li { display: grid; gap: .35rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .prova-dato { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.8rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: var(--accent); }
+  @media (max-width: 980px) { .piani-griglia { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 820px) { .duo { grid-template-columns: 1fr; } .piani-griglia { grid-template-columns: 1fr; } .piano-scheda { min-height: 0; } }
+</style>

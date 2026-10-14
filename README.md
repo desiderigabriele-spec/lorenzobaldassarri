@@ -1,6 +1,17 @@
 # Lorenzo Baldassarri — progetto sito web
 
-**Stato:** ricerca e progettazione (nessun codice ancora) · aggiornato il 14 ottobre 2026
+**Stato:** prima versione del sito (anteprima, contenuti da confermare) · aggiornato il 14 ottobre 2026
+
+## Avviare il sito
+
+```bash
+npm install
+npm run dev      # sviluppo su http://localhost:4321
+npm run build    # build statica in dist/
+npm run preview  # anteprima della build
+```
+
+Stack: Astro (statico) · three.js (scena 3D a particelle) · GSAP + ScrollTrigger · Lenis · font Sora/Inter/JetBrains Mono ospitati in locale. Deploy pronto per Vercel (`vercel.json`). Dati da confermare: [`DA-CONFERMARE.md`](DA-CONFERMARE.md).
 
 ## Documenti
 

@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import { porte, contatti } from '../data/sito.js';
+---
+<Base title="Contatti — Lorenzo Baldassarri, psicologo e psicoterapeuta" description="Prenota una call conoscitiva o una prima visita con il Dott. Lorenzo Baldassarri. Studio a Montecatini Terme e colloqui online." path="/contatti">
+  <section class="sezione page-hero" data-theme="carta">
+    <div class="wrap grid">
+      <div>
+        <p class="eyebrow" data-reveal>Contatti</p>
+        <h1 data-reveal style="--d:.08s">Parliamone.</h1>
+        <p class="lead" data-reveal style="--d:.16s">Scrivimi due righe. Ti rispondo entro un giorno lavorativo.</p>
+        <dl class="dati" data-reveal style="--d:.24s">
+          <div><dt class="mono">Studio</dt><dd>{contatti.indirizzo}<br />{contatti.citta}</dd></div>
+          <div><dt class="mono">Modalità</dt><dd>In studio e online</dd></div>
+        </dl>
+      </div>
+
+      <form class="modulo scheda" data-nascondi-cta novalidate data-reveal>
+        <fieldset class="chi">
+          <legend class="mono">Sono…</legend>
+          <div class="chip">
+            {porte.map((p) => (
+              <label><input type="radio" name="per" value={p.id} required /> <span>{p.sotto}</span></label>
+            ))}
+          </div>
+        </fieldset>
+        <label class="campo"><span class="mono">Nome</span><input name="nome" autocomplete="name" required /></label>
+        <label class="campo"><span class="mono">Email</span><input name="email" type="email" autocomplete="email" required /></label>
+        <label class="campo"><span class="mono">Messaggio</span><textarea name="messaggio" rows="4" placeholder="Di cosa vorresti parlare?"></textarea></label>
+        <p class="nota">Non inserire informazioni sulla tua salute: ne parleremo di persona.</p>
+        <label class="privacy"><input type="checkbox" name="privacy" required /> <span>Ho letto l'<a href="/privacy">informativa privacy</a>.</span></label>
+        <button class="btn btn-primario" type="submit">Invia</button>
+        <p class="esito" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector('.modulo');
+  const esito = form.querySelector('.esito');
+  // Preselezione dal percorso scelto (?per=… o porta salvata)
+  const per = new URLSearchParams(location.search).get('per') || (() => { try { return sessionStorage.getItem('lb-porta'); } catch { return null; } })();
+  if (per) { const r = form.querySelector(`input[value="${per}"]`); if (r) r.checked = true; }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const vuoti = [];
+    if (!form.per.value) vuoti.push('chi sei');
+    if (!form.nome.value.trim()) vuoti.push('il nome');
+    if (!form.email.validity.valid || !form.email.value) vuoti.push("un'email valida");
+    if (!form.privacy.checked) vuoti.push("la conferma dell'informativa");
+    if (vuoti.length) {
+      esito.textContent = `Manca solo ${vuoti.join(', ')}: senza, non posso risponderti.`;
+      esito.dataset.tipo = 'errore';
+      return;
+    }
+    // L'invio reale va collegato a un endpoint (vedi DA-CONFERMARE.md)
+    esito.dataset.tipo = 'info';
+    esito.textContent = 'Anteprima: l’invio non è ancora attivo. Ricevuto. Ti rispondo entro un giorno lavorativo, appena il modulo sarà collegato.';
+  });
+</script>
+
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: start; }
+  .page-hero h1 { margin-top: 1.5rem; }
+  .dati { display: grid; margin-top: 2.5rem; border-top: 1px solid var(--line); }
+  .dati div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .dati dt { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); padding-top: .2rem; }
+  .dati dd { margin: 0; }
+  .modulo { display: grid; gap: 1.1rem; }
+  .chi { border: 0; padding: 0; margin: 0; }
+  .chi legend, .campo .mono { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-2); margin-bottom: .6rem; }
+  .chip { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip label { position: relative; }
+  .chip input { position: absolute; opacity: 0; inset: 0; }
+  .chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--line); cursor: pointer; transition: all .4s var(--respiro); }
+  .chip input:checked + span { background: var(--inchiostro); color: var(--carta); border-color: var(--inchiostro); }
+  .chip input:focus-visible + span { outline: 3px solid var(--terracotta); outline-offset: 2px; }
+  .campo { display: grid; }
+  .campo input, .campo textarea { width: 100%; min-height: 48px; padding: .8rem 1rem; border-radius: 12px; border: 1px solid var(--line); background: var(--carta); transition: border-color .4s var(--respiro); }
+  .campo input:focus, .campo textarea:focus { border-color: var(--inchiostro); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 30%, transparent); }
+  .nota { font-size: .85rem; color: var(--fg-2); }
+  .privacy { display: flex; gap: .6rem; align-items: flex-start; font-size: .9rem; }
+  .privacy input { width: 20px; height: 20px; margin-top: .15rem; accent-color: var(--terracotta); }
+  .modulo .btn { justify-self: start; }
+  .esito { min-height: 1.5em; font-size: .95rem; }
+  .esito[data-tipo="errore"] { color: var(--terracotta); }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .modulo .btn { justify-self: stretch; } }
+</style>

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+# Anteprima: indicizzazione disattivata finché i contenuti non sono confermati.

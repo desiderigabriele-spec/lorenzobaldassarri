@@ -1,0 +1,12 @@
+---
+import Legale from '../components/Legale.astro';
+import { contatti } from '../data/sito.js';
+---
+<Legale title="Note legali" path="/note-legali">
+  <h2>Titolare</h2>
+  <p>Dott. Lorenzo Baldassarri · Psicologo-Psicoterapeuta<br />{contatti.indirizzo}, {contatti.citta}<br />P.IVA {contatti.piva} · PEC [da inserire]</p>
+  <h2>Iscrizione</h2>
+  <p>Ordine degli Psicologi della Toscana, n. {contatti.albo}. Titolo professionale conseguito in Italia. Norme professionali di riferimento: Codice Deontologico degli Psicologi Italiani.</p>
+  <h2>Contenuti</h2>
+  <p>I contenuti del sito hanno finalità informativa e non sostituiscono un colloquio professionale. I nomi di atleti, squadre e aziende sono citati solo con autorizzazione.</p>
+</Legale>

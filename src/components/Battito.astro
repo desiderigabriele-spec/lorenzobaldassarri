@@ -1,0 +1,16 @@
+---
+// Linea di telemetria decorativa per le pagine interne (statica, nessun JS)
+interface Props { tono?: 'carta' | 'cruscotto'; }
+const { tono = 'carta' } = Astro.props;
+---
+<svg class={`battito ${tono}`} viewBox="0 0 1000 80" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 50 L180 50 L196 44 L212 50 L250 50 L262 56 L276 10 L290 66 L304 50 L380 50 L410 40 L440 50 L620 50 L636 44 L652 50 L690 50 L702 56 L716 10 L730 66 L744 50 L820 50 L850 40 L880 50 L1000 50" pathLength="1" />
+</svg>
+<style>
+  .battito { width: 100%; height: 64px; overflow: visible; margin-top: clamp(2rem, 5vw, 3.5rem); }
+  .battito path { fill: none; stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: traccia 3.2s var(--respiro) .3s forwards; }
+  .battito.carta path { stroke: var(--inchiostro); }
+  .battito.cruscotto path { stroke: var(--telemetria); }
+  @keyframes traccia { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .battito path { animation: none; stroke-dashoffset: 0; } }
+</style>

@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+interface Props { title: string; path: string; }
+const { title, path } = Astro.props;
+---
+<Base title={`${title} — Lorenzo Baldassarri`} description={`${title} del sito del Dott. Lorenzo Baldassarri.`} path={path}>
+  <section class="sezione page-hero" data-theme="carta">
+    <div class="wrap prose">
+      <p class="eyebrow">Informazioni legali</p>
+      <h1 class="h2">{title}</h1>
+      <p class="avviso">Bozza da completare con i dati del titolare e la revisione di un consulente.</p>
+      <slot />
+    </div>
+  </section>
+</Base>
