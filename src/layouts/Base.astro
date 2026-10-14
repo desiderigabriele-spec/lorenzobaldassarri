@@ -39,10 +39,43 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Schermata d'ingresso col logo: solo alla prima pagina della visita
+      try { if (!sessionStorage.getItem('lb-intro')) document.documentElement.classList.add('intro-attiva'); } catch (e) { document.documentElement.classList.add('intro-attiva'); }
+    </script>
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
+    <div class="intro" aria-hidden="true">
+      <div class="intro-logo">
+        <span class="intro-mono" set:html={logoMono} />
+        <span class="intro-nome" set:html={logoNome} />
+        <span class="intro-ruolo">Psicologo esperto di performance</span>
+        <span class="intro-barra"><span></span></span>
+      </div>
+    </div>
+    <script is:inline>
+      (function () {
+        var html = document.documentElement;
+        if (!html.classList.contains('intro-attiva')) return;
+        var inizio = Date.now(), chiusa = false;
+        var ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var minimo = ridotto ? 300 : 1700;
+        function chiudi() {
+          if (chiusa) return; chiusa = true;
+          html.classList.add('intro-fine');
+          try { sessionStorage.setItem('lb-intro', '1'); } catch (e) {}
+          setTimeout(function () {
+            html.classList.remove('intro-attiva');
+            window.dispatchEvent(new Event('lb-intro-fine'));
+          }, ridotto ? 50 : 650);
+        }
+        function quandoPronta() { setTimeout(chiudi, Math.max(0, minimo - (Date.now() - inizio))); }
+        if (document.readyState === 'complete') quandoPronta(); else window.addEventListener('load', quandoPronta);
+        setTimeout(chiudi, 4500); // mai bloccare chi ha una connessione lenta
+      })();
+    </script>
     <a class="skip-link" href="#contenuto">Vai al contenuto</a>
 
     <header class="site-header" data-on={headerOn}>
@@ -51,7 +84,7 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
           <span class="brand-mark" aria-hidden="true" set:html={logoMono} />
           <span class="brand-testo">
             <span class="brand-nome" aria-hidden="true" set:html={logoNome} />
-            <span class="brand-ruolo">Dott. · Psicologo<span class="ruolo-lungo"> esperto di performance</span></span>
+            <span class="brand-ruolo">Psicologo<span class="ruolo-lungo"> esperto di performance</span> · Psicoterapeuta</span>
           </span>
         </a>
         <nav class="nav" aria-label="Principale">

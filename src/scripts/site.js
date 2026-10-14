@@ -80,7 +80,10 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && root.cla
 const io = new IntersectionObserver((voci) => {
   for (const v of voci) if (v.isIntersecting) { v.target.classList.add('visto'); io.unobserve(v.target); }
 }, { rootMargin: '0px 0px -8% 0px' });
-document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+const avviaComparse = () => document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+// se c'è la schermata d'ingresso, le comparse partono quando si apre la pagina
+if (document.documentElement.classList.contains('intro-attiva')) window.addEventListener('lb-intro-fine', avviaComparse, { once: true });
+else avviaComparse();
 
 /* ---------- Personalizzazione: la porta scelta adatta le CTA ---------- */
 export function applicaPorta(id) {

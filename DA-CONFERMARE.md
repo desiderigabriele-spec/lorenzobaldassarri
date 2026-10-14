@@ -18,7 +18,7 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Nessun cliente è nominato: decidere se e dove, solo con liberatoria scritta
 
 ## Materiali da fornire
-- [ ] Ritratto: in uso una foto provvisoria in studio (512×512 px, `public/img/lorenzo-studio.jpg`). Serve l'originale ad alta risoluzione (almeno 1600 px sul lato corto) e il consenso alla pubblicazione. Indicazioni per altri scatti: verticale 4:5, almeno 1200×1500 px, sguardo verso sinistra (verso il titolo). Metterlo in `public/img/` e indicarne il percorso in `src/data/sito.js` → `contatti.foto`. Compare nell'hero e in Chi sono
+- [x] Ritratto: foto in alta risoluzione ricevuta (1295×1214); ritaglio 4:5 a 960×1200 per hero e Chi sono, primo piano 256×256 per la chat. Confermare il consenso alla pubblicazione
 - [ ] Foto di campo/pista/aula con liberatorie
 - [ ] Case study anonimi autorizzati (la sezione "Storie senza nomi" è stata omessa)
 
@@ -30,6 +30,6 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Analytics senza cookie (Plausible o Umami)
 - [ ] Rimuovere `Disallow: /` da `public/robots.txt` quando i contenuti sono confermati
 - [ ] Versione inglese (/en) delle pagine chiave
-- [ ] **Logo MindUP**: ora c'è una ricostruzione in SVG (`public/img/mindup-logo-chiaro.svg` e `-scuro.svg`). Sostituirla con il file ufficiale (SVG o PNG trasparente) appena disponibile.
+- [x] **Logo MindUP**: SVG ufficiale in `public/logo/mindup-enhancement-psychology.svg`; per gli sfondi chiari c'è una variante con i grigi scuriti (`public/img/mindup-logo-chiaro.svg`).
 - [x] **"Creatore della Psicologia del Potenziamento®"**: confermato dall'articolo su *Scienza & Sport* (2021), dove Lorenzo è indicato come "ideatore del mental training 'Protocollo Funzionale per Sportivi' e della Psicologia del Potenziamento". Resta da verificare l'uso del marchio ®.
-- [ ] **Logo LB**: in uso (header, favicon, footer), vettorializzato dall'immagine ricevuta (`public/logo/`). Se il grafico ha il file vettoriale originale (SVG/AI/PDF), sostituirlo per la massima precisione.
+- [x] **Logo LB**: SVG ufficiali in `public/logo/` (simbolo e completo, bianco / blu notte / nero), usati in header, favicon, footer e schermata d'ingresso.

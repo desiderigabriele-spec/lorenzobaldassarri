@@ -10,7 +10,7 @@ export const contatti = {
   volto: '/img/lorenzo-volto.jpg',
   // Ritratto: mettere il file in public/img/ e scrivere qui il percorso, es. '/img/lorenzo.jpg'
   // (verticale 4:5, almeno 1200×1500 px, sguardo rivolto verso sinistra, cioè verso il titolo)
-  foto: '/img/lorenzo-studio.jpg', // provvisoria 512×512: serve l'originale ad alta risoluzione
+  foto: '/img/lorenzo-studio.jpg', // ritratto 4:5 (960×1200) ricavato dalla foto in alta risoluzione
 };
 
 // Come si presenta: titoli da mettere in evidenza ovunque
