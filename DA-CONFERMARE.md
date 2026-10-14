@@ -32,4 +32,4 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Versione inglese (/en) delle pagine chiave
 - [ ] **Logo MindUP**: ora c'è una ricostruzione in SVG (`public/img/mindup-logo-chiaro.svg` e `-scuro.svg`). Sostituirla con il file ufficiale (SVG o PNG trasparente) appena disponibile.
 - [x] **"Creatore della Psicologia del Potenziamento®"**: confermato dall'articolo su *Scienza & Sport* (2021), dove Lorenzo è indicato come "ideatore del mental training 'Protocollo Funzionale per Sportivi' e della Psicologia del Potenziamento". Resta da verificare l'uso del marchio ®.
-
+- [ ] **Logo LB**: in uso (header, favicon, footer), vettorializzato dall'immagine ricevuta (`public/logo/`). Se il grafico ha il file vettoriale originale (SVG/AI/PDF), sostituirlo per la massima precisione.

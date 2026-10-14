@@ -4,6 +4,9 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { contatti, porte, identita } from '../data/sito.js';
+import logoMono from '../assets/logo/lb-monogramma.svg?raw';
+import logoNome from '../assets/logo/lb-nome.svg?raw';
+import logoIntero from '../assets/logo/lb-logo.svg?raw';
 import Chat from '../components/Chat.astro';
 
 interface Props {
@@ -29,6 +32,8 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#FAF8F4" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="it_IT" />
     <meta property="og:title" content={title} />
@@ -43,10 +48,10 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     <header class="site-header" data-on={headerOn}>
       <div class="header-bar">
         <a class="brand" href="/" aria-label="Dott. Lorenzo Baldassarri, psicologo esperto di performance: home">
-          <span class="brand-mark" aria-hidden="true">LB</span>
+          <span class="brand-mark" aria-hidden="true" set:html={logoMono} />
           <span class="brand-testo">
-            <span class="brand-nome">{identita.nome}</span>
-            <span class="brand-ruolo">{identita.ruoloBreve}</span>
+            <span class="brand-nome" aria-hidden="true" set:html={logoNome} />
+            <span class="brand-ruolo">Dott. · Psicologo<span class="ruolo-lungo"> esperto di performance</span></span>
           </span>
         </a>
         <nav class="nav" aria-label="Principale">
@@ -93,6 +98,7 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
       <div class="wrap">
         <div class="footer-grid">
           <div>
+            <a class="footer-logo" href="/" aria-label="Dott. Lorenzo Baldassarri: home" set:html={logoIntero} />
             <p class="footer-claim">Sotto pressione, la mente si allena.</p>
             <a class="btn btn-primario" href="/contatti" data-cta style="margin-top:2rem;background:var(--segnale);color:var(--cruscotto)">Prenota una call</a>
           </div>

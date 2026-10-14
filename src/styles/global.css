@@ -237,12 +237,12 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
 .site-header[data-on="cruscotto"] { color: var(--testo-scuro); }
 .site-header[data-on="cruscotto"] .header-bar { background: rgba(20, 28, 66, .72); border-color: rgba(241, 238, 230, .12); }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; margin-right: auto; min-width: 0; }
-.brand-mark {
-  flex: none; width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center;
-  background: var(--terracotta); color: #fff; font-family: var(--f-display); font-weight: 800; font-size: .95rem; letter-spacing: -0.04em;
-}
-.brand-testo { display: grid; line-height: 1.1; min-width: 0; }
-.brand-nome { font-family: var(--f-display); font-weight: 700; letter-spacing: -0.02em; font-size: 1.02rem; white-space: nowrap; }
+.brand-mark { flex: none; width: 2.03rem; height: 2.6rem; display: block; color: var(--cruscotto); }
+.brand-mark svg, .brand-nome svg, .footer-logo svg { display: block; width: 100%; height: 100%; }
+.brand-testo { display: grid; gap: .2rem; line-height: 1.1; min-width: 0; }
+.site-header[data-on="cruscotto"] .brand-mark, .site-header[data-on="cruscotto"] .brand-nome { color: var(--testo-scuro); }
+.footer-logo { display: block; width: min(100%, 22rem); aspect-ratio: 4451 / 1181; color: var(--testo-scuro); margin-bottom: 1.75rem; }
+.brand-nome { display: block; height: 1.3rem; width: calc(1.3rem * 10.05); color: var(--cruscotto); }
 .brand-ruolo { font-family: var(--f-mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; white-space: nowrap; }
 .nav { display: flex; align-items: center; gap: .2rem; }
 .nav > a, .nav-apri {
@@ -251,6 +251,7 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
 }
 .nav > a:hover, .nav-apri:hover, .nav-gruppo:focus-within .nav-apri { background: rgba(36, 67, 214, .08); }
 .nav > a[aria-current="page"] { color: var(--terracotta); background: rgba(36, 67, 214, .08); }
+.site-header[data-on="cruscotto"] .nav > a[aria-current="page"] { color: var(--segnale); background: rgba(255, 181, 71, .12); }
 .site-header[data-on="cruscotto"] .nav > a:hover, .site-header[data-on="cruscotto"] .nav-apri:hover { background: rgba(255, 255, 255, .08); }
 .nav-apri span { font-size: .7em; opacity: .6; margin-left: .15rem; }
 .nav-gruppo { position: relative; }
@@ -302,7 +303,11 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
 @media (max-width: 560px) {
   .header-cta { display: none; }
   .header-bar { height: 3.6rem; }
-  .brand-mark { width: 2.5rem; height: 2.5rem; }
+  .brand-mark { width: 1.85rem; height: 2.37rem; }
+  .brand-nome { height: 1.12rem; width: calc(1.12rem * 10); }
+}
+@media (max-width: 480px) {
+  .ruolo-lungo { display: none; }
 }
 
 /* ---------- Tela 3D ---------- */
