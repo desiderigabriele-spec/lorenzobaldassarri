@@ -25,13 +25,7 @@ function misura(x, y, t) {
   ultimo = { x, y, t };
 }
 window.addEventListener('pointermove', (e) => misura(e.clientX, e.clientY, e.timeStamp), { passive: true });
-let ultimoScroll = { y: window.scrollY, t: performance.now() };
-window.addEventListener('scroll', () => {
-  const t = performance.now();
-  const v = Math.abs(window.scrollY - ultimoScroll.y) / Math.max(t - ultimoScroll.t, 1);
-  if (window.matchMedia('(pointer: coarse)').matches) spinta = Math.max(spinta, clamp(v / 4));
-  ultimoScroll = { y: window.scrollY, t };
-}, { passive: true });
+
 
 /* ======================================================================
    2 · LINEA DEL BATTITO NELL'HERO
@@ -58,9 +52,33 @@ function battito(x) {
   return g(0.18, 0.035, 0.12) - g(0.36, 0.012, 0.18) + g(0.4, 0.016, 1) - g(0.44, 0.014, 0.32) + g(0.66, 0.06, 0.22);
 }
 
+/* Pulsante "Tieni premuto": la pressione cresce finché tieni, poi torna la calma */
+const tieni = document.querySelector('[data-tieni]');
+let tenuto = false;
+let caricoTieni = 0;
+let prossimoBattito = 0;
+function premi(e) { if (e) e.preventDefault(); tenuto = true; tieni.classList.add('premuto'); }
+function lascia() { if (!tenuto) return; tenuto = false; tieni.classList.remove('premuto'); }
+if (tieni) {
+  tieni.addEventListener('pointerdown', (e) => { tieni.setPointerCapture?.(e.pointerId); premi(e); });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((t) => tieni.addEventListener(t, lascia));
+  tieni.addEventListener('contextmenu', (e) => e.preventDefault());
+  tieni.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) premi(e); });
+  tieni.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') lascia(); });
+}
+
 function tick(ora) {
   const dt = Math.min((ora - prec) / 1000, 0.05);
   prec = ora;
+  // tenere premuto fa salire la pressione in circa 2 secondi; lasciare la fa scendere
+  caricoTieni = tenuto ? Math.min(1, caricoTieni + dt * 0.55) : Math.max(0, caricoTieni - dt * 2);
+  if (caricoTieni > 0) spinta = Math.max(spinta, caricoTieni);
+  if (tieni) tieni.style.setProperty('--p', caricoTieni.toFixed(3));
+  // vibrazione a ritmo di battito, dove il telefono la supporta
+  if (tenuto && navigator.vibrate && ora > prossimoBattito) {
+    navigator.vibrate(18);
+    prossimoBattito = ora + 60000 / (60 + segnali.pressione * 95);
+  }
 
   // la spinta decade: fermarsi riporta la calma
   spinta *= Math.pow(0.04, dt);
@@ -82,7 +100,7 @@ function tick(ora) {
     }
     linea.setAttribute('d', d);
     if (bpmEl) bpmEl.textContent = String(Math.round(bpm));
-    linea.style.stroke = p > 0.45 ? 'var(--emozione)' : 'var(--fisiologia)';
+    linea.style.stroke = p > 0.45 ? 'var(--terracotta)' : 'var(--inchiostro)';
     if (barraP) barraP.style.transform = `scaleX(${Math.max(0.02, p).toFixed(3)})`;
     if (valP) valP.textContent = `${Math.round(p * 100)}%`;
 

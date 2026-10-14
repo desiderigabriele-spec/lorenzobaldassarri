@@ -144,12 +144,17 @@ const media = [
       <div class="mente-testo">
         <p class="eyebrow" data-reveal>Prova adesso</p>
         <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
-        <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine">Muovi il cursore veloce</strong><strong class="hint-touch">Trascina il dito sulla sfera</strong>: i piani si separano. Fermati: tornano insieme.</p>
+        <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine">Muovi il cursore veloce o tieni premuto il pulsante</strong><strong class="hint-touch">Tieni premuto il pulsante</strong>: i piani si separano. Lascia: tornano insieme.</p>
       </div>
       <div class="mente-stage">
         <div class="mente-ancora" data-ancora>
           {piani.map((p, i) => <span class={`angolo a${i + 1} p-${p.id}`} aria-hidden="true">{p.nome}</span>)}
         </div>
+        <button type="button" class="tieni" data-tieni aria-describedby="mente-titolo">
+          <span class="tieni-riempi" aria-hidden="true"></span>
+          <span class="tieni-testo">Tieni premuto</span>
+          <span class="tieni-sotto mono">la pressione sale finché non lasci</span>
+        </button>
         <div class="pressometro" aria-hidden="true">
           <span class="mono">Pressione</span>
           <span class="pressometro-barra"><span data-pressione-barra></span></span>
@@ -218,7 +223,7 @@ const media = [
       <ul class="numeri" role="list">
         {numeri.map((n, i) => (
           <li class="numero" data-reveal style={`--d:${i * 0.08}s`}>
-            <span class="numero-val display evidenza"><span data-conta={n.to}>{n.to}</span>{n.suffix}</span>
+            <span class="numero-val display"><span data-conta={n.to}>{n.to}</span>{n.suffix}</span>
             <span class="numero-lab">{n.label}</span>
           </li>
         ))}
@@ -458,7 +463,7 @@ const media = [
   .p-emozione { --c: var(--emozione); }
   .p-corpo { --c: var(--corpo); }
   .p-fisiologia { --c: var(--fisiologia); }
-  .evidenza { background: linear-gradient(100deg, var(--pensiero), var(--emozione) 45%, var(--corpo) 75%, var(--fisiologia)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .evidenza { color: var(--terracotta); }
 
   /* ---------- HERO ---------- */
   .hero { padding-top: clamp(6.5rem, 12vw, 8.5rem); padding-bottom: clamp(3rem, 7vw, 5rem); overflow: hidden; }
@@ -467,27 +472,27 @@ const media = [
   .hero h1 { max-width: 11ch; }
   .a-capo { display: block; }
   .piani-pill { display: flex; flex-wrap: wrap; gap: .5rem; margin: -.4rem 0 0; padding: 0; list-style: none; }
-  .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .45rem .85rem; border-radius: 999px; font-family: var(--f-display); font-weight: 600; font-size: .92rem; color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--carta)); border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); }
+  .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .45rem .85rem; border-radius: 999px; font-family: var(--f-display); font-weight: 600; font-size: .92rem; color: var(--inchiostro); background: #fff; border: 1px solid var(--linea); }
   .pill-punto { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
   .hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .25rem; }
   .fiducia { font-size: .72rem; letter-spacing: .06em; color: var(--fg-2); max-width: 46ch; }
 
   .hero-foto { position: relative; width: min(100%, 440px); justify-self: center; padding: 1.5rem; }
   .hero-foto :global(.foto-hero) { position: relative; z-index: 1; border-radius: 999px 999px 26px 26px; box-shadow: 0 40px 80px -36px rgba(11, 18, 48, .55); }
-  .aurora { position: absolute; inset: -12%; z-index: 0; filter: blur(46px); opacity: .85; }
+  .aurora { position: absolute; inset: -10%; z-index: 0; filter: blur(60px); opacity: .45; }
   .aurora span { position: absolute; width: 58%; aspect-ratio: 1; border-radius: 50%; animation: deriva 18s var(--respiro) infinite alternate; }
   .aurora .b1 { background: #7C93FF; left: 0; top: 4%; }
-  .aurora .b2 { background: #FF8A80; right: 0; top: 0; animation-delay: -4s; }
-  .aurora .b3 { background: #FFC56B; left: 6%; bottom: 0; animation-delay: -9s; }
-  .aurora .b4 { background: #4BE3C6; right: 2%; bottom: 6%; animation-delay: -13s; }
+  .aurora .b2 { background: #C9D3FF; right: 0; top: 0; animation-delay: -4s; }
+  .aurora .b3 { background: #DCE3F5; left: 6%; bottom: 0; animation-delay: -9s; }
+  .aurora .b4 { background: #A9B8F5; right: 2%; bottom: 6%; animation-delay: -13s; }
   @keyframes deriva { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(6%, -5%) scale(1.08); } 100% { transform: translate(-5%, 6%) scale(.95); } }
   .badge { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .9rem; border-radius: 999px; background: color-mix(in srgb, #FFFFFF 86%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 12px 30px -14px rgba(11, 18, 48, .4); font-family: var(--f-display); font-weight: 600; font-size: .85rem; white-space: nowrap; animation: galleggia 7s var(--respiro) infinite alternate; }
   .badge .mono { font-size: .7rem; color: var(--pensiero); font-weight: 500; }
   .badge-1 { left: -6%; top: 12%; }
   .badge-2 { right: -8%; top: 30%; animation-delay: -2s; }
-  .badge-2 .mono { color: var(--fisiologia); }
+  
   .badge-3 { left: -8%; top: 48%; animation-delay: -4s; }
-  .badge-3 .mono { color: var(--emozione); }
+  
   @keyframes galleggia { from { transform: translateY(0); } to { transform: translateY(-8px); } }
 
   @media (max-width: 860px) {
@@ -500,7 +505,7 @@ const media = [
   }
 
   /* ---------- LA SFERA ---------- */
-  .mente { background: linear-gradient(180deg, var(--carta), #F2F0FA); }
+  .mente { background: var(--carta); }
   .mente-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); grid-template-areas: 'testo stage' 'legenda stage'; gap: 1.4rem clamp(2rem, 5vw, 4rem); align-items: center; }
   .mente-testo { grid-area: testo; align-self: end; }
   .mente-stage { grid-area: stage; }
@@ -511,28 +516,34 @@ const media = [
   .hint-touch { display: none; }
   @media (pointer: coarse) { .hint-fine { display: none; } .hint-touch { display: inline; } }
   .legenda { display: grid; gap: .65rem; margin: 0; padding: 0; list-style: none; }
-  .legenda li { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: baseline; padding: .7rem .9rem; border-radius: 14px; background: color-mix(in srgb, var(--c) 7%, #FFFFFF); border-left: 4px solid var(--c); }
-  .legenda strong { color: var(--c); font-family: var(--f-display); }
+  .legenda li { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: baseline; padding: .7rem 0; border-bottom: 1px solid var(--linea); }
+  .legenda strong { color: var(--inchiostro); font-family: var(--f-display); }
   .legenda-punto { width: 10px; height: 10px; border-radius: 50%; background: var(--c); transform: translateY(1px); }
   .mente-sintesi { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.2rem, 1rem + .8vw, 1.6rem); letter-spacing: -0.02em; line-height: 1.2; }
   .mente-stage { display: grid; gap: 1rem; touch-action: pan-y; min-width: 0; }
   .mente-ancora { position: relative; aspect-ratio: 1; width: min(100%, 520px); justify-self: center; }
-  .angolo { position: absolute; font-family: var(--f-display); font-weight: 600; font-size: .85rem; color: var(--c); padding: .3rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 10%, #FFFFFF); border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); }
+  .angolo { position: absolute; display: inline-flex; align-items: center; gap: .4rem; font-family: var(--f-display); font-weight: 600; font-size: .85rem; color: var(--inchiostro); padding: .3rem .7rem; border-radius: 999px; background: #fff; border: 1px solid var(--linea); }
+  .angolo::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
   .a1 { left: 0; top: 4%; } .a2 { right: 0; top: 4%; } .a3 { left: 0; bottom: 4%; } .a4 { right: 0; bottom: 4%; }
+  .tieni { position: relative; overflow: hidden; justify-self: center; width: min(100%, 360px); min-height: 4.2rem; padding: .7rem 1.5rem; border: 0; border-radius: 999px; background: var(--inchiostro); color: #fff; display: grid; place-items: center; gap: .1rem; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; -webkit-tap-highlight-color: transparent; transition: transform .4s var(--respiro); }
+  .tieni.premuto { transform: scale(.97); }
+  .tieni-riempi { position: absolute; inset: 0; background: var(--terracotta); transform-origin: left; transform: scaleX(var(--p, 0)); }
+  .tieni-testo { position: relative; font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; letter-spacing: -0.01em; }
+  .tieni-sotto { position: relative; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
   .pressometro { display: grid; grid-template-columns: auto 1fr 4ch; align-items: center; gap: .9rem; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); }
   .pressometro-barra { height: 8px; border-radius: 8px; background: color-mix(in srgb, var(--inchiostro) 8%, transparent); overflow: hidden; }
-  .pressometro-barra span { display: block; height: 100%; width: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--fisiologia), var(--corpo), var(--emozione)); transform-origin: left; transform: scaleX(.02); }
+  .pressometro-barra span { display: block; height: 100%; width: 100%; border-radius: 8px; background: var(--terracotta); transform-origin: left; transform: scaleX(.02); }
   .pressometro-val { text-align: right; color: var(--inchiostro); font-weight: 600; }
   .telemetria { width: 100%; }
   .tel-testa { display: flex; justify-content: space-between; font-size: .72rem; letter-spacing: .08em; color: var(--fg-2); text-transform: uppercase; }
   .tel-live { display: inline-flex; align-items: center; gap: .5rem; }
-  .tel-punto { width: 6px; height: 6px; border-radius: 50%; background: var(--emozione); animation: spia 1s var(--respiro) infinite; }
+  .tel-punto { width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); animation: spia 1s var(--respiro) infinite; }
   .tel-bpm { color: var(--inchiostro); font-weight: 600; }
   .tel-svg { width: 100%; height: clamp(50px, 7vw, 80px); overflow: visible; margin-top: .4rem; }
   .tel-asse { stroke: var(--linea); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 2 6; }
-  .tel-linea { fill: none; stroke: var(--fisiologia); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+  .tel-linea { fill: none; stroke: var(--inchiostro); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
   .tel-msg { min-height: 1.6em; font-size: .78rem; letter-spacing: .04em; color: var(--fg-2); margin-top: .4rem; }
-  .tel-msg.calma { color: var(--fisiologia); font-weight: 600; }
+  .tel-msg.calma { color: var(--terracotta); font-weight: 600; }
   @media (max-width: 860px) {
     .mente-grid { grid-template-columns: 1fr; grid-template-areas: 'testo' 'stage' 'legenda'; }
     .legenda { grid-template-columns: 1fr 1fr; }
@@ -550,13 +561,13 @@ const media = [
     transition: border-color .5s var(--respiro), background-color .5s var(--respiro), transform .6s var(--respiro);
   }
   .porta:hover { border-color: var(--inchiostro); transform: translateY(-3px); }
-  .porta[aria-pressed="true"] { background: var(--pensiero); color: #fff; border-color: var(--pensiero); }
+  .porta[aria-pressed="true"] { background: var(--inchiostro); color: #fff; border-color: var(--inchiostro); }
   .porta[aria-pressed="true"] .porta-sotto { color: rgba(255, 255, 255, .75); }
-  .porta-icona { width: 2.6rem; height: 2.6rem; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, color-mix(in srgb, var(--pensiero) 14%, #fff), color-mix(in srgb, var(--fisiologia) 14%, #fff)); }
-  .porta-icona svg { width: 1.3rem; height: 1.3rem; fill: none; stroke: var(--pensiero); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .porta-icona { width: 2.6rem; height: 2.6rem; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--terracotta) 9%, #fff); }
+  .porta-icona svg { width: 1.3rem; height: 1.3rem; fill: none; stroke: var(--terracotta); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .porta[aria-pressed="true"] .porta-icona { background: rgba(255, 255, 255, .14); }
   .porta[aria-pressed="true"] .porta-icona svg { stroke: #fff; }
-  .porta::after { content: ''; position: absolute; left: 1.25rem; right: 1.25rem; top: 0; height: 3px; border-radius: 0 0 3px 3px; background: linear-gradient(90deg, var(--pensiero), var(--emozione), var(--corpo), var(--fisiologia)); transform: scaleX(0); transition: transform .6s var(--respiro); }
+  .porta::after { content: ''; position: absolute; left: 1.25rem; right: 1.25rem; top: 0; height: 3px; border-radius: 0 0 3px 3px; background: var(--terracotta); transform: scaleX(0); transition: transform .6s var(--respiro); }
   .porta:hover::after, .porta[aria-pressed="true"]::after { transform: scaleX(1); }
   .porta-nome { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.25rem, 1rem + .7vw, 1.55rem); letter-spacing: -0.02em; line-height: 1.1; align-self: end; }
   .porta-sotto { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-2); }
