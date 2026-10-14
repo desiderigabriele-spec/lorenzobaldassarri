@@ -7,6 +7,7 @@
   /* Carta: chiara, pulita, calda */
   --carta: #FAF8F4;
   --carta-2: #F0ECE4;
+  --nebbia: #EEF1FA;
   --inchiostro: #12161C;
   --grafite: #4A5360;
   --linea: rgba(18, 22, 28, 0.12);
@@ -162,13 +163,30 @@ p { text-wrap: pretty; }
   background-color: var(--cruscotto);
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
-/* Passaggio morbido Carta → Cruscotto */
-.sezione[data-theme="cruscotto"].sfuma::before,
-.sezione[data-theme="cruscotto"].sfuma::after {
-  content: ''; position: absolute; left: 0; right: 0; height: clamp(4rem, 10vw, 9rem);
-  pointer-events: none; z-index: 1;
+main { overflow-x: clip; }
+
+/* ---------- Stacco tra sezioni: ogni sezione è una scheda che sale sulla precedente ---------- */
+main > section.sezione:not(:first-of-type):not(.pista) {
+  --raggio: clamp(22px, 3.4vw, 44px);
+  margin-top: calc(-1 * var(--raggio));
+  border-radius: var(--raggio) var(--raggio) 0 0;
+  box-shadow: 0 -22px 44px -30px rgba(11, 18, 48, .35);
 }
-.sezione[data-theme="cruscotto"].sfuma::before { top: 0; background: linear-gradient(var(--carta), transparent); opacity: .0; }
+/* tinta alternata sulle sezioni chiare, per non confonderle tra loro */
+main > section.sezione[data-theme="carta"]:nth-of-type(even) { --bg: var(--nebbia); }
+/* ogni sezione ha il suo colore guida, a turno tra i quattro piani */
+main > section.sezione:nth-of-type(4n+2) { --tocco: var(--pensiero); }
+main > section.sezione:nth-of-type(4n+3) { --tocco: var(--emozione); }
+main > section.sezione:nth-of-type(4n) { --tocco: var(--corpo); }
+main > section.sezione:nth-of-type(4n+1) { --tocco: var(--fisiologia); }
+main > section.sezione:not(:first-of-type):not(.pista)::before {
+  content: ''; position: absolute; top: calc(var(--raggio) * .42); left: 50%; z-index: 2;
+  width: 46px; height: 5px; border-radius: 5px; transform: translateX(-50%);
+  background: var(--tocco);
+}
+main > section.sezione:not(:first-of-type):not(.pista) .eyebrow::before { background: var(--tocco); }
+main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-mix(in srgb, var(--tocco) 55%, var(--fg)); font-weight: 600; }
+
 .sezione-head { display: grid; gap: 1.25rem; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); max-width: 46rem; }
 .sezione-head.center { margin-inline: auto; text-align: center; justify-items: center; }
 
@@ -287,16 +305,6 @@ p { text-wrap: pretty; }
   .brand-mark { width: 2.5rem; height: 2.5rem; }
 }
 
-/* ---------- Barra CTA mobile ---------- */
-.cta-bar {
-  position: fixed; left: .75rem; right: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom));
-  z-index: 40; display: none;
-  transform: translateY(160%); transition: transform .7s var(--respiro);
-}
-.cta-bar .btn { width: 100%; box-shadow: 0 12px 32px -12px rgba(18, 22, 28, .45); }
-.cta-bar.visibile { transform: none; }
-@media (max-width: 920px) { .cta-bar { display: block; } }
-
 /* ---------- Tela 3D ---------- */
 .tela-3d {
   position: fixed; inset: 0; z-index: 1;
@@ -347,6 +355,14 @@ p { text-wrap: pretty; }
   display: flex; gap: .75rem; align-items: flex-start;
   border-left: 3px solid var(--accent); padding: 1rem 1.25rem; background: color-mix(in srgb, var(--fg) 4%, transparent);
   border-radius: 0 12px 12px 0; font-size: .95rem;
+}
+
+/* ---------- Mobile: spazi e titoli più compatti, ogni sezione in una schermata ---------- */
+@media (max-width: 860px) {
+  :root { --sezione: clamp(2.5rem, 6svh, 3.5rem); }
+  h2, .h2 { font-size: clamp(1.9rem, 8.4vw, 2.5rem); }
+  .lead { font-size: 1rem; }
+  .sezione-head { margin-bottom: 1.25rem; gap: .6rem; }
 }
 
 /* ---------- PC: titoli e spazi in proporzione all'altezza dello schermo ---------- */

@@ -194,7 +194,7 @@ const media = [
   </section>
 
   <!-- 3 · CHI SEI -->
-  <section class="sezione" data-theme="carta" aria-labelledby="porte-titolo" id="porte">
+  <section class="sezione porte-sezione" data-theme="carta" aria-labelledby="porte-titolo" id="porte">
     <div class="wrap">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Chi sei?</p>
@@ -313,7 +313,7 @@ const media = [
       <div class="wrap pista-head">
         <p class="eyebrow">La storia</p>
         <h2 id="pista-titolo">Dalla Scuola Calcio<br />alla Formula 1.</h2>
-        <div class="pista-progresso mono" aria-hidden="true"><span data-tappa>01</span> / 06 <span class="barra"><span></span></span></div>
+        <div class="pista-progresso mono" aria-hidden="true"><span data-tappa>01</span> / 06 <span class="barra"><span></span></span> <span class="scorri">Scorri <span>→</span></span></div>
       </div>
       <div class="pista-binario">
         <ol class="pista-tappe" role="list">
@@ -334,7 +334,7 @@ const media = [
   </section>
 
   <!-- 7 · COME LAVORO -->
-  <section class="sezione" data-theme="carta" aria-labelledby="giri-titolo">
+  <section class="sezione giri-sezione" data-theme="carta" aria-labelledby="giri-titolo">
     <div class="wrap">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Come lavoro</p>
@@ -398,6 +398,7 @@ const media = [
         <p class="eyebrow" data-reveal>Sul campo</p>
         <h2 id="campo-titolo" data-reveal>Dove succede il lavoro.</h2>
         <p class="lead" data-reveal>Studio, campo, paddock, aula: le stesse quattro leve, in posti diversi.</p>
+        <p class="scorri mono" aria-hidden="true">Scorri <span>→</span></p>
       </div>
       <div class="galleria">
         <FotoGuida tipo="studio" classe="g1" titolo="Foto da scattare · In studio" guida={['Verticale, Lorenzo in ascolto', 'Luce naturale dalla finestra', 'Nessun paziente riconoscibile']} />
@@ -409,11 +410,12 @@ const media = [
   </section>
 
   <!-- 9 · MEDIA -->
-  <section class="sezione" data-theme="carta" aria-labelledby="media-titolo">
+  <section class="sezione media-sezione" data-theme="carta" aria-labelledby="media-titolo">
     <div class="wrap">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Media e interventi</p>
         <h2 id="media-titolo" data-reveal>Dove ne ho parlato.</h2>
+        <p class="scorri mono" aria-hidden="true">Scorri <span>→</span></p>
       </div>
       <ul class="griglia-3" role="list">
         {media.map((m, i) => (
@@ -432,7 +434,7 @@ const media = [
   </section>
 
   <!-- 10 · DOMANDE -->
-  <section class="sezione" data-theme="carta" aria-labelledby="faq-titolo">
+  <section class="sezione faq-sezione" data-theme="carta" aria-labelledby="faq-titolo">
     <div class="wrap faq-grid">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Domande</p>
@@ -514,7 +516,7 @@ const media = [
   }
 
   /* ---------- LA SFERA ---------- */
-  .mente { background: var(--carta); }
+  .mente { background: var(--bg); }
   .mente-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); grid-template-areas: 'testo stage' 'legenda stage'; gap: 1.4rem clamp(2rem, 5vw, 4rem); align-items: center; }
   .mente-testo { grid-area: testo; align-self: end; }
   .mente-stage { grid-area: stage; }
@@ -851,4 +853,112 @@ const media = [
   .tieni.usato::after, .tieni.premuto::after, .tieni.usato .tieni-dito svg { animation: none; opacity: 0; }
   .tieni.usato .tieni-dito svg { opacity: 1; }
   @media (prefers-reduced-motion: reduce) { .gesto-cursore, .gesto-scia, .gesto-anello, .tieni::after, .tieni-dito svg { animation: none; } .gesto-label .l2 { display: none; } }
+  /* ---------- MOBILE: ogni sezione in una schermata ---------- */
+  .scorri { display: none; }
+  @media (max-width: 860px) {
+    .scorri { display: inline-flex; align-items: center; gap: .4rem; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-2); }
+    .scorri span { display: inline-block; animation: scorri 1.6s var(--respiro) infinite; }
+    @keyframes scorri { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+    .carosello, .galleria, .media-sezione .griglia-3, .pista-binario {
+      display: flex; gap: .75rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+      margin-inline: calc(-1 * var(--gutter)); padding: .25rem var(--gutter) .5rem; scroll-padding-inline: var(--gutter); scrollbar-width: none;
+    }
+    .galleria::-webkit-scrollbar, .media-sezione .griglia-3::-webkit-scrollbar, .pista-binario::-webkit-scrollbar { display: none; }
+
+    /* le sezioni a griglia non devono allargarsi per colpa delle schede che scorrono */
+    .sezione { grid-template-columns: minmax(0, 1fr); }
+    .pista-stage { overflow: hidden; }
+
+    /* Hero */
+    .hero { min-height: 100svh; padding-top: 4.6rem; padding-bottom: 1rem; display: grid; align-content: center; }
+    .hero-grid { gap: .9rem; }
+    .hero-testo { gap: .7rem; }
+    .hero-foto { width: min(44vw, 23svh); padding: .35rem; }
+    .hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); max-width: none; }
+    .hero .lead { font-size: 1rem; }
+    .pill { font-size: .78rem; padding: .32rem .65rem; }
+    .piani-pill { gap: .35rem; margin-top: -.2rem; }
+    .hero-cta .btn { min-height: 3rem; padding-inline: 1rem; }
+    .fiducia { display: none; }
+    .badge { font-size: .66rem; padding: .3rem .55rem; }
+    .badge .mono { font-size: .58rem; }
+    .badge-1 { left: -34%; top: 8%; } .badge-2 { right: -38%; top: 46%; } .badge-3 { left: -36%; top: 74%; }
+
+    /* La sfera */
+    .mente { min-height: 100svh; display: grid; align-content: center; padding-block: 1.75rem; }
+    .mente-grid { gap: .9rem; }
+    .mente-testo { gap: .6rem; }
+    .mente-testo .lead { font-size: 1rem; }
+    .mente-legenda { display: none; }
+    .mente-stage { gap: .6rem; }
+    .mente-ancora { width: min(78vw, 34svh); }
+    .angolo { font-size: .74rem; padding: .22rem .55rem; }
+    .a1, .a2 { top: -2%; } .a3, .a4 { bottom: -2%; }
+    .a1, .a3 { left: -9%; } .a2, .a4 { right: -9%; }
+    .tieni { min-height: 3.5rem; padding-block: .5rem; }
+    .tieni-testo { font-size: 1rem; }
+    .tel-testa { display: none; }
+    .tel-svg { height: 28px; margin-top: 0; }
+    .tel-msg { margin-top: .2rem; font-size: .72rem; }
+
+    /* Porte */
+    .porte-sezione { min-height: 100svh; display: grid; align-content: center; }
+    .porta { padding: .7rem .9rem; gap: .8rem; }
+    .porta-icona { width: 2.2rem; height: 2.2rem; border-radius: 10px; }
+    .porta-nome { font-size: 1.12rem; }
+    .porta-esito { margin-top: .75rem; padding: .9rem 1rem; }
+
+    /* Respiro */
+    .respiro { min-height: 100svh; display: grid; align-content: center; }
+    .respiro-grid { gap: 1.25rem; }
+    .respiro-testo { gap: .8rem; }
+    .respiro-stage { width: min(68vw, 34svh); }
+
+    /* Cruscotto */
+    .cruscotto { min-height: 100svh; display: grid; align-content: center; padding-block: 1.75rem 1.5rem; }
+    .cruscotto-layout { gap: .6rem; }
+    .cruscotto-head { margin-bottom: .25rem; }
+    .cruscotto-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: 'ancora ancora ancora ancora' 's1 s2 s3 s4'; gap: .4rem; }
+    .cruscotto-ancora { width: min(46vw, 19svh); }
+    .strumento { padding: .55rem .25rem .45rem; gap: .15rem; border-radius: 14px; }
+    .strumento-nome { font-size: .72rem; }
+    .strumento-nome::before { width: 6px; height: 6px; margin-right: .25rem; }
+    .strumento-val { font-size: .66rem; }
+    .pressione { margin-top: .25rem; gap: .25rem .75rem; }
+    .pressione input { height: 2.25rem; }
+    .cruscotto-dettaglio { margin-top: 0; min-height: 2.6em; font-size: .85rem; line-height: 1.35; }
+    .cruscotto .lead { font-size: .95rem; }
+    .strumento svg { max-width: 64px; }
+    .cruscotto-chiusa { margin-top: 0; gap: .4rem; }
+    .cruscotto-chiusa .h3 { font-size: 1.1rem; }
+
+    /* Pista: le tappe scorrono di lato */
+    .pista-stage { min-height: 100svh; padding-block: 2.5rem; gap: 1.25rem; align-content: center; }
+    .pista-progresso { position: static; }
+    .pista-binario { padding-bottom: .75rem; }
+    .pista-tappe { flex-direction: row; width: max-content; padding-inline: 0; gap: .75rem; }
+    .tappa { width: 80vw; scroll-snap-align: start; padding: 1.15rem; }
+    .pista-ancora { position: absolute; top: 2rem; right: 0; width: 70%; height: 26svh; margin: 0; }
+
+    /* Come lavoro */
+    .giri-sezione { min-height: 100svh; display: grid; align-content: center; }
+    .giri { grid-template-columns: 1fr 1fr; gap: 1.1rem .9rem; padding-left: 0; }
+    .giri::before { display: none; }
+    .giro { gap: .35rem; padding: .9rem; border-radius: 16px; background: color-mix(in srgb, #fff 70%, transparent); border: 1px solid var(--linea); }
+    .giro-punto { position: static; width: 10px; height: 10px; margin: 0; }
+    .giro h3 { font-size: 1.1rem; }
+    .giro .muted { font-size: .86rem; line-height: 1.4; }
+
+    /* Autovalutazione */
+    .quiz-sezione { min-height: 100svh; display: grid; align-content: center; }
+    .quiz { min-height: 0; padding-top: 1.25rem; }
+    .quiz-domanda legend { margin-bottom: .75rem; }
+    .quiz-scelta { padding: .7rem .95rem; }
+
+    /* Sul campo e media: schede che scorrono */
+    .campo-sezione, .media-sezione, .faq-sezione { min-height: 100svh; display: grid; align-content: center; }
+    .galleria > :global(*) { flex: 0 0 76vw; height: 44svh; aspect-ratio: auto !important; scroll-snap-align: start; }
+    .media-sezione .griglia-3 > li { flex: 0 0 78vw; scroll-snap-align: start; }
+    .faq-voce summary { padding: 1rem 0; font-size: 1rem; }
+  }
 </style>

@@ -240,8 +240,8 @@ export function avviaScena(canvas, segnali) {
       };
       ultimaSezione = sez;
     } else if (ultimaSezione) {
-      // tra una scena e l'altra la forma resta, quasi trasparente, per non disturbare la lettura
-      target.opacity = 0.07;
+      // nelle sezioni senza scena la forma sparisce: il testo resta pulito e il cambio di sezione si sente
+      target.opacity = 0;
     }
 
     const k = ridotto ? 1 : 1 - Math.pow(0.0025, dt); // inseguimento morbido, curva "respiro"

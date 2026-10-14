@@ -29,7 +29,7 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
     <p class="chat-nota">Non inserire informazioni sulla tua salute: ne parleremo di persona. In caso di emergenza chiama il 112.</p>
   </section>
 
-  <button type="button" class="chat-bolla" data-chat-apri aria-expanded="false" aria-controls="chat-pannello" aria-label="Contatta Lorenzo: WhatsApp o richiesta di ricontatto">
+  <button type="button" class="chat-bolla" data-chat-apri aria-expanded="false" aria-controls="chat-pannello" aria-label="Contatta Lorenzo: prenota una call o scrivi su WhatsApp">
     <picture>
       <source srcset={voltoWebp} type="image/webp" />
       <img src={volto} alt="" width="64" height="64" />
@@ -38,7 +38,7 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
       <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" /></svg>
     </span>
   </button>
-  <p class="chat-invito" data-chat-invito hidden>Ciao, posso aiutarti?</p>
+  <p class="chat-invito" data-chat-invito hidden>Prenota una call con me</p>
 </div>
 
 <style is:global>
@@ -99,8 +99,9 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
   .grande svg { width: 1.5rem; height: 1.5rem; flex: none; }
   .grande-wa { background: #1F8A55; color: #fff; text-decoration: none; }
   .grande-wa svg { fill: #fff; }
-  .grande-modulo { background: var(--inchiostro); color: #fff; }
-  .grande-modulo svg { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .grande-call { background: var(--terracotta); color: #fff; }
+  .grande-call svg { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .chat-tel { justify-self: center; font-size: .85rem; font-weight: 600; color: var(--inchiostro); padding: .2rem 0; }
   .chat-campo { display: flex; gap: .4rem; }
   .chat-campo input, .chat-campo textarea { flex: 1; min-width: 0; border: 1px solid rgba(18, 22, 28, .18); border-radius: 14px; padding: .65rem .8rem; font: inherit; font-size: .95rem; background: #fff; color: var(--inchiostro); resize: none; }
   .chat-campo input:focus, .chat-campo textarea:focus { outline: none; border-color: var(--terracotta); box-shadow: 0 0 0 3px rgba(36, 67, 214, .18); }
@@ -113,12 +114,9 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
   .chat-nota { margin: 0; padding: .6rem 1rem .85rem; font-size: .7rem; line-height: 1.35; color: var(--grafite); }
 
   .chat-azioni .grande { padding: .7rem 1rem; }
-  body:has(.chat-aperta) .cta-bar { display: none !important; }
-  /* su mobile la barra "Prenota una call" lascia spazio al pallino */
-  @media (max-width: 920px) { .cta-bar { right: calc(.75rem + 4.75rem) !important; } }
   @media (max-width: 480px) {
     .chat-pannello { position: fixed; left: .5rem; right: .5rem; bottom: calc(5.4rem + env(safe-area-inset-bottom, 0px)); width: auto; height: auto; max-height: calc(100svh - 7rem); }
-    .chat-invito { display: none; }
+    .chat-invito { font-size: .82rem; padding: .45rem .75rem; bottom: 1.1rem; }
   }
   @media (prefers-reduced-motion: reduce) { .chat-bolla::after { animation: none; } }
 </style>

@@ -55,7 +55,6 @@ function suScroll() {
   if (su) header.classList.remove('nascosto');
   ultimoY = yy;
   aggiornaHeader();
-  aggiornaCtaBar();
 }
 window.addEventListener('scroll', suScroll, { passive: true });
 
@@ -76,19 +75,6 @@ toggle?.addEventListener('click', () => {
 });
 menu?.addEventListener('click', (e) => { if (e.target.closest('a')) chiudiMenu(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && root.classList.contains('menu-aperto')) { chiudiMenu(); toggle.focus(); } });
-
-/* ---------- Barra CTA su mobile ---------- */
-const ctaBar = document.querySelector('.cta-bar');
-function aggiornaCtaBar() {
-  if (!ctaBar) return;
-  const footer = document.querySelector('.site-footer');
-  const form = document.querySelector('[data-nascondi-cta]');
-  const fuori = (el) => { if (!el) return true; const r = el.getBoundingClientRect(); return r.top > window.innerHeight || r.bottom < 0; };
-  const mostra = window.scrollY > window.innerHeight * 0.6 && fuori(footer) && fuori(form);
-  ctaBar.classList.toggle('visibile', mostra);
-  ctaBar.setAttribute('aria-hidden', String(!mostra));
-  ctaBar.querySelector('a').tabIndex = mostra ? 0 : -1;
-}
 
 /* ---------- Comparse ---------- */
 const io = new IntersectionObserver((voci) => {

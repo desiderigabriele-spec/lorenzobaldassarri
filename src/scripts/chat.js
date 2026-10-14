@@ -43,7 +43,11 @@ function avvia(radice) {
   // Invito discreto dopo qualche secondo, una sola volta per visita
   let vista = false;
   try { vista = sessionStorage.getItem('lb-chat-vista') === '1'; } catch (_) {}
-  if (!vista && invito) setTimeout(() => { if (pannello.hidden) invito.hidden = false; }, 9000);
+  if (!vista && invito) setTimeout(() => {
+    if (!pannello.hidden) return;
+    invito.hidden = false;
+    setTimeout(() => { invito.hidden = true; }, 8000);
+  }, 6000);
 
   /* ---------- messaggi ---------- */
   async function lui(testo) {
@@ -124,37 +128,41 @@ function avvia(radice) {
 
   function mostraStrade() {
     pulisci();
+    const call = document.createElement('button');
+    call.type = 'button'; call.className = 'grande grande-call';
+    call.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></svg><span>Prenota una call conoscitiva<small>Scegli tu quando: meno di un minuto</small></span>';
+    call.addEventListener('click', () => { pulisci(); tu('Prenota una call conoscitiva'); modulo(); });
     const a = document.createElement('a');
     a.className = 'grande grande-wa';
     a.href = wa('Ciao Lorenzo, ti scrivo dal tuo sito.');
     a.target = '_blank'; a.rel = 'noopener';
     a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg><span>Scrivimi su WhatsApp<small>Si apre la chat con il messaggio iniziato</small></span>';
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'grande grande-modulo';
-    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg><span>Chiedi di essere ricontattato<small>Sei domande, meno di un minuto</small></span>';
-    b.addEventListener('click', () => { pulisci(); tu('Chiedi di essere ricontattato'); modulo(); });
-    azioni.append(a, b);
-    a.focus({ preventScroll: true });
+    const tel = document.createElement('a');
+    tel.className = 'chat-tel';
+    tel.href = `tel:+${numero}`;
+    tel.textContent = 'Oppure chiamami ora';
+    azioni.append(call, a, tel);
+    call.focus({ preventScroll: true });
   }
 
   async function modulo() {
     const r = {};
-    await lui('Perfetto. Per cosa mi contatti?');
+    await lui('Perfetto, organizziamo una call. Di cosa vorresti parlare?');
     r.per = await chiediScelta(['Sono un atleta o un genitore', 'Squadra o società sportiva', 'Azienda o ruolo da leader', 'Motorsport', 'Supporto psicologico per me', 'Altro']);
     await lui('Raccontami in due righe di cosa hai bisogno.');
     r.bisogno = await chiediTesto({ segnaposto: 'Per esempio: ansia prima delle gare', lungo: true, opzionale: true });
     await lui('Come ti chiami?');
     r.nome = await chiediTesto({ segnaposto: 'Nome e cognome', autocompl: 'name' });
-    await lui(`Piacere, ${r.nome.split(' ')[0]}. Come preferisci essere ricontattato?`);
-    r.modo = await chiediScelta(['Telefono', 'WhatsApp', 'Email']);
-    if (r.modo === 'Email') {
+    await lui(`Piacere, ${r.nome.split(' ')[0]}. Dove preferisci fare la call?`);
+    r.modo = await chiediScelta(['Telefono', 'Videochiamata WhatsApp', 'Email per accordarci']);
+    if (r.modo.startsWith('Email')) {
       await lui('Lasciami la tua email.');
       r.recapito = await chiediTesto({ segnaposto: 'nome@esempio.it', tipo: 'email', autocompl: 'email', valida: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : 'Questa email non sembra completa: controlla e riprova.') });
     } else {
       await lui('Lasciami il tuo numero.');
       r.recapito = await chiediTesto({ segnaposto: '+39 ...', tipo: 'tel', autocompl: 'tel', valida: (v) => (v.replace(/\D/g, '').length >= 8 ? '' : 'Il numero sembra troppo corto: controlla e riprova.') });
     }
-    await lui('Quando ti è più comodo?');
+    await lui('Quando ti è più comodo essere chiamato?');
     r.quando = await chiediScelta(['Mattina', 'Pomeriggio', 'Sera', 'Indifferente']);
     await lui('Ecco il riepilogo. Se va bene, invialo.');
     riepilogo(r);
@@ -163,13 +171,13 @@ function avvia(radice) {
   function riepilogo(r) {
     const card = document.createElement('div');
     card.className = 'msg msg-riepilogo';
-    const righe = [['Motivo', r.per], ['Richiesta', r.bisogno || 'Ne parliamo a voce'], ['Nome', r.nome], ['Ricontatto', `${r.modo} · ${r.recapito}`], ['Quando', r.quando]];
+    const righe = [['Motivo', r.per], ['Richiesta', r.bisogno || 'Ne parliamo a voce'], ['Nome', r.nome], ['Call', `${r.modo} · ${r.recapito}`], ['Quando', r.quando]];
     const dl = document.createElement('dl');
     righe.forEach(([k, v]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); });
     card.append(dl);
     corpo.append(card); scorri();
 
-    const testo = ['Ciao Lorenzo, ti scrivo dal tuo sito per essere ricontattato.', ...righe.map(([k, v]) => `${k}: ${v}`)].join('\n');
+    const testo = ['Ciao Lorenzo, ti scrivo dal tuo sito per prenotare una call conoscitiva.', ...righe.map(([k, v]) => `${k}: ${v}`)].join('\n');
     pulisci();
     const consenso = document.createElement('label');
     consenso.className = 'chat-consenso';
@@ -177,7 +185,7 @@ function avvia(radice) {
     const invia = document.createElement('a');
     invia.className = 'grande grande-wa';
     invia.href = wa(testo); invia.target = '_blank'; invia.rel = 'noopener';
-    invia.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20l18-8L3 4v6l12 2-12 2z"/></svg><span>Invia la richiesta<small>Si apre WhatsApp con il messaggio pronto</small></span>';
+    invia.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20l18-8L3 4v6l12 2-12 2z"/></svg><span>Invia la prenotazione<small>Si apre WhatsApp con il messaggio pronto</small></span>';
     const errore = document.createElement('p');
     errore.className = 'chat-errore'; errore.setAttribute('role', 'alert');
     const ricomincia = document.createElement('button');
@@ -186,7 +194,7 @@ function avvia(radice) {
     invia.addEventListener('click', async (e) => {
       if (!consenso.querySelector('input').checked) { e.preventDefault(); errore.textContent = 'Per inviare serve il consenso al trattamento dei dati.'; return; }
       pulisci();
-      await lui('Grazie! Su WhatsApp trovi il messaggio già scritto: premi Invia e ti ricontatto io.');
+      await lui('Grazie! Su WhatsApp trovi il messaggio già scritto: premi Invia e ti richiamo io per fissare la call.');
       const ancora = document.createElement('button');
       ancora.type = 'button'; ancora.className = 'salta'; ancora.textContent = 'Nuova richiesta';
       ancora.addEventListener('click', () => { corpo.replaceChildren(); pulisci(); benvenuto(); });

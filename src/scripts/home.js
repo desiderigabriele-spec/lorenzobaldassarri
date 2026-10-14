@@ -305,12 +305,15 @@ if (pista && tappe) {
     return () => tween.kill();
   });
   mm.add('(max-width: 820px), (prefers-reduced-motion: reduce)', () => {
-    const st = ScrollTrigger.create({
-      trigger: tappe, start: 'top 70%', end: 'bottom 60%',
-      onUpdate: (s) => segnaProgresso(s.progress),
-    });
-    if (ridotto) segnaProgresso(1);
-    return () => st.kill();
+    // su mobile le tappe scorrono di lato: il progresso segue lo scorrimento orizzontale
+    const binario = tappe.parentElement;
+    const suScorri = () => {
+      const max = binario.scrollWidth - binario.clientWidth;
+      segnaProgresso(max > 0 ? binario.scrollLeft / max : 1);
+    };
+    binario.addEventListener('scroll', suScorri, { passive: true });
+    suScorri();
+    return () => binario.removeEventListener('scroll', suScorri);
   });
 }
 
