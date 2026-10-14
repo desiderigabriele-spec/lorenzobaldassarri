@@ -13,6 +13,21 @@ export const contatti = {
   foto: '/img/lorenzo-studio.jpg', // provvisoria 512×512: serve l'originale ad alta risoluzione
 };
 
+// Come si presenta: titoli da mettere in evidenza ovunque
+export const identita = {
+  nome: 'Dott. Lorenzo Baldassarri',
+  ruolo: 'Psicologo esperto di performance',
+  ruoloBreve: 'Psicologo · Esperto di performance',
+  metodo: 'Psicologia del Potenziamento®',
+  mindup: {
+    nome: 'MindUP Enhancement Psychology®',
+    sito: 'https://www.mindup.live/',
+    // Logo ufficiale: metterlo in public/img/ e scrivere qui il percorso, es. '/img/mindup-logo.svg'.
+    // Finché è null si vede un segnaposto tipografico.
+    logo: null,
+  },
+};
+
 // Le cinque "porte": una per pubblico, una sola azione principale ciascuna.
 export const porte = [
   {

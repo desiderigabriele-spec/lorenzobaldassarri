@@ -1,0 +1,25 @@
+---
+// Logo MindUP: il file ufficiale se presente (identita.mindup.logo), altrimenti un segnaposto tipografico.
+import { identita } from '../data/sito.js';
+interface Props { classe?: string }
+const { classe = '' } = Astro.props;
+const { logo, nome } = identita.mindup;
+---
+{logo
+  ? <img class={`mindup-logo ${classe}`} src={logo} alt={nome} />
+  : (
+    <span class={`mindup-logo mindup-segnaposto ${classe}`} role="img" aria-label={nome}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 8h-4.5v10h-5V11H5z" /></svg>
+      <span>Mind<b>UP</b></span>
+    </span>
+  )}
+
+<style is:global>
+  .mindup-logo { display: inline-flex; align-items: center; height: 1.6rem; width: auto; flex: none; }
+  img.mindup-logo { object-fit: contain; }
+  .mindup-segnaposto { gap: .3rem; font-family: var(--f-display); font-weight: 600; font-size: 1rem; letter-spacing: -0.02em; color: var(--inchiostro); }
+  .mindup-segnaposto svg { width: 1.15rem; height: 1.15rem; fill: var(--terracotta); }
+  .mindup-segnaposto b { font-weight: 800; color: var(--terracotta); }
+  [data-theme="cruscotto"] .mindup-segnaposto { color: var(--testo-scuro); }
+  [data-theme="cruscotto"] .mindup-segnaposto svg, [data-theme="cruscotto"] .mindup-segnaposto b { fill: var(--segnale); color: var(--segnale); }
+</style>

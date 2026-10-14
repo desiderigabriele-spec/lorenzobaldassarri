@@ -1,0 +1,42 @@
+---
+// I due titoli che distinguono Lorenzo: co-founder di MindUP e creatore della Psicologia del Potenziamento®.
+import { identita } from '../data/sito.js';
+import MindUp from './MindUp.astro';
+interface Props { classe?: string }
+const { classe = '' } = Astro.props;
+---
+<ul class={`credenziali ${classe}`} role="list">
+  <li>
+    <a class="credenziale" href={identita.mindup.sito} target="_blank" rel="noopener">
+      <MindUp />
+      <span class="cred-testo"><span class="cred-lab mono">Ruolo</span><span class="cred-val">Co-founder</span></span>
+    </a>
+  </li>
+  <li>
+    <a class="credenziale" href="/metodo">
+      <span class="cred-icona" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="M12 3.5v17M3.5 12h17" /></svg>
+      </span>
+      <span class="cred-testo"><span class="cred-lab mono">Creatore della</span><span class="cred-val">{identita.metodo}</span></span>
+    </a>
+  </li>
+</ul>
+
+<style is:global>
+  .credenziali { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+  .credenziale {
+    display: inline-flex; align-items: center; gap: .7rem; padding: .55rem .95rem .55rem .7rem; border-radius: 16px; text-decoration: none;
+    background: #fff; border: 1px solid var(--linea); color: var(--inchiostro);
+    box-shadow: 0 10px 26px -18px rgba(11, 18, 48, .45); transition: border-color .4s var(--respiro), transform .5s var(--respiro);
+  }
+  .credenziale:hover { border-color: var(--terracotta); transform: translateY(-2px); }
+  .credenziale .mindup-logo { padding-right: .7rem; border-right: 1px solid var(--linea); }
+  .cred-testo { display: grid; line-height: 1.15; }
+  .cred-lab { font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--grafite); }
+  .cred-val { font-family: var(--f-display); font-weight: 700; font-size: .95rem; letter-spacing: -0.015em; }
+  .cred-icona { width: 2rem; height: 2rem; border-radius: 10px; display: grid; place-items: center; background: var(--terracotta); flex: none; }
+  .cred-icona svg { width: 1.15rem; height: 1.15rem; fill: none; stroke: #fff; stroke-width: 1.6; }
+  [data-theme="cruscotto"] .credenziale { background: var(--cruscotto-2); border-color: var(--linea-scura); color: var(--testo-scuro); }
+  [data-theme="cruscotto"] .cred-lab { color: var(--testo-scuro-2); }
+  [data-theme="cruscotto"] .credenziale .mindup-logo { border-color: var(--linea-scura); }
+</style>

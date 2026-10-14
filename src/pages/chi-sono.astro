@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import { contatti } from '../data/sito.js';
 import FotoGuida from '../components/FotoGuida.astro';
+import Credenziali from '../components/Credenziali.astro';
 
 const formazione = [
   { t: 'Laurea in Psicologia clinica e di comunità', e: 'Università degli Studi di Firenze' },
@@ -16,16 +17,17 @@ const ruoli = [
   { q: '2013–2016', t: 'Psicologo dello sport, responsabile area mental', e: 'Formula Medicine, Viareggio' },
   { q: '2017 →', t: 'Docente', e: 'Università degli Studi di Parma' },
   { q: '2017 →', t: 'Co-fondatore', e: 'Gruppo Eljos – Equipe di Psicologia Funzionale' },
-  { q: '2021 →', t: 'Co-fondatore', e: 'MindUP Enhancement Psychology®' },
+  { q: '2021 →', t: 'Co-founder e creatore del metodo', e: 'MindUP Enhancement Psychology® · Psicologia del Potenziamento®' },
 ];
 ---
 <Base title="Chi sono — Lorenzo Baldassarri, psicologo e psicoterapeuta" description="Dalla Scuola Calcio alla Formula 1: la storia, la formazione e gli incarichi del Dott. Lorenzo Baldassarri, psicologo-psicoterapeuta e psicologo dello sport." path="/chi-sono">
   <section class="sezione page-hero" data-theme="carta">
     <div class="wrap hero-chi">
       <div>
-        <p class="eyebrow" data-reveal>Chi sono</p>
+        <p class="eyebrow" data-reveal>Dott. Lorenzo Baldassarri · Psicologo esperto di performance</p>
         <h1 data-reveal style="--d:.08s">Prima il campo. Poi la pista.</h1>
         <p class="lead" data-reveal style="--d:.16s">Ho giocato a calcio per oltre vent'anni. Poi ho allenato bambini. Poi sono entrato nel paddock della Formula 1. Ho sempre fatto la stessa cosa: aiutare le persone a rendere sotto pressione, senza perdersi.</p>
+        <div data-reveal style="--d:.24s;margin-top:1.5rem"><Credenziali /></div>
       </div>
       <div class="ritratto-box" data-reveal>
         <FotoGuida tipo="studio" src={contatti.foto} alt="Il Dott. Lorenzo Baldassarri nel suo studio" titolo="Foto da scattare · Ritratto in studio" guida={['Verticale 4:5, a figura intera o tre quarti', 'Seduto o in piedi vicino alla finestra', 'Espressione aperta, sguardo in camera']} />

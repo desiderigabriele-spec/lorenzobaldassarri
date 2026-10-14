@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { porte, piani, contatti } from '../data/sito.js';
+import { porte, piani, contatti, identita } from '../data/sito.js';
 import FotoGuida from '../components/FotoGuida.astro';
+import Credenziali from '../components/Credenziali.astro';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -11,7 +12,8 @@ const jsonLd = {
       '@id': 'https://www.lorenzobaldassarri.it/#persona',
       name: 'Lorenzo Baldassarri',
       honorificPrefix: 'Dott.',
-      jobTitle: ['Psicologo-Psicoterapeuta', 'Psicologo dello sport'],
+      jobTitle: ['Psicologo esperto di performance', 'Psicologo-Psicoterapeuta', 'Psicologo dello sport', 'Co-founder di MindUP Enhancement Psychology®'],
+      worksFor: { '@type': 'Organization', name: 'MindUP Enhancement Psychology®', url: 'https://www.mindup.live/' },
       disambiguatingDescription: 'Psicologo e psicoterapeuta di Montecatini Terme; non il pilota motociclistico omonimo.',
       alumniOf: [
         { '@type': 'CollegeOrUniversity', name: 'Università degli Studi di Firenze' },
@@ -19,7 +21,7 @@ const jsonLd = {
       ],
       memberOf: { '@type': 'Organization', name: 'Ordine degli Psicologi della Toscana' },
       affiliation: { '@type': 'CollegeOrUniversity', name: 'Università degli Studi di Parma' },
-      knowsAbout: ['Psicologia dello sport', 'Psicoterapia funzionale', 'Mental training', 'Gestione dello stress', 'Ansia da prestazione'],
+      knowsAbout: ['Psicologia del Potenziamento', 'Psicologia della performance', 'Psicologia dello sport', 'Psicoterapia funzionale', 'Mental training', 'Gestione dello stress', 'Ansia da prestazione'],
       sameAs: [
         'https://www.linkedin.com/in/lorenzo-baldassarri-70b39343/',
         'https://www.mindup.live/',
@@ -116,17 +118,21 @@ const media = [
   <section class="sezione hero" data-theme="carta" aria-labelledby="hero-titolo">
     <div class="wrap hero-grid">
       <div class="hero-testo">
-        <p class="eyebrow" data-reveal>Dalla Scuola Calcio alla Formula 1</p>
+        <div class="hero-chi" data-reveal>
+          <p class="hero-nome">{identita.nome}</p>
+          <p class="hero-ruolo mono">{identita.ruolo}<span class="solo-desk"> · Psicoterapeuta</span></p>
+        </div>
         <h1 id="hero-titolo" data-reveal style="--d:.08s">Sotto pressione, <span class="a-capo">la mente <span class="evidenza">si allena.</span></span></h1>
-        <p class="lead" data-reveal style="--d:.16s">Psicologo e psicoterapeuta. Alleno i quattro piani che decidono la prestazione:</p>
+        <p class="lead" data-reveal style="--d:.16s">Alleno i quattro piani che decidono la prestazione:</p>
         <ul class="piani-pill" role="list" data-reveal style="--d:.2s">
           {piani.map((p) => <li class={`pill p-${p.id}`}><span class="pill-punto"></span>{p.nome}</li>)}
         </ul>
         <div class="hero-cta" data-reveal style="--d:.24s">
           <a class="btn btn-primario" href="/contatti" data-cta>Prenota una call</a>
-          <a class="btn btn-secondario" href="#mente">Mettiti alla prova <span class="freccia" aria-hidden="true">↓</span></a>
+          <a class="btn btn-secondario solo-desk-flex" href="#mente">Mettiti alla prova <span class="freccia" aria-hidden="true">↓</span></a>
         </div>
-        <p class="fiducia mono" data-reveal style="--d:.32s">Psicologo-psicoterapeuta · Albo Toscana n. {contatti.albo} · Docente Università di Parma</p>
+        <Credenziali classe="hero-cred" />
+        <p class="fiducia mono" data-reveal style="--d:.32s">Albo Psicologi Toscana n. {contatti.albo} · Docente Università di Parma</p>
       </div>
       <div class="hero-foto" data-reveal style="--d:.12s">
         <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
@@ -481,6 +487,11 @@ const media = [
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; gap: clamp(2rem, 5vw, 4rem); }
   .hero-testo { display: grid; gap: 1.4rem; min-width: 0; }
   .hero h1 { max-width: 11ch; }
+  .hero-chi { display: grid; gap: .3rem; }
+  .hero-nome { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem); letter-spacing: -0.025em; color: var(--inchiostro); display: inline-flex; align-items: center; gap: .6rem; }
+  .hero-nome::before { content: ''; width: 1.6rem; height: 3px; border-radius: 3px; background: var(--terracotta); }
+  .hero-ruolo { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--terracotta); font-weight: 600; }
+  .hero-cred { margin-top: .15rem; }
   .a-capo { display: block; }
   .piani-pill { display: flex; flex-wrap: wrap; gap: .5rem; margin: -.4rem 0 0; padding: 0; list-style: none; }
   .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .45rem .85rem; border-radius: 999px; font-family: var(--f-display); font-weight: 600; font-size: .92rem; color: var(--inchiostro); background: #fff; border: 1px solid var(--linea); }
@@ -789,7 +800,8 @@ const media = [
   /* ---------- PC: ogni sezione entra nello schermo ---------- */
   @media (min-width: 1024px) {
     .hero { padding-top: max(6rem, 13vh); padding-bottom: 5vh; min-height: 100svh; display: grid; align-content: center; }
-    .hero-testo { gap: clamp(.8rem, 2.2vh, 1.4rem); }
+    .hero-testo { gap: clamp(.7rem, 1.8vh, 1.2rem); }
+    .fiducia { display: none; }
     .hero-foto { width: min(440px, 58vh); }
     .piani-pill { margin-top: -.2rem; }
 
@@ -873,16 +885,33 @@ const media = [
     .hero { min-height: 100svh; padding-top: 4.6rem; padding-bottom: 1rem; display: grid; align-content: center; }
     .hero-grid { gap: .9rem; }
     .hero-testo { gap: .7rem; }
-    .hero-foto { width: min(44vw, 23svh); padding: .35rem; }
+    .hero-foto { width: min(40vw, 19svh); padding: .3rem; }
     .hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); max-width: none; }
     .hero .lead { font-size: 1rem; }
     .pill { font-size: .78rem; padding: .32rem .65rem; }
     .piani-pill { gap: .35rem; margin-top: -.2rem; }
     .hero-cta .btn { min-height: 3rem; padding-inline: 1rem; }
-    .fiducia { display: none; }
+    .fiducia, .solo-desk, .solo-desk-flex { display: none !important; }
+    .hero-nome { font-size: 1.12rem; }
+    .hero-nome::before { width: 1.1rem; }
+    .hero-ruolo { font-size: .66rem; }
+    .hero-chi { gap: .15rem; }
+    .piani-pill { flex-wrap: nowrap; }
+    .pill { font-size: .72rem; padding: .28rem .5rem; gap: .35rem; }
+    .pill-punto { width: 6px; height: 6px; }
+    :global(.hero-cred) { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .45rem; order: 1; }
+    .hero-cta { order: 2; padding-right: 4.6rem; }
+    :global(.hero-cred .cred-val) { white-space: nowrap; }
+    :global(.hero-cred li:last-child .cred-val) { white-space: normal; line-height: 1.15; }
+    :global(.hero-cred .credenziale) { height: 100%; padding: .45rem .55rem; gap: .45rem; border-radius: 12px; }
+    :global(.hero-cred .mindup-logo) { height: 1.3rem; padding-right: .45rem; }
+    :global(.hero-cred .mindup-segnaposto) { font-size: .82rem; }
+    :global(.hero-cred .cred-icona) { width: 1.6rem; height: 1.6rem; border-radius: 8px; }
+    :global(.hero-cred .cred-val) { font-size: .76rem; }
+    :global(.hero-cred .cred-lab) { font-size: .52rem; }
     .badge { font-size: .66rem; padding: .3rem .55rem; }
     .badge .mono { font-size: .58rem; }
-    .badge-1 { left: -34%; top: 8%; } .badge-2 { right: -38%; top: 46%; } .badge-3 { left: -36%; top: 74%; }
+    .badge-1 { left: -42%; top: 10%; } .badge-2 { right: -46%; top: 62%; } .badge-3 { display: none; }
 
     /* La sfera */
     .mente { min-height: 100svh; display: grid; align-content: center; padding-block: 1.75rem; }

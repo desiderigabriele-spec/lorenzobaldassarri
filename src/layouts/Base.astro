@@ -3,7 +3,7 @@ import '@fontsource-variable/sora';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
-import { contatti, porte } from '../data/sito.js';
+import { contatti, porte, identita } from '../data/sito.js';
 import Chat from '../components/Chat.astro';
 
 interface Props {
@@ -42,11 +42,11 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
 
     <header class="site-header" data-on={headerOn}>
       <div class="header-bar">
-        <a class="brand" href="/" aria-label="Lorenzo Baldassarri, psicologo e psicoterapeuta: home">
+        <a class="brand" href="/" aria-label="Dott. Lorenzo Baldassarri, psicologo esperto di performance: home">
           <span class="brand-mark" aria-hidden="true">LB</span>
           <span class="brand-testo">
-            <span class="brand-nome">Lorenzo Baldassarri</span>
-            <span class="brand-ruolo">Psicologo · Psicoterapeuta</span>
+            <span class="brand-nome">{identita.nome}</span>
+            <span class="brand-ruolo">{identita.ruoloBreve}</span>
           </span>
         </a>
         <nav class="nav" aria-label="Principale">
