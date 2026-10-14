@@ -110,8 +110,8 @@ const media = [
 ];
 ---
 <Base
-  title="Lorenzo Baldassarri – Psicologo dello sport e Psicoterapeuta"
-  description="Lorenzo Baldassarri, psicologo e psicoterapeuta a Montecatini Terme. Alleno ciò che decide la prestazione sotto pressione: pensieri, emozioni, corpo, fisiologia. Atleti, squadre, aziende, motorsport."
+  title="Dott. Lorenzo Baldassarri – Psicologo, Psicoterapeuta e Psicologo dello sport a Montecatini Terme"
+  description="Psicoterapia funzionale e psicologia dello sport a Montecatini Terme e online. Ansia, stress, momenti difficili, pressione da prestazione: lavoro su pensieri, emozioni, corpo e respiro insieme."
   jsonLd={jsonLd}
 >
   <canvas class="tela-3d" aria-hidden="true"></canvas>
@@ -120,15 +120,16 @@ const media = [
   <section class="sezione hero" data-theme="carta" aria-labelledby="hero-titolo">
     <div class="wrap hero-grid">
       <div class="hero-testo">
-        <p class="hero-ruolo mono" data-reveal>{identita.ruolo}<span class="solo-desk"> · Psicoterapeuta</span></p>
-        <h1 id="hero-titolo" data-reveal style="--d:.08s">Sotto pressione, <span class="a-capo">la mente <span class="evidenza">si allena.</span></span></h1>
-        <p class="lead" data-reveal style="--d:.16s">Alleno i quattro piani che decidono la prestazione:</p>
-        <ul class="piani-pill" role="list" data-reveal style="--d:.2s">
-          {piani.map((p) => <li class={`pill p-${p.id}`}><span class="pill-punto"></span>{p.nome}</li>)}
-        </ul>
+        <p class="hero-ruolo mono" data-reveal>Psicoterapia funzionale<span class="solo-desk"> · Montecatini Terme e online</span></p>
+        <h1 id="hero-titolo" data-reveal style="--d:.08s">Ritrova il tuo <span class="evidenza">equilibrio.</span><span class="h1-sotto">In terapia, in gara, al lavoro.</span></h1>
+        <p class="lead" data-reveal style="--d:.16s">Ansia, stress, momenti difficili, pressione da prestazione: lavoro su pensieri, emozioni, corpo e respiro insieme.</p>
+        <nav class="hero-strade" aria-label="Da dove vuoi partire" data-reveal style="--d:.2s">
+          <a href="/psicoterapia"><span class="mono">Per me</span> Psicoterapia <span aria-hidden="true">→</span></a>
+          <a href="/psicologo-dello-sport"><span class="mono">Per lo sport</span> Prestazione <span aria-hidden="true">→</span></a>
+        </nav>
         <div class="hero-cta" data-reveal style="--d:.24s">
           <a class="btn btn-primario" href="/contatti" data-cta>Prenota una call</a>
-          <a class="btn btn-secondario solo-desk-flex" href="#mente">Mettiti alla prova <span class="freccia" aria-hidden="true">↓</span></a>
+          <a class="btn btn-secondario solo-desk-flex" href="#perche">Scopri il metodo <span class="freccia" aria-hidden="true">↓</span></a>
         </div>
         <Credenziali classe="hero-cred" />
         <p class="fiducia mono" data-reveal style="--d:.32s">Albo Psicologi Toscana n. {contatti.albo} · Docente Università di Parma</p>
@@ -143,11 +144,62 @@ const media = [
     </div>
   </section>
 
+  <!-- 2 · PERCHÉ LA PSICOLOGIA FUNZIONALE: il grattacielo -->
+  <section class="sezione perche" id="perche" data-theme="carta" aria-labelledby="perche-titolo">
+    <div class="wrap perche-grid">
+      <div class="perche-testo">
+        <p class="eyebrow" data-reveal>Psicologia funzionale</p>
+        <h2 id="perche-titolo" data-reveal>Perché a volte capire non basta.</h2>
+        <p class="lead" data-reveal>Molti percorsi lavorano soprattutto su un piano: pensieri, comportamenti o passato. Funzionano, ma a volte capisci tutto e il corpo resta in allarme.</p>
+        <p class="perche-sotto mono" data-reveal>Quando si lavora su un piano solo, il rischio è:</p>
+        <ol class="limiti" role="list">
+          <li data-reveal><strong>Un cambiamento in superficie.</strong> <span class="muted">Va meglio finché segui la tecnica, poi torna come prima.</span></li>
+          <li data-reveal style="--d:.06s"><strong>Poca flessibilità.</strong> <span class="muted">Funziona lì, non quando la situazione cambia.</span></li>
+          <li data-reveal style="--d:.12s"><strong>Le ricadute.</strong> <span class="muted">Basta un imprevisto e si perde.</span></li>
+        </ol>
+        <div class="risposta" data-reveal>
+          <p><strong>La Psicologia Funzionale parte dalle fondamenta:</strong> i funzionamenti di fondo da cui nascono pensieri, emozioni e sintomi. E recupera le Esperienze di Base del Sé:</p>
+          <ul class="esperienze" role="list">
+            <li>Calma</li><li>Contatto</li><li>Forza</li><li>Tenerezza</li><li>Contenimento</li>
+          </ul>
+          <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <figure class="torre-box" data-reveal>
+        <svg class="torre-svg" viewBox="0 0 320 440" role="img" aria-labelledby="torre-didascalia">
+          <line class="terreno" x1="20" y1="330" x2="300" y2="330" />
+          <g class="fondamenta">
+            {piani.map((p, i) => (
+              <g class={`fondo p-${p.id}`} data-fondo={i}>
+                <rect x="70" y={336 + i * 22} width="180" height="18" rx="4" />
+                <text x="258" y={349 + i * 22}>{p.nome}</text>
+              </g>
+            ))}
+          </g>
+          <g class="torre">
+            {Array.from({ length: 8 }, (_, k) => (
+              <g class="piano-torre" data-piano={k}>
+                <rect x="100" y={296 - k * 34} width="120" height="32" rx="3" />
+                <rect class="finestra" x="112" y={306 - k * 34} width="18" height="12" rx="2" />
+                <rect class="finestra" x="151" y={306 - k * 34} width="18" height="12" rx="2" />
+                <rect class="finestra" x="190" y={306 - k * 34} width="18" height="12" rx="2" />
+              </g>
+            ))}
+            <path class="crepa" d="M150 300 L 158 262 L 149 230 L 161 190" />
+            <path class="crepa" d="M190 232 L 182 200 L 194 170" />
+          </g>
+          <g class="oscilla-segni" aria-hidden="true"><path d="M58 120 q -10 22 0 44" /><path d="M262 120 q 10 22 0 44" /></g>
+        </svg>
+        <figcaption id="torre-didascalia" class="torre-didascalia" aria-live="polite"><span data-fase>Più sale, più oscilla: manca la base.</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
   <!-- 2 · LA SFERA: la tua mente sotto pressione -->
   <section class="sezione mente" id="mente" data-theme="carta" data-stato="mente" aria-labelledby="mente-titolo">
     <div class="wrap mente-grid">
       <div class="mente-testo">
-        <p class="eyebrow" data-reveal>Prova adesso</p>
+        <p class="eyebrow" data-reveal>I quattro piani · prova adesso</p>
         <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
         <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
         <button type="button" class="come-si-usa" data-guida="mente"><span aria-hidden="true">?</span> Come si usa</button>
@@ -198,26 +250,6 @@ const media = [
     </div>
   </section>
 
-
-  <!-- 3 · AUTORITÀ + NUMERI -->
-  <section class="sezione autorita-sezione" data-theme="carta" aria-label="Esperienze e numeri">
-    <div class="nastro" aria-hidden="true">
-      <div class="nastro-scorre mono">
-        {[...autorita, ...autorita].map((a) => <span>{a}</span>)}
-      </div>
-    </div>
-    <ul class="sr-only" role="list">{autorita.map((a) => <li>{a}</li>)}</ul>
-    <div class="wrap">
-      <ul class="numeri" role="list">
-        {numeri.map((n, i) => (
-          <li class="numero" data-reveal style={`--d:${i * 0.08}s`}>
-            <span class="numero-val display"><span data-conta={n.to}>{n.to}</span>{n.suffix}</span>
-            <span class="numero-lab">{n.label}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
 
   <!-- 4 · RESPIRA CON ME -->
   <section class="sezione respiro" id="respiro" data-theme="carta" data-stato="respiro" aria-labelledby="respiro-titolo">
@@ -293,6 +325,26 @@ const media = [
         <p class="h3" data-reveal>Il pensiero positivo muove una lancetta.<br /><span class="accento">Io alleno tutte e quattro.</span></p>
         <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
       </div>
+    </div>
+  </section>
+
+  <!-- 3 · AUTORITÀ + NUMERI -->
+  <section class="sezione autorita-sezione" data-theme="carta" aria-label="Esperienze e numeri">
+    <div class="nastro" aria-hidden="true">
+      <div class="nastro-scorre mono">
+        {[...autorita, ...autorita].map((a) => <span>{a}</span>)}
+      </div>
+    </div>
+    <ul class="sr-only" role="list">{autorita.map((a) => <li>{a}</li>)}</ul>
+    <div class="wrap">
+      <ul class="numeri" role="list">
+        {numeri.map((n, i) => (
+          <li class="numero" data-reveal style={`--d:${i * 0.08}s`}>
+            <span class="numero-val display"><span data-conta={n.to}>{n.to}</span>{n.suffix}</span>
+            <span class="numero-lab">{n.label}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -1057,5 +1109,64 @@ const media = [
     .cruscotto-ancora { width: min(100%, 30vh) !important; }
     .strumento svg { max-width: min(150px, 12vh) !important; }
     .cruscotto-layout { row-gap: .5rem !important; }
+  }
+  /* hero: titolo per tutti, due strade */
+  .hero h1 { max-width: 13ch; }
+  .h1-sotto { display: block; margin-top: .35em; font-size: .42em; line-height: 1.15; letter-spacing: -0.03em; color: var(--grafite); font-weight: 600; }
+  .hero-strade { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .hero-strade a { display: inline-flex; align-items: center; gap: .55rem; padding: .6rem 1rem; border-radius: 14px; border: 1px solid var(--linea); background: #fff; text-decoration: none; font-family: var(--f-display); font-weight: 700; font-size: .98rem; color: var(--inchiostro); box-shadow: 0 10px 24px -18px rgba(11, 18, 48, .5); transition: border-color .3s, transform .4s var(--respiro); }
+  .hero-strade a:hover { border-color: var(--terracotta); transform: translateY(-2px); }
+  .hero-strade .mono { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--terracotta); font-weight: 600; }
+  @media (max-width: 860px) {
+    .hero-strade { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .hero-strade a { flex-direction: column; align-items: flex-start; gap: .1rem; padding: .6rem .8rem; font-size: .92rem; }
+    .h1-sotto { font-size: .5em; }
+  }
+  /* ---------- PERCHÉ: il grattacielo ---------- */
+  .perche-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .perche-testo { display: grid; gap: 1rem; }
+  .perche-testo h2 { max-width: 14ch; }
+  .perche-sotto { margin: .3rem 0 -.3rem; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-2); }
+  .limiti { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: lim; }
+  .limiti li { counter-increment: lim; position: relative; padding: .55rem 0 .55rem 2.2rem; border-bottom: 1px solid var(--linea); line-height: 1.45; }
+  .limiti li::before { content: counter(lim, decimal-leading-zero); position: absolute; left: 0; top: .78rem; font-family: var(--f-mono); font-size: .72rem; color: var(--emozione); }
+  .limiti strong { font-family: var(--f-display); color: var(--inchiostro); }
+  .risposta { display: grid; gap: .7rem; padding: 1.1rem 1.25rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -30px rgba(11, 18, 48, .5); }
+  .risposta p { margin: 0; }
+  .risposta strong { color: var(--terracotta); }
+  .esperienze { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+  .esperienze li { padding: .3rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--terracotta) 9%, #fff); color: var(--terracotta); font-family: var(--f-display); font-weight: 600; font-size: .85rem; }
+  .torre-box { margin: 0; display: grid; gap: .75rem; justify-items: center; }
+  .torre-svg { width: min(100%, 360px); height: auto; overflow: visible; }
+  .terreno { stroke: var(--inchiostro); stroke-width: 2; stroke-linecap: round; }
+  .torre { transform-box: view-box; transform-origin: 160px 330px; }
+  .piano-torre rect:first-child { fill: var(--cruscotto); }
+  .piano-torre .finestra { fill: #FFD27A; opacity: .85; }
+  .piano-torre { opacity: 0; transform: translateY(-26px); transition: opacity .35s, transform .45s var(--uscita); }
+  .piano-torre.su { opacity: 1; transform: none; }
+  .crepa { fill: none; stroke: var(--emozione); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .4s; }
+  .oscilla-segni path { fill: none; stroke: var(--emozione); stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: opacity .4s; }
+  .torre-box.instabile .crepa, .torre-box.instabile .oscilla-segni path { opacity: .9; }
+  .fondo rect { fill: var(--c); }
+  .fondo text { fill: var(--c); font-family: var(--f-display); font-weight: 700; font-size: 12px; dominant-baseline: middle; }
+  .fondo { opacity: 0; transform: translateY(10px); transition: opacity .45s, transform .5s var(--uscita); }
+  .fondo.su { opacity: 1; transform: none; }
+  .torre-didascalia { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; text-align: center; color: var(--emozione); transition: color .4s; min-height: 2.6em; max-width: 26ch; }
+  .torre-box.stabile .torre-didascalia { color: var(--fisiologia); }
+  @media (max-width: 860px) {
+    .perche-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .perche-testo { display: contents; }
+    .perche-testo > * { order: 3; }
+    .perche-testo > .eyebrow, .perche-testo > h2, .perche-testo > .lead { order: 1; }
+    .torre-box { order: 2; margin-block: .5rem; }
+    .torre-svg { width: min(78vw, 300px); }
+  }
+  @media (min-width: 1024px) and (max-height: 960px) {
+    .perche-testo { gap: .6rem; }
+    .risposta { padding: .8rem 1rem; gap: .5rem; }
+    .perche-sotto { display: none; }
+    .esperienze li { padding: .2rem .6rem; font-size: .8rem; }
+    .limiti li { padding-block: .4rem; }
+    .torre-svg { width: min(100%, 52vh); }
   }
 </style>

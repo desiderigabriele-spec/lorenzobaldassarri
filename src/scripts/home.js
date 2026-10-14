@@ -448,3 +448,45 @@ if (quiz) {
     domande[0].querySelector('.quiz-scelta').focus({ preventScroll: true });
   });
 }
+
+/* ======================================================================
+   PERCHÉ LA PSICOLOGIA FUNZIONALE: il grattacielo
+   Scorrendo: i piani salgono su una base sottile e oscillano;
+   poi arrivano le fondamenta sui quattro piani e la torre si ferma.
+   ====================================================================== */
+const torreBox = document.querySelector('.torre-box');
+if (torreBox) {
+  const torre = torreBox.querySelector('.torre');
+  const pianiTorre = [...torreBox.querySelectorAll('[data-piano]')];
+  const fondi = [...torreBox.querySelectorAll('[data-fondo]')];
+  const fase = torreBox.querySelector('[data-fase]');
+  let prog = ridotto ? 1 : 0;
+  let ampiezza = 0;
+  let testo = '';
+  function disegnaTorre(p) {
+    const costruiti = clamp(p / 0.45) * pianiTorre.length;
+    pianiTorre.forEach((el, k) => el.classList.toggle('su', k < costruiti));
+    const fondamenta = clamp((p - 0.52) / 0.33);
+    fondi.forEach((el, k) => el.classList.toggle('su', fondamenta > k / fondi.length + 0.01));
+    ampiezza = (costruiti / pianiTorre.length) * 4.5 * (1 - fondamenta);
+    torreBox.classList.toggle('instabile', ampiezza > 2.2);
+    torreBox.classList.toggle('stabile', fondamenta >= 0.99);
+    const nuovo = fondamenta >= 0.99 ? 'Con le fondamenta sui quattro piani: sale e resta stabile.'
+      : fondamenta > 0 ? 'Arrivano le fondamenta: pensiero, emozione, corpo, fisiologia…'
+      : costruiti < 1 ? 'Scorri: costruiamo.' : 'Più sale, più oscilla: manca la base.';
+    if (nuovo !== testo) { testo = nuovo; fase.textContent = nuovo; }
+  }
+  disegnaTorre(prog);
+  if (!ridotto) {
+    ScrollTrigger.create({
+      trigger: torreBox, start: 'top 85%', end: 'bottom 25%', scrub: 0.6,
+      onUpdate: (st) => { prog = st.progress; disegnaTorre(prog); },
+    });
+    const oscilla = (t) => {
+      const angolo = ampiezza * Math.sin(t / 1000 * 2.4) + ampiezza * 0.25 * Math.sin(t / 1000 * 5.3);
+      torre.style.transform = `rotate(${angolo.toFixed(2)}deg)`;
+      requestAnimationFrame(oscilla);
+    };
+    requestAnimationFrame(oscilla);
+  }
+}
