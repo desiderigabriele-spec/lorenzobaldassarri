@@ -39,9 +39,11 @@ window.addEventListener('scroll', () => {
 const linea = document.querySelector('.tel-linea');
 const bpmEl = document.querySelector('[data-bpm]');
 const msg = document.querySelector('.tel-msg');
-const hero = document.querySelector('.hero');
-let heroVisibile = true;
-new IntersectionObserver(([v]) => { heroVisibile = v.isIntersecting; }).observe(hero);
+const mente = document.querySelector('.mente');
+const barraP = document.querySelector('[data-pressione-barra]');
+const valP = document.querySelector('[data-pressione-val]');
+let heroVisibile = false;
+if (mente) new IntersectionObserver(([v]) => { heroVisibile = v.isIntersecting; }).observe(mente);
 
 let fase = 0;
 let picco = 0;
@@ -80,16 +82,18 @@ function tick(ora) {
     }
     linea.setAttribute('d', d);
     if (bpmEl) bpmEl.textContent = String(Math.round(bpm));
-    linea.style.stroke = p > 0.45 ? 'var(--terracotta)' : 'var(--inchiostro)';
+    linea.style.stroke = p > 0.45 ? 'var(--emozione)' : 'var(--fisiologia)';
+    if (barraP) barraP.style.transform = `scaleX(${Math.max(0.02, p).toFixed(3)})`;
+    if (valP) valP.textContent = `${Math.round(p * 100)}%`;
 
     // "Ecco. La calma si allena." quando torni quieto dopo un picco
-    if (p > 0.42) { picco = ora; quieteDa = 0; }
+    if (p > 0.42) { picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: i piani si separano…'; } }
     if (picco && p < 0.06) {
       if (!quieteDa) quieteDa = ora;
       if (ora - quieteDa > 900 && !mostrato) {
         mostrato = true;
         msg.classList.add('calma');
-        msg.textContent = 'Ecco. La calma si allena.';
+        msg.textContent = 'Ecco: i quattro piani tornano insieme. La calma si allena.';
         setTimeout(() => { mostrato = false; picco = 0; }, 5000);
       }
     }

@@ -32,10 +32,12 @@ float snoise(vec3 v){
 }`;
 
 const vertexShader = /* glsl */ `
-uniform float uTime, uPressure, uBreath, uRing, uTrack, uSize, uPR;
+uniform float uTime, uPressure, uBreath, uRing, uTrack, uSize, uPR, uScala;
 uniform mat3 uRot[4];
+uniform vec3 uPiani[4];
 attribute float aRingIdx, aAng, aT, aRand;
 varying float vRand;
+varying vec3 vCol;
 ${NOISE}
 vec3 pista(float t){ float s=sin(t), c=cos(t); float d=1.0+s*s; return vec3(1.0*c/d, 0.0, 0.72*s*c/d); }
 void main(){
@@ -43,7 +45,13 @@ void main(){
   vec3 sfera = position;
   float n  = snoise(sfera*1.6 + vec3(uTime*0.18));
   float n2 = snoise(sfera*4.2 + vec3(uTime*0.9));
-  sfera *= (1.0 + n*(0.035 + uPressure*0.42) + n2*uPressure*0.1) * (1.0 + uBreath*0.24);
+  sfera *= (1.0 + n*(0.035 + uPressure*0.18) + n2*uPressure*0.05) * (1.0 + uBreath*0.24);
+  // sotto pressione i quattro piani si separano; a riposo tornano una sfera sola
+  int g = int(aRingIdx + 0.5);
+  vec3 dir = vec3(-0.75, 0.6, 0.0);
+  if (g == 1) dir = vec3(0.75, 0.6, 0.0); else if (g == 2) dir = vec3(-0.75, -0.6, 0.0); else if (g == 3) dir = vec3(0.75, -0.6, 0.0);
+  float sep = smoothstep(0.08, 0.75, uPressure);
+  sfera = sfera * (1.0 - sep*0.58);
 
   // ORBITE: quattro anelli inclinati, i punti scorrono lungo l'anello
   int k = int(aRingIdx + 0.5);
@@ -66,34 +74,39 @@ void main(){
   p = mix(p, pt, uTrack);
 
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  // la separazione avviene nello spazio dello schermo: ogni piano va verso la sua etichetta
+  mv.xy += dir.xy * sep * 0.95 * uScala * (1.0 - uRing) * (1.0 - uTrack);
   gl_Position = projectionMatrix * mv;
   gl_PointSize = uSize * uPR * (0.5 + aRand*0.9) / -mv.z;
   vRand = aRand;
+  vec3 c = uPiani[0];
+  if (g == 1) c = uPiani[1]; else if (g == 2) c = uPiani[2]; else if (g == 3) c = uPiani[3];
+  vCol = c;
 }`;
 
 const fragmentShader = /* glsl */ `
-uniform vec3 uColor, uAccent;
-uniform float uOpacity, uPressure;
+uniform float uOpacity;
 varying float vRand;
+varying vec3 vCol;
 void main(){
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float a = smoothstep(0.5, 0.12, d);
-  float quota = smoothstep(0.62, 1.0, vRand) * (0.3 + uPressure*0.7);
-  gl_FragColor = vec4(mix(uColor, uAccent, quota), a*uOpacity);
+  gl_FragColor = vec4(vCol, a*uOpacity);
 }`;
 
 // Parametri per stato: estensione della forma rispetto all'ancora e opacità
 const STATI = {
-  hero:      { ring: 0, track: 0, fit: 1.0,  opacity: 1.0 },
+  mente:     { ring: 0, track: 0, fit: 1.25, opacity: 1.0 },
   respiro:   { ring: 0, track: 0, fit: 1.3,  opacity: 1.0 },
   cruscotto: { ring: 1, track: 0, fit: 1.12, opacity: 0.9 },
   pista:     { ring: 0, track: 1, fit: 2.1,  opacity: 0.6, base: 'w' },
-  chiusura:  { ring: 0, track: 0, fit: 1.0,  opacity: 0.85 },
+  chiusura:  { ring: 0, track: 0, fit: 1.0,  opacity: 0.9 },
 };
-const COLORI = {
-  carta:     { base: new THREE.Color('#12161C'), accento: new THREE.Color('#B33616') },
-  cruscotto: { base: new THREE.Color('#5BE3C1'), accento: new THREE.Color('#FF6A3D') },
+// Colori dei quattro piani: pensiero, emozione, corpo, fisiologia (più profondi sulla carta, luminosi sul blu notte)
+const PIANI = {
+  carta:     ['#2443D6', '#E0413B', '#E89A1C', '#10A58A'].map((c) => new THREE.Color(c)),
+  cruscotto: ['#7C93FF', '#FF6B6B', '#FFB547', '#2EE6C0'].map((c) => new THREE.Color(c)),
 };
 
 export function avviaScena(canvas, segnali) {
@@ -152,9 +165,9 @@ export function avviaScena(canvas, segnali) {
     uTrack: { value: 0 },
     uSize: { value: mobile ? 13 : 15 },
     uPR: { value: pr },
+    uScala: { value: 1 },
     uOpacity: { value: 0 },
-    uColor: { value: COLORI.carta.base.clone() },
-    uAccent: { value: COLORI.carta.accento.clone() },
+    uPiani: { value: PIANI.carta.map((c) => c.clone()) },
     uRot: { value: [rot(Math.PI / 2, 0, 0), rot(Math.PI / 2, Math.PI / 2, 0), rot(Math.PI / 4, 0, Math.PI / 4), rot(-Math.PI / 4, 0, -Math.PI / 4)] },
   };
   const mat = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true, depthWrite: false });
@@ -240,9 +253,8 @@ export function avviaScena(canvas, segnali) {
     corrente.track += (target.track - corrente.track) * km;
     corrente.opacity += (target.opacity - corrente.opacity) * km;
 
-    const pal = COLORI[tema] || COLORI.carta;
-    uniforms.uColor.value.lerp(pal.base, km);
-    uniforms.uAccent.value.lerp(pal.accento, km);
+    const pal = PIANI[tema] || PIANI.carta;
+    uniforms.uPiani.value.forEach((c, i) => c.lerp(pal[i], km));
 
     const pressione = nome === 'cruscotto' ? segnali.cruscotto : segnali.pressione;
     uniforms.uPressure.value += (pressione - uniforms.uPressure.value) * (1 - Math.pow(0.01, dt));
@@ -254,6 +266,7 @@ export function avviaScena(canvas, segnali) {
 
     gruppo.position.set(corrente.x, corrente.y, 0);
     gruppo.scale.setScalar(Math.max(corrente.s, 0.001));
+    uniforms.uScala.value = Math.max(corrente.s, 0.001);
     // la pista resta di fronte a chi guarda; sfera e orbite ruotano lentamente
     const libero = 1 - corrente.track;
     gruppo.rotation.y = tempo * 0.08 * libero + mira.x * 0.18 + corrente.track * Math.sin(tempo * 0.3) * 0.12;

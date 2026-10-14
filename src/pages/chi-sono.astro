@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import { contatti } from '../data/sito.js';
-import Ritratto from '../components/Ritratto.astro';
+import FotoGuida from '../components/FotoGuida.astro';
 
 const formazione = [
   { t: 'Laurea in Psicologia clinica e di comunità', e: 'Università degli Studi di Firenze' },
@@ -28,7 +28,7 @@ const ruoli = [
         <p class="lead" data-reveal style="--d:.16s">Ho giocato a calcio per oltre vent'anni. Poi ho allenato bambini. Poi sono entrato nel paddock della Formula 1. Ho sempre fatto la stessa cosa: aiutare le persone a rendere sotto pressione, senza perdersi.</p>
       </div>
       <div class="ritratto-box" data-reveal>
-        <Ritratto />
+        <FotoGuida tipo="studio" src={contatti.foto} alt="Il Dott. Lorenzo Baldassarri nel suo studio" titolo="Foto da scattare · Ritratto in studio" guida={['Verticale 4:5, a figura intera o tre quarti', 'Seduto o in piedi vicino alla finestra', 'Espressione aperta, sguardo in camera']} />
         <p class="mono didascalia">Dott. Lorenzo Baldassarri · Montecatini Terme</p>
       </div>
     </div>

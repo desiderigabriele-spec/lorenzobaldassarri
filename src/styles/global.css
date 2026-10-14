@@ -4,23 +4,30 @@
    ========================================================================== */
 
 :root {
-  /* Carta */
-  --carta: #F6F2EA;
-  --carta-2: #EFE9DD;
+  /* Carta: chiara, pulita, calda */
+  --carta: #FAF8F4;
+  --carta-2: #F0ECE4;
   --inchiostro: #12161C;
   --grafite: #4A5360;
   --linea: rgba(18, 22, 28, 0.12);
-  --terracotta: #B33616;
-  --terracotta-scura: #962c11;
+  /* Azione principale: blu cobalto = fiducia e lucidità (il nome resta per compatibilità) */
+  --terracotta: #2443D6;
+  --terracotta-scura: #1A33AE;
 
-  /* Cruscotto */
-  --cruscotto: #0C1117;
-  --cruscotto-2: #151C25;
+  /* I quattro piani: ogni colore ha sempre lo stesso significato in tutto il sito */
+  --pensiero: #2443D6;   --pensiero-chiaro: #7C93FF;
+  --emozione: #C8322F;   --emozione-chiaro: #FF6B6B;
+  --corpo: #8A5200;      --corpo-chiaro: #FFB547;
+  --fisiologia: #0A7A64; --fisiologia-chiaro: #2EE6C0;
+
+  /* Cruscotto: blu notte, non nero */
+  --cruscotto: #0B1230;
+  --cruscotto-2: #141C42;
   --testo-scuro: #F1EEE6;
-  --testo-scuro-2: #A5AFBC;
-  --linea-scura: rgba(241, 238, 230, 0.12);
-  --segnale: #FF6A3D;
-  --telemetria: #5BE3C1;
+  --testo-scuro-2: #AEB6CF;
+  --linea-scura: rgba(241, 238, 230, 0.14);
+  --segnale: #FFB547;
+  --telemetria: #2EE6C0;
 
   /* Valori di superficie correnti (cambiano dentro [data-theme="cruscotto"]) */
   --bg: var(--carta);
@@ -47,6 +54,10 @@
 }
 
 [data-theme="cruscotto"] {
+  --pensiero: var(--pensiero-chiaro);
+  --emozione: var(--emozione-chiaro);
+  --corpo: var(--corpo-chiaro);
+  --fisiologia: var(--fisiologia-chiaro);
   --bg: var(--cruscotto);
   --fg: var(--testo-scuro);
   --fg-2: var(--testo-scuro-2);

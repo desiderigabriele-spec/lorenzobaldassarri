@@ -43,7 +43,7 @@ function aggiornaHeader() {
   }
   header.dataset.on = tema;
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = tema === 'cruscotto' ? '#0C1117' : '#F6F2EA';
+  if (meta) meta.content = tema === 'cruscotto' ? '#0B1230' : '#FAF8F4';
 }
 let ultimoY = window.scrollY;
 function suScroll() {
