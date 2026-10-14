@@ -11,6 +11,8 @@ import { porte, contatti } from '../data/sito.js';
         <p class="lead" data-reveal style="--d:.16s">Scrivimi due righe. Ti rispondo entro un giorno lavorativo.</p>
         <dl class="dati" data-reveal style="--d:.24s">
           <div><dt class="mono">Studio</dt><dd>{contatti.indirizzo}<br />{contatti.citta}</dd></div>
+          <div><dt class="mono">Telefono</dt><dd><a href={`tel:${contatti.telefono.replace(/\s/g, '')}`}>{contatti.telefono}</a></dd></div>
+          <div><dt class="mono">WhatsApp</dt><dd><a href={`https://wa.me/${contatti.whatsapp}`} target="_blank" rel="noopener">Scrivimi su WhatsApp</a></dd></div>
           <div><dt class="mono">Modalità</dt><dd>In studio e online</dd></div>
         </dl>
       </div>
@@ -26,7 +28,7 @@ import { porte, contatti } from '../data/sito.js';
         </fieldset>
         <label class="campo"><span class="mono">Nome</span><input name="nome" autocomplete="name" required /></label>
         <label class="campo"><span class="mono">Email</span><input name="email" type="email" autocomplete="email" required /></label>
-        <label class="campo"><span class="mono">Messaggio</span><textarea name="messaggio" rows="4" placeholder="Di cosa vorresti parlare?"></textarea></label>
+        <label class="campo"><span class="mono">Messaggio</span><textarea name="messaggio" rows="3" placeholder="Di cosa vorresti parlare?"></textarea></label>
         <p class="nota">Non inserire informazioni sulla tua salute: ne parleremo di persona.</p>
         <label class="privacy"><input type="checkbox" name="privacy" required /> <span>Ho letto l'<a href="/privacy">informativa privacy</a>.</span></label>
         <button class="btn btn-primario" type="submit">Invia</button>
@@ -86,5 +88,15 @@ import { porte, contatti } from '../data/sito.js';
   .modulo .btn { justify-self: start; }
   .esito { min-height: 1.5em; font-size: .95rem; }
   .esito[data-tipo="errore"] { color: var(--terracotta); }
+  @media (min-width: 1024px) {
+    .modulo { gap: .7rem; padding: 1.25rem 1.5rem; }
+    .chip span { min-height: 40px; padding: 0 .85rem; font-size: .9rem; }
+    .campo input, .campo textarea { min-height: 44px; padding: .6rem .9rem; }
+    .dati { margin-top: 1.5rem; }
+    .dati div { padding: .65rem 0; }
+    .page-hero h1 { margin-top: .75rem; }
+    .page-hero { padding-bottom: 2.5vh; }
+    .chi legend, .campo .mono { margin-bottom: .35rem; }
+  }
   @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .modulo .btn { justify-self: stretch; } }
 </style>

@@ -115,3 +115,14 @@ window.__applicaPorta = (id) => {
 
 suScroll();
 window.addEventListener('load', () => ScrollTrigger.refresh());
+
+/* ---------- Menu a tendina "Percorsi" ---------- */
+const gruppo = document.querySelector('.nav-gruppo');
+const apri = gruppo?.querySelector('.nav-apri');
+function chiudiPercorsi() { gruppo?.classList.remove('aperto'); apri?.setAttribute('aria-expanded', 'false'); }
+apri?.addEventListener('click', () => {
+  const aperto = gruppo.classList.toggle('aperto');
+  apri.setAttribute('aria-expanded', String(aperto));
+});
+document.addEventListener('click', (e) => { if (gruppo && !gruppo.contains(e.target)) chiudiPercorsi(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && gruppo?.classList.contains('aperto')) { chiudiPercorsi(); apri.focus(); } });

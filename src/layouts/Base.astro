@@ -4,6 +4,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { contatti, porte } from '../data/sito.js';
+import Chat from '../components/Chat.astro';
 
 interface Props {
   title: string;
@@ -40,20 +41,31 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     <a class="skip-link" href="#contenuto">Vai al contenuto</a>
 
     <header class="site-header" data-on={headerOn}>
-      <div class="wrap header-row">
+      <div class="header-bar">
         <a class="brand" href="/" aria-label="Lorenzo Baldassarri, psicologo e psicoterapeuta: home">
-          <span class="brand-nome">Lorenzo Baldassarri</span>
-          <span class="brand-ruolo">Psicologo · Psicoterapeuta</span>
+          <span class="brand-mark" aria-hidden="true">LB</span>
+          <span class="brand-testo">
+            <span class="brand-nome">Lorenzo Baldassarri</span>
+            <span class="brand-ruolo">Psicologo · Psicoterapeuta</span>
+          </span>
         </a>
         <nav class="nav" aria-label="Principale">
           <a href="/metodo" aria-current={isCurrent('/metodo')}>Metodo</a>
-          <a href="/psicologo-dello-sport" aria-current={isCurrent('/psicologo-dello-sport')}>Atleti</a>
-          <a href="/squadre-e-societa" aria-current={isCurrent('/squadre-e-societa')}>Squadre</a>
-          <a href="/aziende-e-leader" aria-current={isCurrent('/aziende-e-leader')}>Aziende</a>
-          <a href="/motorsport" aria-current={isCurrent('/motorsport')}>Motorsport</a>
-          <a href="/psicoterapia" aria-current={isCurrent('/psicoterapia')}>Psicoterapia</a>
-          <a class="btn btn-primario btn-piccolo" href="/contatti" data-cta>Prenota una call</a>
+          <div class="nav-gruppo">
+            <button type="button" class="nav-apri" aria-expanded="false" aria-controls="nav-percorsi">Percorsi <span aria-hidden="true">▾</span></button>
+            <div class="nav-menu" id="nav-percorsi">
+              {porte.map((p) => (
+                <a href={p.href} aria-current={isCurrent(p.href)}>
+                  <strong>{p.menu}</strong>
+                  <span>{p.riga}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+          <a href="/chi-sono" aria-current={isCurrent('/chi-sono')}>Chi sono</a>
+          <a href="/contatti" aria-current={isCurrent('/contatti')}>Contatti</a>
         </nav>
+        <a class="btn btn-primario btn-piccolo header-cta" href="/contatti" data-cta>Prenota una call</a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile">
           <span></span><span></span><span class="sr-only">Menu</span>
         </button>
@@ -93,6 +105,8 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
           <div>
             <h2>Studio</h2>
             <ul role="list">
+              <li><a href={`tel:${contatti.telefono.replace(/\s/g, '')}`}>{contatti.telefono}</a></li>
+              <li><a href={`https://wa.me/${contatti.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>
               <li>{contatti.indirizzo}</li>
               <li>{contatti.citta}</li>
               <li>In studio e online</li>
@@ -110,12 +124,15 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
       </div>
     </footer>
 
+    <Chat />
+
     <div class="cta-bar" aria-hidden="true">
       <a class="btn btn-primario" href="/contatti" data-cta tabindex="-1">Prenota una call</a>
     </div>
 
     <script>
       import '../scripts/site.js';
+      import '../scripts/chat.js';
     </script>
   </body>
 </html>

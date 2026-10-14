@@ -5,6 +5,9 @@ export const contatti = {
   citta: '51016 Montecatini Terme (PT)',
   albo: '6292 [da confermare]',
   piva: '[da inserire]',
+  telefono: '+39 346 856 4025',
+  whatsapp: '393468564025',
+  volto: '/img/lorenzo-volto.jpg',
   // Ritratto: mettere il file in public/img/ e scrivere qui il percorso, es. '/img/lorenzo.jpg'
   // (verticale 4:5, almeno 1200×1500 px, sguardo rivolto verso sinistra, cioè verso il titolo)
   foto: '/img/lorenzo-studio.jpg', // provvisoria 512×512: serve l'originale ad alta risoluzione

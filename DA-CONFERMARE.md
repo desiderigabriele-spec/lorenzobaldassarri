@@ -23,6 +23,8 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Case study anonimi autorizzati (la sezione "Storie senza nomi" è stata omessa)
 
 ## Tecnica
+- [ ] Chat: oggi la richiesta guidata si invia aprendo WhatsApp con il messaggio pronto. Per ricevere le richieste anche via email serve un endpoint (es. funzione Vercel + servizio email UE)
+- [ ] Confermare il numero +39 346 856 4025 per telefono e WhatsApp, e l'uso della foto del volto nella chat
 - [ ] Collegare il modulo contatti a un endpoint reale (oggi mostra un messaggio di anteprima)
 - [ ] Testi definitivi di Privacy, Cookie e Note legali (oggi bozze)
 - [ ] Analytics senza cookie (Plausible o Umami)
