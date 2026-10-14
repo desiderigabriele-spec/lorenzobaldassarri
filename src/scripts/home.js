@@ -227,49 +227,92 @@ btnStop?.addEventListener('click', () => { fermaRespiro(false); btnStart.focus()
 const slider = document.getElementById('pressione');
 const out = document.querySelector('.pressione-out');
 const dettaglio = document.getElementById('cruscotto-dettaglio');
+const pianoScelto = document.querySelector('[data-piano-scelto]');
+// Ogni piano ha un punto di equilibrio al centro (50). Troppo poco o troppo: fuori asse.
 const LETTURE = {
-  pensiero: { nome: 'Attenzione', da: 92, a: 28, unita: '%', alto: (v) => v < 45, testo: "Sotto pressione l'attenzione si restringe: si vede meno, si decide peggio." },
-  emozione: { nome: 'Attivazione', da: 18, a: 92, unita: '%', alto: (v) => v > 70, testo: 'La paura di sbagliare sale e chiede tutta l’energia.' },
-  corpo: { nome: 'Tensione', da: 12, a: 88, unita: '%', alto: (v) => v > 65, testo: 'I muscoli si irrigidiscono: il gesto perde precisione.' },
-  fisiologia: { nome: 'Battito', da: 58, a: 156, unita: ' bpm', alto: (v) => v > 125, testo: 'Battito e respiro accelerano: il corpo entra in allarme.' },
+  pensiero: { basso: 'Distratto', giusto: 'Lucido', alto: 'Agitato' },
+  emozione: { basso: 'Piatto', giusto: 'Carico', alto: 'In ansia' },
+  corpo: { basso: 'Molle', giusto: 'Sciolto', alto: 'Rigido' },
+  fisiologia: { basso: 'Spento', giusto: 'Regolare', alto: 'Battito alto' },
 };
 const strumenti = [...document.querySelectorAll('[data-strumento]')];
-function aggiornaCruscotto(valore) {
-  const p = valore / 100;
-  segnali.cruscotto = p;
-  out.textContent = String(valore);
-  slider.setAttribute('aria-valuetext', `Pressione ${valore} su 100`);
+const base = { pensiero: 50, emozione: 50, corpo: 50, fisiologia: 50 };
+let scelto = 'pensiero';
+// quanto un piano fuori asse trascina gli altri
+const TRASCINA = 0.55;
+// verde → ambra → rosso in base alla distanza dal centro
+function coloreStato(d) {
+  const t = Math.min(1, d);
+  const h = 168 - 168 * Math.min(1, t * 1.25);
+  return `hsl(${Math.max(0, h).toFixed(0)} 88% ${t < 0.5 ? 55 : 64}%)`;
+}
+function aggiornaCruscotto() {
+  const valori = {};
+  let somma = 0;
+  const nomiFuori = [];
+  for (const id of Object.keys(base)) {
+    let v = base[id];
+    for (const altro of Object.keys(base)) if (altro !== id) v += (base[altro] - 50) * TRASCINA;
+    valori[id] = clamp(v / 100) * 100;
+  }
   strumenti.forEach((s) => {
-    const l = LETTURE[s.dataset.strumento];
-    const v = l.da + (l.a - l.da) * p;
-    const norm = clamp((v - Math.min(l.da, l.a)) / Math.abs(l.a - l.da));
-    s.querySelector('.arco-val').style.strokeDashoffset = String(100 - norm * 100);
-    s.querySelector('.lancetta').style.transform = `rotate(${-90 + norm * 180}deg)`;
-    s.querySelector('[data-val]').textContent = `${l.nome} ${Math.round(v)}${l.unita}`;
-    s.classList.toggle('alto', l.alto(v));
+    const id = s.dataset.strumento;
+    const v = valori[id];
+    const d = Math.abs(v - 50) / 50;
+    somma += d;
+    const l = LETTURE[id];
+    const stato = d < 0.18 ? l.giusto : (v > 50 ? l.alto : l.basso);
+    s.style.setProperty('--stato', coloreStato(d));
+    s.querySelector('.lancetta').style.transform = `rotate(${-90 + (v / 100) * 180}deg)`;
+    s.querySelector('[data-val]').textContent = stato;
+    s.classList.toggle('fuori', d >= 0.4);
+    if (d >= 0.4) nomiFuori.push(piani.find((x) => x.id === id).nome);
   });
+  const dSel = Math.abs(valori[scelto] - 50) / 50;
+  const lSel = LETTURE[scelto];
+  const statoSel = dSel < 0.18 ? 'In equilibrio' : (valori[scelto] > 50 ? lSel.alto : lSel.basso);
+  out.textContent = statoSel;
+  out.style.setProperty('--stato-sel', coloreStato(dSel));
+  slider.setAttribute('aria-valuetext', `${piani.find((x) => x.id === scelto).nome}: ${statoSel}`);
+  segnali.cruscotto = clamp(somma / 4);
+  dettaglio.classList.toggle('equilibrio', nomiFuori.length === 0 && somma / 4 < 0.15);
+  dettaglio.classList.toggle('allarme', nomiFuori.length > 1);
+  if (nomiFuori.length === 0) dettaglio.textContent = somma / 4 < 0.15 ? 'Tutto verde: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
+  else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} fuori asse: guarda, si spostano anche gli altri.`;
+  else dettaglio.textContent = 'Un piano fuori asse trascina gli altri. Per questo li alleno insieme.';
+}
+function scegli(id) {
+  scelto = id;
+  strumenti.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.strumento === id)));
+  if (pianoScelto) pianoScelto.textContent = piani.find((x) => x.id === id).nome;
+  slider.value = String(base[id]);
+  aggiornaCruscotto();
 }
 let toccato = false;
-slider?.addEventListener('input', () => { toccato = true; aggiornaCruscotto(Number(slider.value)); });
-strumenti.forEach((s) => s.addEventListener('click', () => {
-  const aperto = s.getAttribute('aria-expanded') === 'true';
-  strumenti.forEach((x) => x.setAttribute('aria-expanded', 'false'));
-  if (aperto) { dettaglio.textContent = 'Tocca uno strumento per capire cosa misura.'; return; }
-  s.setAttribute('aria-expanded', 'true');
-  const piano = piani.find((x) => x.id === s.dataset.strumento);
-  dettaglio.textContent = `${piano.nome} · piano ${piano.piano.toLowerCase()}. ${LETTURE[s.dataset.strumento].testo}`;
-}));
+slider?.addEventListener('input', () => { toccato = true; base[scelto] = Number(slider.value); aggiornaCruscotto(); });
+strumenti.forEach((s) => s.addEventListener('click', () => { toccato = true; scegli(s.dataset.strumento); }));
+document.querySelector('[data-equilibrio]')?.addEventListener('click', () => {
+  toccato = true;
+  const da = { ...base };
+  const o = { t: 0 };
+  gsap.to(o, { t: 1, duration: ridotto ? 0 : 0.8, ease: 'power2.inOut', onUpdate: () => {
+    for (const id of Object.keys(base)) base[id] = da[id] + (50 - da[id]) * o.t;
+    slider.value = String(Math.round(base[scelto]));
+    aggiornaCruscotto();
+  } });
+});
 if (slider) {
-  aggiornaCruscotto(Number(slider.value));
+  scegli('pensiero');
   if (!ridotto) {
-    // dimostrazione unica: la pressione sale e scende da sola, finché non la tocchi tu
+    // dimostrazione unica: il pensiero va fuori asse e trascina gli altri, poi torna al centro
     ScrollTrigger.create({
       trigger: '.cruscotto-grid', start: 'top 70%', once: true,
       onEnter: () => {
-        const o = { v: Number(slider.value) };
+        const o = { v: 50 };
+        const passo = () => { if (!toccato) { base.pensiero = o.v; slider.value = String(Math.round(o.v)); aggiornaCruscotto(); } };
         gsap.timeline()
-          .to(o, { v: 82, duration: 2.4, ease: 'power2.inOut', onUpdate: () => { if (!toccato) { slider.value = Math.round(o.v); aggiornaCruscotto(Math.round(o.v)); } } })
-          .to(o, { v: 22, duration: 2.6, ease: 'power2.inOut', delay: 0.6, onUpdate: () => { if (!toccato) { slider.value = Math.round(o.v); aggiornaCruscotto(Math.round(o.v)); } } });
+          .to(o, { v: 92, duration: 2.2, ease: 'power2.inOut', onUpdate: passo })
+          .to(o, { v: 50, duration: 2.2, ease: 'power2.inOut', delay: 1.2, onUpdate: passo });
       },
     });
   }
