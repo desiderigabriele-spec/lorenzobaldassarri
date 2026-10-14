@@ -6,12 +6,19 @@ import { piani } from '../data/sito.js';
 
 const fasi = [
   { n: '01', t: 'Ascolto', d: 'Obiettivi, contesto, storia sportiva o professionale.' },
-  { n: '02', t: 'Valutazione', d: 'Una lettura dei quattro piani, con misure fisiologiche dove servono.' },
+  { n: '02', t: 'Valutazione', d: 'Una lettura dei quattro piani, con biofeedback, neurofeedback e pedane propriocettive digitali dove servono.' },
   { n: '03', t: 'Allenamento', d: 'Tecniche mirate per ogni piano, in seduta e sul campo.' },
-  { n: '04', t: 'Monitoraggio', d: 'Dati e feedback continui: la traiettoria si corregge in corsa.' },
+  { n: '04', t: 'Monitoraggio', d: 'I dati psicofisiologici rendono visibili i progressi: la traiettoria si corregge in corsa.' },
 ];
+// Le tre qualità di ogni funzione (Psicologia Funzionale, Rispoli): cosa si allena davvero
+const qualita = [
+  { n: '01', t: 'Gamma', d: 'Quanto spazio hai tra i due poli: dalla calma all’attivazione, dalla lentezza alla velocità. Più è ampia, più risorse hai.', piena: 'M0 40 C 25 2, 50 2, 75 40 S 125 78, 150 40 S 200 2, 225 40 S 275 78, 300 40', ridotta: 'M0 40 C 25 30, 50 30, 75 40 S 125 50, 150 40 S 200 30, 225 40 S 275 50, 300 40' },
+  { n: '02', t: 'Modularità', d: 'Saper passare da un polo all’altro, più volte. Senza, si resta bloccati sempre sullo stesso registro.', piena: 'M0 40 C 18 4, 37 4, 50 40 S 82 76, 100 40 S 137 4, 150 40 S 182 76, 200 40 S 237 4, 250 40 S 282 76, 300 40', ridotta: 'M0 40 C 40 8, 120 6, 170 10 S 260 14, 300 40' },
+  { n: '03', t: 'Mobilità', d: 'Quanto in fretta cambi marcia quando la situazione cambia, senza restare invischiato in quella di prima.', piena: 'M0 60 L 90 60 L 100 14 L 200 14 L 210 60 L 300 60', ridotta: 'M0 60 L 60 60 C 120 60, 140 14, 200 14 C 240 14, 260 60, 300 60' },
+];
+
 const fonti = [
-  { quando: '2021', cosa: 'Scienza & Sport', d: 'Articolo sui fondamenti della Psicologia del Potenziamento, con Giammaria, Sgherri e Betti.' },
+  { quando: '2021', cosa: 'Scienza & Sport', d: '“La psicologia del potenziamento”: l’articolo che ne presenta i fondamenti. Con Andrea Giammaria, Elena Sgherri ed Erika Betti.' },
   { quando: '2021', cosa: 'Academy Nazionali F.I.R.', d: 'Webinar “Emozioni nella performance”.', href: 'https://www.psicologidellosport.it/emozioni-nella-performance-come-le-emozioni-trasformano-i-risultati-sport/' },
   { quando: '2025', cosa: 'KM2025 · Università di Siena', d: 'Invited talk all’Industry Day sul motorsport.', href: 'https://www.iiakm.org/conference/KM2025/pdfs/KM2025_Industry-Day-Invited-Talk_BALDASSARRI.pdf' },
 ];
@@ -50,6 +57,55 @@ const fonti = [
   <section class="sezione" data-theme="carta">
     <div class="wrap">
       <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Le fondamenta</p>
+        <h2 data-reveal>Prima le fondamenta, poi il grattacielo.</h2>
+        <p class="lead" data-reveal>Non insegno solo tecniche per il momento critico: alleno i funzionamenti di fondo da cui nascono pensieri, emozioni e gesti. Di ogni funzione contano tre qualità.</p>
+      </div>
+      <ul class="qualita" role="list">
+        {qualita.map((q, i) => (
+          <li class="qualita-voce" data-reveal style={`--d:${i * 0.08}s`}>
+            <svg class="onda" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
+              <path class="onda-ridotta" d={q.ridotta} />
+              <path class="onda-piena" d={q.piena} pathLength="1" />
+            </svg>
+            <p class="onda-legenda mono"><span class="pieno">allenata</span><span class="ridotto">limitata</span></p>
+            <span class="mono piano-n">{q.n}</span>
+            <h3>{q.t}</h3>
+            <p class="muted">{q.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme="cruscotto">
+    <div class="wrap duo esempio">
+      <div>
+        <p class="eyebrow" data-reveal>Un esempio dalla pista</p>
+        <h2 data-reveal>Safety car: cambiare marcia in un attimo.</h2>
+        <p class="lead" style="margin-top:1.25rem" data-reveal>Primo, in fuga: basta un’attenzione morbida, che non spreca energia. Entra la safety car, il gruppo si ricompatta: serve subito la concentrazione massima.</p>
+        <p class="muted" style="margin-top:1rem;max-width:44ch" data-reveal>Non è una tecnica da ricordare sotto stress: è una funzione allenata, che risponde da sola. Lo stesso vale per un leader che passa dal guidare all’ascoltare.</p>
+      </div>
+      <figure class="grafico" data-reveal>
+        <svg viewBox="0 0 520 280" role="img" aria-label="Andamento della concentrazione di un pilota: rilassamento, attenzione morbida al primo posto in solitaria, poi concentrazione massimale con la safety car e dopo la ripartenza.">
+          <line class="g-asse" x1="40" y1="20" x2="40" y2="240" /><line class="g-asse" x1="40" y1="240" x2="510" y2="240" />
+          <line class="g-guida" x1="40" y1="50" x2="510" y2="50" /><line class="g-guida" x1="40" y1="140" x2="510" y2="140" /><line class="g-guida" x1="40" y1="215" x2="510" y2="215" />
+          <text class="g-lab" x="48" y="42">Concentrazione massimale</text>
+          <text class="g-lab" x="48" y="132">Attenzione morbida</text>
+          <text class="g-lab" x="120" y="207">Rilassamento</text>
+          <path class="g-linea" pathLength="1" d="M40 215 C 70 215, 80 140, 110 140 L 250 140 C 270 140, 275 50, 300 50 L 420 50 C 440 50, 445 70, 470 70 L 510 70" />
+          <g class="g-evento"><line x1="170" y1="240" x2="170" y2="140" /><text x="170" y="258">Primo in solitaria</text></g>
+          <g class="g-evento"><line x1="285" y1="240" x2="285" y2="60" /><text x="285" y="258">Safety car</text></g>
+          <g class="g-evento"><line x1="455" y1="240" x2="455" y2="64" /><text x="455" y="258">Ripartenza</text></g>
+        </svg>
+        <figcaption class="mono">Da “La psicologia del potenziamento”, Scienza &amp; Sport, 2021</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sezione" data-theme="carta">
+    <div class="wrap">
+      <div class="sezione-head">
         <p class="eyebrow" data-reveal>Le fasi</p>
         <h2 data-reveal>Misurare, allenare, verificare.</h2>
       </div>
@@ -71,7 +127,7 @@ const fonti = [
         <p class="eyebrow" data-reveal>Da dove viene</p>
         <h2 data-reveal>Dalla pista, al mondo.</h2>
         <p class="lead" style="margin-top:1.5rem" data-reveal>Il protocollo nasce tra il 2013 e il 2016 in Formula Medicine, dalla tesi di specializzazione “Protocollo Funzionale per lo Sportivo”. Oggi lo sviluppo con il Gruppo Eljos e MindUP.</p>
-        <p class="muted" style="margin-top:1.25rem;max-width:44ch" data-reveal>Base teorica: la Psicologia Funzionale (Neo-Funzionalismo). Il metodo è stato elaborato con i colleghi del Gruppo Eljos.</p>
+        <p class="muted" style="margin-top:1.25rem;max-width:44ch" data-reveal>Base teorica: la Psicologia Funzionale (Neo-Funzionalismo). Ideato da Lorenzo e messo a punto con i colleghi del Gruppo Eljos, dal 2014 è applicato con piloti, tennisti, velisti, calciatori e tiratori.</p>
       </div>
       <ul class="fonti" role="list">
         {fonti.map((f) => (
@@ -104,6 +160,40 @@ const fonti = [
   .duo h2 { margin-top: 1rem; }
   .fonti { display: grid; gap: 1.75rem; }
   .fonti li { display: grid; gap: .5rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .qualita { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .qualita-voce { display: grid; gap: .6rem; align-content: start; padding: 1.4rem; border-radius: var(--radius); border: 1px solid var(--line); background: color-mix(in srgb, #fff 60%, transparent); }
+  .onda { width: 100%; height: 80px; overflow: visible; margin-bottom: .25rem; }
+  .onda path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+  .onda-ridotta { stroke: var(--grafite); stroke-width: 1.5; stroke-dasharray: 4 5; opacity: .55; }
+  .onda-piena { stroke: var(--terracotta); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s var(--respiro) .3s; }
+  .qualita-voce.visto .onda-piena { stroke-dashoffset: 0; }
+  .onda-legenda { display: flex; gap: 1rem; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); }
+  .onda-legenda span::before { content: ''; display: inline-block; width: 14px; height: 0; margin-right: .4rem; vertical-align: middle; }
+  .onda-legenda .pieno::before { border-top: 3px solid var(--terracotta); }
+  .onda-legenda .ridotto::before { border-top: 1.5px dashed var(--grafite); }
+  .grafico { margin: 0; padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--line); background: color-mix(in srgb, var(--cruscotto-2) 70%, transparent); }
+  .grafico svg { width: 100%; height: auto; overflow: visible; }
+  .g-asse { stroke: var(--testo-scuro-2); stroke-width: 1.2; }
+  .g-guida { stroke: var(--linea-scura); stroke-dasharray: 3 6; }
+  .g-lab { fill: var(--testo-scuro-2); font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .g-linea { fill: none; stroke: var(--segnale); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.6s var(--respiro) .3s; filter: drop-shadow(0 0 6px rgba(255, 181, 71, .45)); }
+  .grafico.visto .g-linea { stroke-dashoffset: 0; }
+  .g-evento line { stroke: var(--telemetria); stroke-width: 1; stroke-dasharray: 2 4; }
+  .g-evento text { fill: var(--testo-scuro); font-family: var(--f-display); font-weight: 600; font-size: 12px; text-anchor: middle; }
+  .grafico figcaption { margin-top: .75rem; font-size: .66rem; letter-spacing: .08em; color: var(--testo-scuro-2); }
+  .esempio { align-items: center; }
+  @media (max-width: 820px) {
+    .qualita { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: .75rem; margin-inline: calc(-1 * var(--gutter)); padding: .25rem var(--gutter) .5rem; scrollbar-width: none; }
+    .qualita-voce { flex: 0 0 80vw; scroll-snap-align: start; padding: 1.1rem; }
+    .piani, .fasi { grid-template-columns: 1fr 1fr !important; gap: .6rem; }
+    .piano { padding: 1rem; gap: .4rem; }
+    .piano svg { width: 40px; height: 40px; margin-bottom: 0; }
+    .piano .muted, .fasi .muted { font-size: .85rem; line-height: 1.4; }
+    .fasi li { gap: .4rem; padding-top: .9rem; }
+    .grafico { padding: .75rem; }
+    .duo { gap: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .onda-piena, .g-linea { stroke-dashoffset: 0; transition: none; } }
   @media (max-width: 980px) { .piani, .fasi { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 820px) { .piani, .fasi, .duo { grid-template-columns: 1fr; } }
 </style>

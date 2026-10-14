@@ -30,6 +30,6 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Analytics senza cookie (Plausible o Umami)
 - [ ] Rimuovere `Disallow: /` da `public/robots.txt` quando i contenuti sono confermati
 - [ ] Versione inglese (/en) delle pagine chiave
-- [ ] **Logo MindUP**: mandare il file ufficiale (SVG o PNG trasparente), da mettere in `public/img/` e indicare in `src/data/sito.js` → `identita.mindup.logo`. Ora c'è un segnaposto tipografico.
-- [ ] **"Creatore della Psicologia del Potenziamento®"**: la vecchia bio dice "elaborato assieme ai colleghi del Gruppo Eljos". Confermare la dicitura (creatore / ideatore / co-creatore) e l'uso del marchio ®.
+- [ ] **Logo MindUP**: ora c'è una ricostruzione in SVG (`public/img/mindup-logo-chiaro.svg` e `-scuro.svg`). Sostituirla con il file ufficiale (SVG o PNG trasparente) appena disponibile.
+- [x] **"Creatore della Psicologia del Potenziamento®"**: confermato dall'articolo su *Scienza & Sport* (2021), dove Lorenzo è indicato come "ideatore del mental training 'Protocollo Funzionale per Sportivi' e della Psicologia del Potenziamento". Resta da verificare l'uso del marchio ®.
 

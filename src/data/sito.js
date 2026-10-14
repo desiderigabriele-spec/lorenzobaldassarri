@@ -22,9 +22,9 @@ export const identita = {
   mindup: {
     nome: 'MindUP Enhancement Psychology®',
     sito: 'https://www.mindup.live/',
-    // Logo ufficiale: metterlo in public/img/ e scrivere qui il percorso, es. '/img/mindup-logo.svg'.
-    // Finché è null si vede un segnaposto tipografico.
-    logo: null,
+    // Logo: ricostruzione provvisoria in SVG. Sostituire i due file con quelli ufficiali appena arrivano.
+    // chiaro = per sfondi chiari (scritta scura), scuro = per sfondi blu notte (scritta argento).
+    logo: { chiaro: '/img/mindup-logo-chiaro.svg', scuro: '/img/mindup-logo-scuro.svg' },
   },
 };
 
