@@ -18,7 +18,8 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] Nessun cliente è nominato: decidere se e dove, solo con liberatoria scritta
 
 ## Materiali da fornire
-- [ ] Ritratto professionale (oggi monogramma "LB" in Chi sono) e foto di campo/pista/aula con liberatorie
+- [ ] Ritratto professionale: verticale 4:5, almeno 1200×1500 px, sguardo verso sinistra (verso il titolo). Metterlo in `public/img/` e indicarne il percorso in `src/data/sito.js` → `contatti.foto`. Compare nell'hero e in Chi sono
+- [ ] Foto di campo/pista/aula con liberatorie
 - [ ] Case study anonimi autorizzati (la sezione "Storie senza nomi" è stata omessa)
 
 ## Tecnica

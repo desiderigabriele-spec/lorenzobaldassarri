@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import { contatti } from '../data/sito.js';
+import Ritratto from '../components/Ritratto.astro';
 
 const formazione = [
   { t: 'Laurea in Psicologia clinica e di comunità', e: 'Università degli Studi di Firenze' },
@@ -26,10 +27,10 @@ const ruoli = [
         <h1 data-reveal style="--d:.08s">Prima il campo. Poi la pista.</h1>
         <p class="lead" data-reveal style="--d:.16s">Ho giocato a calcio per oltre vent'anni. Poi ho allenato bambini. Poi sono entrato nel paddock della Formula 1. Ho sempre fatto la stessa cosa: aiutare le persone a rendere sotto pressione, senza perdersi.</p>
       </div>
-      <figure class="ritratto" data-reveal>
-        <div class="ritratto-foto" role="img" aria-label="Monogramma LB"><span>LB</span></div>
-        <figcaption class="mono">Dott. Lorenzo Baldassarri · Montecatini Terme</figcaption>
-      </figure>
+      <div class="ritratto-box" data-reveal>
+        <Ritratto />
+        <p class="mono didascalia">Dott. Lorenzo Baldassarri · Montecatini Terme</p>
+      </div>
     </div>
   </section>
 
@@ -72,10 +73,8 @@ const ruoli = [
   .hero-chi { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: end; }
   .page-hero h1 { max-width: 12ch; margin-top: 1.5rem; }
   .page-hero .lead { max-width: 44ch; }
-  .ritratto { display: grid; gap: .75rem; margin: 0; }
-  .ritratto-foto { aspect-ratio: 4/5; border-radius: var(--radius); background: radial-gradient(120% 80% at 80% 10%, color-mix(in srgb, var(--terracotta) 35%, transparent), transparent 55%), var(--inchiostro); display: grid; place-items: center; overflow: hidden; }
-  .ritratto-foto span { font-family: var(--f-display); font-weight: 600; font-size: clamp(4rem, 10vw, 7rem); letter-spacing: -0.06em; color: var(--carta); opacity: .9; }
-  .ritratto figcaption { font-size: .7rem; letter-spacing: .1em; color: var(--fg-2); text-transform: uppercase; }
+  .ritratto-box { display: grid; gap: .75rem; max-width: 380px; }
+  .didascalia { font-size: .7rem; letter-spacing: .1em; color: var(--fg-2); text-transform: uppercase; }
   .duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 7vw, 6rem); }
   .duo h2 { margin: 1rem 0 2rem; }
   .righe { display: grid; border-top: 1px solid var(--line); }
@@ -86,5 +85,5 @@ const ruoli = [
   .omonimo .h2 { max-width: 20ch; font-family: var(--f-display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; }
   .accento { color: var(--segnale); }
   .legale { font-size: .75rem; letter-spacing: .04em; }
-  @media (max-width: 820px) { .hero-chi, .duo { grid-template-columns: 1fr; } .ritratto { max-width: 320px; } }
+  @media (max-width: 820px) { .hero-chi, .duo { grid-template-columns: 1fr; } .ritratto-box { max-width: 300px; } }
 </style>

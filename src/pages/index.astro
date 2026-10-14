@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { porte, piani, contatti } from '../data/sito.js';
+import Ritratto from '../components/Ritratto.astro';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -117,7 +118,9 @@ const media = [
         </div>
         <p class="fiducia mono" data-reveal style="--d:.32s">Psicologo-psicoterapeuta · Albo Toscana n. {contatti.albo} · Docente Università di Parma</p>
       </div>
-      <div class="hero-ancora" data-ancora aria-hidden="true"></div>
+      <div class="hero-ancora" data-ancora>
+        <Ritratto classe="ritratto-hero" eager />
+      </div>
       <div class="telemetria" data-reveal style="--d:.4s">
         <div class="tel-testa mono">
           <span class="tel-live"><span class="tel-punto"></span> Battito · esempio illustrativo</span>
@@ -402,7 +405,8 @@ const media = [
   .a-capo { display: block; }
   .hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
   .fiducia { font-size: .72rem; letter-spacing: .06em; color: var(--fg-2); max-width: 46ch; }
-  .hero-ancora { aspect-ratio: 1; width: 100%; max-width: 470px; justify-self: center; }
+  .hero-ancora { aspect-ratio: 1; width: 100%; max-width: 470px; justify-self: center; display: grid; place-items: center; }
+  .hero-ancora :global(.ritratto-hero) { width: 56%; }
 
   .telemetria { margin-top: 1rem; touch-action: pan-y; width: 100%; }
   .tel-testa { display: flex; justify-content: space-between; font-size: .72rem; letter-spacing: .08em; color: var(--fg-2); text-transform: uppercase; }

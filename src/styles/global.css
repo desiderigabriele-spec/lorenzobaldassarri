@@ -258,7 +258,7 @@ p { text-wrap: pretty; }
 .tela-3d.pronta { opacity: 1; }
 
 /* ---------- Comparse allo scroll ---------- */
-.js [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity 1s var(--uscita), transform 1s var(--uscita); transition-delay: var(--d, 0s); }
+.js [data-reveal] { opacity: .35; transform: translateY(14px); transition: opacity 1s var(--uscita), transform 1s var(--uscita); transition-delay: var(--d, 0s); }
 .js [data-reveal].visto { opacity: 1; transform: none; }
 
 /* ---------- Schede ---------- */
