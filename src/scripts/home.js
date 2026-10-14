@@ -37,7 +37,7 @@ const mente = document.querySelector('.mente');
 const barraP = document.querySelector('[data-pressione-barra]');
 const valP = document.querySelector('[data-pressione-val]');
 let heroVisibile = false;
-if (mente) new IntersectionObserver(([v]) => { heroVisibile = v.isIntersecting; }).observe(mente);
+if (mente) new IntersectionObserver(([v]) => { heroVisibile = v.isIntersecting; if (v.intersectionRatio > 0.35) mente.classList.add('vista'); }, { threshold: [0, 0.35] }).observe(mente);
 
 let fase = 0;
 let picco = 0;
@@ -57,7 +57,7 @@ const tieni = document.querySelector('[data-tieni]');
 let tenuto = false;
 let caricoTieni = 0;
 let prossimoBattito = 0;
-function premi(e) { if (e) e.preventDefault(); tenuto = true; tieni.classList.add('premuto'); }
+function premi(e) { if (e) e.preventDefault(); tenuto = true; tieni.classList.add('premuto', 'usato'); }
 function lascia() { if (!tenuto) return; tenuto = false; tieni.classList.remove('premuto'); }
 if (tieni) {
   tieni.addEventListener('pointerdown', (e) => { tieni.setPointerCapture?.(e.pointerId); premi(e); });
@@ -105,7 +105,7 @@ function tick(ora) {
     if (valP) valP.textContent = `${Math.round(p * 100)}%`;
 
     // "Ecco. La calma si allena." quando torni quieto dopo un picco
-    if (p > 0.42) { picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: i piani si separano…'; } }
+    if (p > 0.42) { mente?.classList.add('provato'); picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: i piani si separano…'; } }
     if (picco && p < 0.06) {
       if (!quieteDa) quieteDa = ora;
       if (ora - quieteDa > 900 && !mostrato) {

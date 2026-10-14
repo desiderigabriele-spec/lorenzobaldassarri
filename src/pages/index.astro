@@ -144,14 +144,21 @@ const media = [
       <div class="mente-testo">
         <p class="eyebrow" data-reveal>Prova adesso</p>
         <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
-        <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine">Muovi il cursore veloce</strong><strong class="hint-touch">Tieni premuto il pulsante</strong>: i piani si separano. <span class="hint-fine">Fermati</span><span class="hint-touch">Lascia</span>: tornano insieme.</p>
+        <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
       </div>
       <div class="mente-stage">
         <div class="mente-ancora" data-ancora>
+          <div class="gesto" aria-hidden="true">
+            <svg class="gesto-cursore" viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6L9.6 20z" /></svg>
+            <span class="gesto-scia"></span>
+            <span class="gesto-anello"></span>
+            <span class="gesto-label"><span class="l1">Muovi veloce</span><span class="l2">Ora fermati</span></span>
+          </div>
           {piani.map((p, i) => <span class={`angolo a${i + 1} p-${p.id}`} aria-hidden="true">{p.nome}</span>)}
         </div>
         <button type="button" class="tieni" data-tieni aria-describedby="mente-titolo">
           <span class="tieni-riempi" aria-hidden="true"></span>
+          <span class="tieni-dito" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V8a1.5 1.5 0 0 1 3 0v2m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-4.7-2.3L4 15.5a1.6 1.6 0 0 1 2.4-2.1L9 15" /></svg></span>
           <span class="tieni-testo">Tieni premuto</span>
           <span class="tieni-sotto mono">la pressione sale finché non lasci</span>
         </button>
@@ -169,7 +176,7 @@ const media = [
             <line x1="0" y1="60" x2="1000" y2="60" class="tel-asse" />
             <path class="tel-linea" d="M0 60 L1000 60" />
           </svg>
-          <p class="tel-msg mono" aria-live="polite">In attesa: muoviti, poi fermati.</p>
+          <p class="tel-msg mono" aria-live="polite"><span class="hint-fine">In attesa: muoviti, poi fermati.</span><span class="hint-touch">In attesa: tieni premuto, poi lascia.</span></p>
         </div>
       </div>
       <div class="mente-legenda">
@@ -808,4 +815,40 @@ const media = [
     .chiusura { min-height: auto; }
     .chiusura-ancora { width: min(460px, 52vh); }
   }
+
+  /* ---------- Guide animate: far capire subito cosa fare ---------- */
+  .evidenziatore { background: linear-gradient(transparent 58%, rgba(36, 67, 214, .22) 58%) no-repeat 0 0 / 0% 100%; transition: background-size 1.1s var(--uscita) .3s; }
+  .e2 { transition-delay: 1.1s; }
+  .mente.vista .evidenziatore { background-size: 100% 100%; }
+
+  .gesto { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 3; pointer-events: none; transition: opacity .6s var(--respiro); }
+  .mente.provato .gesto { opacity: 0; }
+  .gesto-cursore { position: absolute; left: -12px; top: -12px; width: 28px; height: 28px; max-width: none; fill: var(--inchiostro); stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 4px 8px rgba(11, 18, 48, .3)); animation: gesto-muovi 4.2s var(--respiro) infinite; }
+  .gesto-scia { position: absolute; left: -70px; top: 2px; width: 140px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, transparent, rgba(36, 67, 214, .55), transparent); animation: gesto-scia 4.2s linear infinite; }
+  .gesto-anello { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--terracotta); opacity: 0; animation: gesto-anello 4.2s var(--uscita) infinite; }
+  .gesto-label { position: absolute; left: 50%; top: 34px; transform: translateX(-50%); white-space: nowrap; font-family: var(--f-display); font-weight: 700; font-size: .9rem; }
+  .gesto-label span { position: absolute; left: 50%; transform: translateX(-50%); padding: .35rem .75rem; border-radius: 999px; background: var(--inchiostro); color: #fff; box-shadow: 0 10px 24px -12px rgba(11, 18, 48, .6); }
+  .gesto-label .l1 { animation: gesto-l1 4.2s steps(1) infinite; }
+  .gesto-label .l2 { background: var(--terracotta); animation: gesto-l2 4.2s steps(1) infinite; }
+  @keyframes gesto-muovi {
+    0% { transform: translate(-90px, 0); } 8% { transform: translate(90px, -14px); } 16% { transform: translate(-90px, 10px); }
+    24% { transform: translate(90px, -8px); } 32% { transform: translate(-90px, 6px); } 40% { transform: translate(60px, 0); }
+    50%, 100% { transform: translate(0, 0); }
+  }
+  @keyframes gesto-scia { 0%, 40% { opacity: 1; transform: scaleX(1); } 48%, 100% { opacity: 0; transform: scaleX(.2); } }
+  @keyframes gesto-anello { 0%, 52% { opacity: 0; transform: scale(.6); } 60% { opacity: 1; transform: scale(1); } 85%, 100% { opacity: 0; transform: scale(1.8); } }
+  @keyframes gesto-l1 { 0% { opacity: 1; } 48% { opacity: 0; } }
+  @keyframes gesto-l2 { 0% { opacity: 0; } 48% { opacity: 1; } }
+  @media (pointer: coarse) { .gesto { display: none; } }
+
+  .tieni-dito { position: absolute; left: 1.1rem; top: 50%; width: 1.9rem; height: 1.9rem; margin-top: -.95rem; }
+  .tieni-dito svg { width: 100%; height: 100%; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; animation: dito-preme 1.8s var(--respiro) infinite; transform-origin: 50% 80%; }
+  @keyframes dito-preme { 0%, 100% { transform: translateY(0) scale(1); } 40%, 60% { transform: translateY(3px) scale(.88); } }
+  .tieni::after { content: ''; position: absolute; inset: -4px; border-radius: 999px; border: 2px solid var(--terracotta); animation: tieni-onda 1.8s var(--uscita) infinite; pointer-events: none; }
+  @keyframes tieni-onda { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.12, 1.35); } }
+  .tieni { overflow: visible; isolation: isolate; }
+  .tieni-riempi { border-radius: 999px; overflow: hidden; }
+  .tieni.usato::after, .tieni.premuto::after, .tieni.usato .tieni-dito svg { animation: none; opacity: 0; }
+  .tieni.usato .tieni-dito svg { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .gesto-cursore, .gesto-scia, .gesto-anello, .tieni::after, .tieni-dito svg { animation: none; } .gesto-label .l2 { display: none; } }
 </style>
