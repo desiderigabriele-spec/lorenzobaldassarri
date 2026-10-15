@@ -42,14 +42,30 @@ const jsonLd = {
 
 // "Ti riconosci?": situazioni comuni, ognuna legata a una delle 4 parti di te
 const situazioni = [
-  { testo: 'Prima di un esame o di una gara mi blocco', parte: 'corpo' },
-  { testo: 'La notte la testa non si spegne', parte: 'pensiero' },
-  { testo: 'So cosa fare, ma nel momento giusto non ci riesco', parte: 'pensiero' },
-  { testo: 'Mi sento sempre in allarme', parte: 'fisiologia' },
-  { testo: 'Dopo un errore non riesco a ripartire', parte: 'emozione' },
-  { testo: 'Sono stanco anche quando riposo', parte: 'fisiologia' },
-  { testo: 'Ho paura di deludere gli altri', parte: 'emozione' },
-  { testo: 'Ho spalle e collo sempre contratti', parte: 'corpo' },
+  { testo: 'Prima di un esame o di una gara mi blocco', parte: 'corpo',
+    spiega: 'Il corpo sente il pericolo e tira il freno: la testa sa cosa fare, ma i muscoli si irrigidiscono.',
+    lavoro: 'Alleniamo il corpo a restare sciolto sotto pressione, con esercizi brevi da usare proprio prima della prova.' },
+  { testo: 'La notte la testa non si spegne', parte: 'pensiero',
+    spiega: 'La testa continua a cercare soluzioni anche quando non serve, e il sonno non arriva.',
+    lavoro: 'Impariamo a spegnere il rumore dei pensieri, con esercizi semplici da fare la sera.' },
+  { testo: 'So cosa fare, ma nel momento giusto non ci riesco', parte: 'pensiero',
+    spiega: 'Sapere non basta: sotto pressione testa, emozioni e corpo devono lavorare insieme, e a volte non lo fanno.',
+    lavoro: 'Ci alleniamo nelle condizioni vere, non solo a parole, finché il gesto ti viene anche quando conta.' },
+  { testo: 'Mi sento sempre in allarme', parte: 'fisiologia',
+    spiega: 'Il tuo allarme interno è rimasto acceso: battito e respiro corrono anche quando non c’è pericolo.',
+    lavoro: 'Insegniamo al corpo ad abbassare il volume, partendo dal respiro. Puoi provarlo qui sotto.' },
+  { testo: 'Dopo un errore non riesco a ripartire', parte: 'emozione',
+    spiega: 'L’errore accende rabbia o paura, e quelle emozioni restano attaccate anche al momento dopo.',
+    lavoro: 'Ti alleni a lasciar andare l’errore in pochi secondi e a tornare su quello che stai facendo.' },
+  { testo: 'Anche quando riposo, non mi ricarico', parte: 'fisiologia',
+    spiega: 'Se il corpo non stacca mai davvero, anche il riposo non basta a ricaricarti.',
+    lavoro: 'Lavoriamo su respiro e recupero, per tornare ad avere energia nella giornata.' },
+  { testo: 'Ho paura di deludere gli altri', parte: 'emozione',
+    spiega: 'Quando il giudizio degli altri pesa più di quello che fai, la paura prende il comando.',
+    lavoro: 'Ritroviamo fiducia e la tua misura: cosa vuoi tu, non cosa si aspettano gli altri.' },
+  { testo: 'Ho spalle e collo sempre contratti', parte: 'corpo',
+    spiega: 'Il corpo trattiene la tensione che accumuli durante il giorno, spesso senza che te ne accorga.',
+    lavoro: 'Esercizi per sciogliere la tensione e per accorgerti prima quando sta salendo.' },
 ];
 
 // frasi che la persona dice a sé stessa: in equilibrio / sotto pressione (stesso ordine dei piani)
@@ -172,21 +188,40 @@ const media = [
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Ti riconosci?</p>
         <h2 id="riconosci-titolo" data-reveal>Tocca le frasi che ti somigliano.</h2>
+        <p class="lead" data-reveal>Per ognuna ti spiego perché succede e cosa possiamo fare insieme.</p>
       </div>
+      <div class="riconosci-corpo">
       <div class="situazioni" role="group" aria-label="Situazioni in cui ti riconosci">
         {situazioni.map((x, i) => (
-          <button type="button" class={`situazione p-${x.parte}`} aria-pressed="false" data-parte={x.parte} data-reveal style={`--d:${i * 0.04}s`}>
+          <button type="button" class={`situazione p-${x.parte}`} aria-pressed="false" data-parte={x.parte} data-spiega={x.spiega} data-lavoro={x.lavoro} data-reveal style={`--d:${i * 0.04}s`}>
             <span class="situazione-punto" aria-hidden="true"></span>{x.testo}
           </button>
         ))}
       </div>
       <div class="riconosci-esito" data-riconosci-esito aria-live="polite" hidden>
-        <p class="riconosci-frase">Capita a tantissime persone. E ci si può lavorare.</p>
-        <p class="riconosci-parti muted" data-riconosci-parti></p>
+        <p class="riconosci-frase" data-riconosci-titolo></p>
+        <div class="riconosci-risposta" data-riconosci-risposta>
+          <p class="riconosci-quale">Hai toccato: <q data-riconosci-quale></q></p>
+          <p><b>Perché succede.</b> <span data-riconosci-spiega></span></p>
+          <p><b>Cosa facciamo insieme.</b> <span data-riconosci-lavoro></span></p>
+        </div>
+        <div class="riconosci-mappa">
+          <p class="etichetta">La tua mappa: dove senti la pressione</p>
+          <ul role="list">
+            {piani.map((p) => (
+              <li class={`p-${p.id}`} data-mappa={p.id}><span>{p.nome}</span><span class="mappa-barra"><i></i></span></li>
+            ))}
+          </ul>
+        </div>
         <div class="riconosci-azioni">
           <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
-          <a class="link-freccia" href="#perche">Come ci lavoriamo <span aria-hidden="true">↓</span></a>
+          <a class="link-freccia" href="#mente" data-riconosci-link><span data-riconosci-link-testo>Prova: cosa ti succede sotto pressione</span> <span aria-hidden="true">↓</span></a>
         </div>
+      </div>
+      <div class="riconosci-vuoto" aria-hidden="true">
+        <span class="riconosci-vuoto-mano">👆</span>
+        <p>Tocca una frase a sinistra.<br />Qui trovi la risposta pensata per te.</p>
+      </div>
       </div>
     </div>
   </section>
@@ -1312,8 +1347,31 @@ const media = [
   .riconosci-esito { margin-top: clamp(1.25rem, 3vh, 2rem); display: grid; gap: .6rem; padding: 1.25rem 1.4rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -30px rgba(11, 18, 48, .5); max-width: 46rem; animation: riconosci-entra .5s var(--uscita); }
   .riconosci-frase { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.1rem, 1rem + .5vw, 1.35rem); letter-spacing: -0.02em; line-height: 1.25; }
   .riconosci-azioni { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.4rem; margin-top: .3rem; }
+  .riconosci-risposta { display: grid; gap: .45rem; padding: .9rem 1rem; border-radius: 14px; background: color-mix(in srgb, var(--c, var(--terracotta)) 8%, #fff); border-left: 4px solid var(--c, var(--terracotta)); transition: background-color .3s, border-color .3s; }
+  .riconosci-risposta.cambia { animation: riconosci-entra .4s var(--uscita); }
+  .riconosci-risposta b { font-family: var(--f-display); color: var(--inchiostro); }
+  .riconosci-quale { font-family: var(--f-display); font-weight: 600; font-size: .9rem; color: var(--fg-2); }
+  .riconosci-quale q { color: var(--inchiostro); }
+  .riconosci-mappa { display: grid; gap: .5rem; }
+  .riconosci-mappa ul { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 0; padding: 0; list-style: none; }
+  .riconosci-mappa li { display: grid; gap: .3rem; font-family: var(--f-display); font-weight: 600; font-size: .85rem; color: var(--fg-2); transition: color .3s; }
+  .riconosci-mappa li.acceso { color: var(--inchiostro); }
+  .mappa-barra { height: 8px; border-radius: 999px; background: var(--linea); overflow: hidden; }
+  .mappa-barra i { display: block; height: 100%; width: 100%; background: var(--c); border-radius: inherit; transform: scaleX(var(--n, 0)); transform-origin: left; transition: transform .5s var(--uscita); }
+  @media (max-width: 860px) { .riconosci-mappa ul { grid-template-columns: 1fr 1fr; gap: .45rem .9rem; } }
   @keyframes riconosci-entra { from { opacity: 0; transform: translateY(10px); } }
-  @media (min-width: 1024px) { .riconosci-sezione { min-height: 100svh; display: grid; align-content: center; } }
+  .riconosci-vuoto { display: none; }
+  @media (min-width: 1024px) {
+    .riconosci-sezione { min-height: 100svh; display: grid; align-content: center; }
+    .riconosci-corpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+    .riconosci-corpo .situazioni { flex-direction: column; align-items: flex-start; }
+    .riconosci-corpo .riconosci-esito { margin-top: 0; }
+    .riconosci-vuoto { display: grid; place-items: center; align-content: center; gap: .8rem; min-height: 22rem; padding: 2rem; border-radius: var(--radius); border: 2px dashed var(--linea); text-align: center; color: var(--fg-2); font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; background: color-mix(in srgb, #fff 55%, transparent); }
+    .riconosci-vuoto-mano { font-size: 2rem; animation: vuoto-mano 1.6s ease-in-out infinite; }
+    .riconosci-esito:not([hidden]) ~ .riconosci-vuoto { display: none; }
+  }
+  @keyframes vuoto-mano { 50% { transform: translate(-8px, -4px); } }
+  @media (min-width: 1024px) and (max-height: 960px) { .riconosci-corpo .situazione { padding-block: .55rem; } .riconosci-corpo .situazioni { gap: .45rem; } }
   @media (max-width: 860px) { .situazione { width: 100%; border-radius: 16px; padding: .65rem .9rem; } .riconosci-esito { padding: 1rem; } }
   /* sfera: una sola barra semplice, niente numeri tecnici */
   .pressometro { grid-template-columns: auto 1fr; }

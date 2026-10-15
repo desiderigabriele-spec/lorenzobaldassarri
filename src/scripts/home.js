@@ -584,14 +584,58 @@ if (torreBox) {
    ====================================================================== */
 const situazioni = [...document.querySelectorAll('.situazione')];
 const esitoRiconosci = document.querySelector('[data-riconosci-esito]');
-const partiRiconosci = document.querySelector('[data-riconosci-parti]');
-const NOMI_PARTI = Object.fromEntries(piani.map((p) => [p.id, p.nome]));
+const $r = (k) => esitoRiconosci?.querySelector(`[data-riconosci-${k}]`);
+let ordineScelte = [];
+let esitoMostrato = false;
+const TITOLI = [
+  'Succede a tantissime persone. Ecco perché.',
+  'Più cose insieme? È normale: le parti di te sono collegate.',
+  'Tante cose insieme: vale la pena parlarne.',
+];
 situazioni.forEach((b) => b.addEventListener('click', () => {
-  b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
-  const scelte = situazioni.filter((x) => x.getAttribute('aria-pressed') === 'true');
+  const acceso = b.getAttribute('aria-pressed') !== 'true';
+  b.setAttribute('aria-pressed', String(acceso));
+  ordineScelte = ordineScelte.filter((x) => x !== b);
+  if (acceso) ordineScelte.push(b);
   if (!esitoRiconosci) return;
-  esitoRiconosci.hidden = scelte.length === 0;
-  const parti = [...new Set(scelte.map((x) => NOMI_PARTI[x.dataset.parte]))];
-  if (partiRiconosci) partiRiconosci.textContent = parti.length ? `Le parti di te coinvolte: ${parti.join(', ')}. Più sotto vedi come lavorano insieme.` : '';
+  esitoRiconosci.hidden = ordineScelte.length === 0;
+  if (!ordineScelte.length) return;
+  const n = ordineScelte.length;
+  $r('titolo').textContent = TITOLI[n === 1 ? 0 : n <= 3 ? 1 : 2];
+  // la risposta parla dell'ultima frase toccata
+  const ultima = ordineScelte[n - 1];
+  const risposta = $r('risposta');
+  risposta.className = `riconosci-risposta p-${ultima.dataset.parte}`;
+  void risposta.offsetWidth;
+  risposta.classList.add('cambia');
+  $r('quale').textContent = ultima.textContent.trim();
+  $r('spiega').textContent = ultima.dataset.spiega;
+  $r('lavoro').textContent = ultima.dataset.lavoro;
+  // la mappa: quanto pesa ogni parte (2 frasi per parte)
+  const conta = {};
+  ordineScelte.forEach((x) => { conta[x.dataset.parte] = (conta[x.dataset.parte] || 0) + 1; });
+  esitoRiconosci.querySelectorAll('[data-mappa]').forEach((li) => {
+    const c = conta[li.dataset.mappa] || 0;
+    li.classList.toggle('acceso', c > 0);
+    li.querySelector('i').style.setProperty('--n', String(Math.min(1, c / 2)));
+  });
+  // il collegamento porta alla prova più utile: respiro se pesa il corpo, sfera se pesano testa ed emozioni
+  const fisico = (conta.corpo || 0) + (conta.fisiologia || 0);
+  const mentale = (conta.pensiero || 0) + (conta.emozione || 0);
+  const link = $r('link');
+  if (fisico > mentale) { link.href = '#respiro'; $r('link-testo').textContent = 'Prova subito: calmati in 30 secondi'; }
+  else { link.href = '#mente'; $r('link-testo').textContent = 'Prova: cosa ti succede sotto pressione'; }
+  // la prima volta, se la risposta resta fuori dallo schermo, la porta in vista
+  if (!esitoMostrato) {
+    esitoMostrato = true;
+    requestAnimationFrame(() => {
+      const r = esitoRiconosci.getBoundingClientRect();
+      const extra = r.top + Math.min(r.height, window.innerHeight * 0.55) - window.innerHeight;
+      if (extra > 0) {
+        if (window.__lenis) window.__lenis.scrollTo(window.scrollY + extra + 16, { duration: 0.9 });
+        else window.scrollBy({ top: extra + 16, behavior: 'smooth' });
+      }
+    });
+  }
 }));
 
