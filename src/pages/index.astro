@@ -524,7 +524,7 @@ const media = [
               <button type="button" class="rec-tutto" data-rec-apri>Leggi tutta <span aria-hidden="true">→</span></button>
               <footer class="rec-autore">
                 {r.foto
-                  ? <img class="rec-foto" src={r.foto} alt="" width="48" height="48" loading="lazy" />
+                  ? <img class="rec-foto" src={r.foto} alt={`Foto di ${r.nome}`} width="60" height="60" loading="lazy" decoding="async" />
                   : <span class="rec-foto rec-iniziali" aria-hidden="true">{iniziali(r.nome)}</span>}
                 <span class="rec-chi">
                   <span class="rec-nome">{r.nome}
@@ -1473,7 +1473,8 @@ const media = [
   .rec-tutto { align-self: flex-start; padding: 0; border: 0; background: none; color: #fff; font-family: var(--f-display); font-weight: 600; font-size: .92rem; cursor: pointer; text-decoration: underline; text-decoration-color: var(--c); text-underline-offset: .3em; text-decoration-thickness: 2px; }
   .rec-tutto:hover { color: var(--c); }
   .rec-autore { margin-top: auto; padding-top: .9rem; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; align-items: center; gap: .8rem; }
-  .rec-foto { width: 48px; height: 48px; border-radius: 50%; flex: none; object-fit: cover; }
+  .rec-foto { width: 60px; height: 60px; border-radius: 50%; flex: none; object-fit: cover; box-shadow: 0 0 0 2px var(--c), 0 0 0 4px rgba(255, 255, 255, .08); }
+  .rec-dialog-corpo .rec-foto { width: 72px; height: 72px; }
   .rec-iniziali { display: grid; place-items: center; background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 45%, var(--cruscotto))); color: #fff; font-family: var(--f-display); font-weight: 700; font-size: 1rem; letter-spacing: .02em; box-shadow: 0 0 0 2px rgba(255, 255, 255, .15); }
   .rec-chi { display: grid; gap: .1rem; min-width: 0; }
   .rec-nome { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--f-display); font-weight: 700; color: #fff; }
