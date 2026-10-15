@@ -56,13 +56,14 @@ const numeri = [
   { to: 3, suffix: '', label: 'anni nel paddock con Formula Medicine' },
 ];
 
-const tappe = [
-  { n: '01', quando: 'Campo', titolo: 'Il campo, prima di tutto.', testo: "Oltre vent'anni da calciatore. Poi allenatore nella Scuola Calcio della mia città." },
-  { n: '02', quando: 'Persona', titolo: 'Crescere la persona, non solo il gesto.', testo: 'Responsabile educativo da psicologo. Un progetto di inclusione presentato a Pistoia.' },
-  { n: '03', quando: '2011', titolo: 'Lo studio.', testo: 'Psicologo e psicoterapeuta a Montecatini Terme. Ansia, stress, prestazione.' },
-  { n: '04', quando: '2013–2016', titolo: 'Il paddock.', testo: 'Area mental di Formula Medicine: piloti di F1 e DTM, Serie A, olimpionici.' },
-  { n: '05', quando: '2017', titolo: 'Il metodo prende forma.', testo: "Co-fondo il Gruppo Eljos. Docente all'Università di Parma." },
-  { n: '06', quando: '2021 → oggi', titolo: 'Ovunque si giochi sotto pressione.', testo: "MindUP, l'academy toscana di rugby, le aziende. Lo stesso metodo." },
+// "Chi sono": il percorso, studi e incarichi insieme
+const percorso = [
+  { quando: 'Prima', titolo: 'Il campo', testo: "Oltre vent'anni da calciatore, poi allenatore di Scuola Calcio." },
+  { quando: '2010–2014', titolo: 'Psicoterapia funzionale', testo: 'Lauree in Psicologia clinica (Firenze, Urbino), specializzazione SEF, master in psicologia dello sport.' },
+  { quando: '2011', titolo: 'Lo studio', testo: 'Psicologo e psicoterapeuta a Montecatini Terme: ansia, stress, momenti difficili.' },
+  { quando: '2013–2016', titolo: 'Il paddock', testo: 'Area mental di Formula Medicine: piloti di F1 e DTM, Serie A, olimpionici.' },
+  { quando: '2017', titolo: 'Università ed Eljos', testo: "Docente all'Università di Parma, co-fondatore del Gruppo Eljos." },
+  { quando: '2021 → oggi', titolo: 'MindUP', testo: 'Co-founder e creatore della Psicologia del Potenziamento®.' },
 ];
 
 const giri = [
@@ -144,28 +145,37 @@ const media = [
     </div>
   </section>
 
-  <!-- 2 · PERCHÉ LA PSICOLOGIA FUNZIONALE: il grattacielo -->
+  <!-- 2 · CHI SONO: il percorso in una linea del tempo -->
+  <section class="sezione chi-sezione" id="chi" data-theme="carta" aria-labelledby="chi-titolo">
+    <div class="wrap">
+      <div class="sezione-head chi-head">
+        <p class="eyebrow" data-reveal>Chi sono</p>
+        <h2 id="chi-titolo" data-reveal>Dal campo alla clinica, fino alla Formula 1.</h2>
+        <p class="lead" data-reveal>Psicologo e psicoterapeuta dal 2011. Prima ancora, calciatore: so cosa vuol dire giocarsi tutto in pochi secondi.</p>
+      </div>
+      <ol class="percorso" role="list">
+        {percorso.map((t, i) => (
+          <li class="tappa-p" data-reveal style={`--d:${i * 0.07}s`}>
+            <span class="tappa-quando">{t.quando}</span>
+            <h3>{t.titolo}</h3>
+            <p class="muted">{t.testo}</p>
+          </li>
+        ))}
+      </ol>
+      <a class="link-freccia chi-link" href="/chi-sono" data-reveal>Studi e incarichi completi <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <!-- 3 · PERCHÉ LA PSICOLOGIA FUNZIONALE: il palazzo resta fermo, le frasi scorrono e lo costruiscono -->
   <section class="sezione perche" id="perche" data-theme="carta" aria-labelledby="perche-titolo">
-    <div class="wrap perche-grid">
-      <div class="perche-testo">
+    <div class="wrap">
+      <div class="sezione-head perche-head">
         <p class="eyebrow" data-reveal>Psicologia funzionale</p>
         <h2 id="perche-titolo" data-reveal>Perché a volte capire non basta.</h2>
         <p class="lead" data-reveal>Molti percorsi lavorano soprattutto su un piano: pensieri, comportamenti o passato. Funzionano, ma a volte capisci tutto e il corpo resta in allarme.</p>
-        <p class="perche-sotto mono" data-reveal>Quando si lavora su un piano solo, il rischio è:</p>
-        <ol class="limiti" role="list">
-          <li data-reveal><strong>Un cambiamento in superficie.</strong> <span class="muted">Va meglio finché segui la tecnica, poi torna come prima.</span></li>
-          <li data-reveal style="--d:.06s"><strong>Poca flessibilità.</strong> <span class="muted">Funziona lì, non quando la situazione cambia.</span></li>
-          <li data-reveal style="--d:.12s"><strong>Le ricadute.</strong> <span class="muted">Basta un imprevisto e si perde.</span></li>
-        </ol>
-        <div class="risposta" data-reveal>
-          <p><strong>La Psicologia Funzionale parte dalle fondamenta:</strong> i funzionamenti di fondo da cui nascono pensieri, emozioni e sintomi. E recupera le Esperienze di Base del Sé:</p>
-          <ul class="esperienze" role="list">
-            <li>Calma</li><li>Contatto</li><li>Forza</li><li>Tenerezza</li><li>Contenimento</li>
-          </ul>
-          <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
-        </div>
       </div>
-      <figure class="torre-box" data-reveal>
+      <div class="storia">
+        <figure class="torre-box">
         <svg class="torre-svg" viewBox="0 0 320 440" role="img" aria-labelledby="torre-didascalia">
           <line class="terreno" x1="20" y1="330" x2="300" y2="330" />
           <g class="fondamenta">
@@ -196,12 +206,39 @@ const media = [
           <text class="etichetta-base" x="160" y="352" text-anchor="middle" aria-hidden="true">Base sottile: un piano solo</text>
           <text class="etichetta-fondamenta" x="62" y="381" text-anchor="end" aria-hidden="true">Fondamenta</text>
         </svg>
-        <figcaption id="torre-didascalia" class="torre-didascalia" aria-live="polite"><span data-fase>Questo palazzo sono i risultati che vuoi.</span></figcaption>
-        <dl class="torre-legenda">
-          <div><dt><span class="leg-palazzo" aria-hidden="true"></span>Il palazzo</dt><dd>Ciò che vuoi ottenere: stare meglio, rendere sotto pressione.</dd></div>
-          <div><dt><span class="leg-fondamenta" aria-hidden="true"></span>Le fondamenta</dt><dd>Pensiero, emozione, corpo e fisiologia: ciò su cui tutto poggia.</dd></div>
-        </dl>
-      </figure>
+          <figcaption id="torre-didascalia" class="torre-didascalia" aria-live="polite"><span data-fase>Questo palazzo sono i risultati che vuoi.</span></figcaption>
+        </figure>
+        <div class="passi">
+          <article class="passo" data-passo="0">
+            <p class="etichetta">Il palazzo</p>
+            <h3>Sono i risultati che vuoi.</h3>
+            <p class="muted">Stare meglio, sentirti più sereno, rendere al meglio sotto pressione. Più il palazzo sale, più ottieni.</p>
+          </article>
+          <article class="passo" data-passo="1">
+            <p class="etichetta etichetta-rischio">Il rischio di un piano solo</p>
+            <h3>Su una base sottile, più sale e più oscilla.</h3>
+            <ol class="limiti" role="list">
+              <li><strong>Un cambiamento in superficie.</strong> <span class="muted">Va meglio finché segui la tecnica, poi torna come prima.</span></li>
+              <li><strong>Poca flessibilità.</strong> <span class="muted">Funziona lì, non quando la situazione cambia.</span></li>
+              <li><strong>Le ricadute.</strong> <span class="muted">Basta un imprevisto e si perde.</span></li>
+            </ol>
+          </article>
+          <article class="passo" data-passo="2">
+            <p class="etichetta etichetta-metodo">Le fondamenta</p>
+            <h3>La Psicologia Funzionale costruisce le fondamenta.</h3>
+            <p class="muted">Lavora sui funzionamenti di fondo da cui nascono pensieri, emozioni e sintomi, su tutti e quattro i piani. E recupera le Esperienze di Base del Sé:</p>
+            <ul class="esperienze" role="list">
+              <li>Calma</li><li>Contatto</li><li>Forza</li><li>Tenerezza</li><li>Contenimento</li>
+            </ul>
+          </article>
+          <article class="passo" data-passo="3">
+            <p class="etichetta etichetta-ok">Il risultato</p>
+            <h3>Ora il palazzo resta in piedi, anche sotto pressione.</h3>
+            <p class="muted">Un cambiamento che regge anche quando la situazione cambia: in terapia, in gara, al lavoro.</p>
+            <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -296,7 +333,7 @@ const media = [
       <div class="sezione-head cruscotto-head">
         <p class="eyebrow" data-reveal>Il metodo · quattro piani</p>
         <h2 id="cruscotto-titolo" data-reveal>Non basta pensare positivo.</h2>
-        <p class="lead" data-reveal>Tocca un piano e spostalo. Al centro è azzurro: equilibrio. Verso gli estremi va in rosso e trascina gli altri.</p>
+        <p class="lead" data-reveal>Porta un piano al rosso e guarda gli altri: lo seguono. Poi attiva l’allenamento e riprova.</p>
         <button type="button" class="come-si-usa" data-guida="cruscotto"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
 
@@ -324,6 +361,10 @@ const media = [
       </svg>
 
       <div class="pressione">
+        <div class="allenamento" role="group" aria-label="Allenamento">
+          <button type="button" data-allenato="no" aria-pressed="true">Senza allenamento</button>
+          <button type="button" data-allenato="si" aria-pressed="false">Con allenamento</button>
+        </div>
         <label for="pressione" class="mono pressione-lab">Stai regolando: <span data-piano-scelto>Pensiero</span></label>
         <input id="pressione" type="range" min="0" max="100" value="50" step="1" aria-valuetext="Pensiero in equilibrio" />
         <output class="mono pressione-out" for="pressione">In equilibrio</output>
@@ -355,33 +396,6 @@ const media = [
           </li>
         ))}
       </ul>
-    </div>
-  </section>
-
-  <!-- 6 · DALLA SCUOLA CALCIO ALLA FORMULA 1 -->
-  <section class="sezione pista" data-theme="cruscotto" data-stato="pista" aria-labelledby="pista-titolo">
-    <div class="pista-ancora" data-ancora aria-hidden="true"></div>
-    <div class="stage pista-stage">
-      <div class="wrap pista-head">
-        <p class="eyebrow">La storia</p>
-        <h2 id="pista-titolo">Dalla Scuola Calcio<br />alla Formula 1.</h2>
-        <div class="pista-progresso mono" aria-hidden="true"><span data-tappa>01</span> / 06 <span class="barra"><span></span></span> <span class="scorri">Scorri <span>→</span></span></div>
-      </div>
-      <div class="pista-binario">
-        <ol class="pista-tappe" role="list">
-          {tappe.map((t) => (
-            <li class="tappa">
-              <p class="tappa-quando mono">{t.n} · {t.quando}</p>
-              <h3>{t.titolo}</h3>
-              <p class="muted">{t.testo}</p>
-            </li>
-          ))}
-        </ol>
-        <svg class="pista-traccia" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
-          <path class="traccia-base" d="M0 70 L330 70 C 420 70 440 22 540 22 S 690 88 790 74 S 930 24 1000 40" />
-          <path class="traccia-viva" d="M0 70 L330 70 C 420 70 440 22 540 22 S 690 88 790 74 S 930 24 1000 40" pathLength="1" />
-        </svg>
-      </div>
     </div>
   </section>
 
@@ -1118,7 +1132,11 @@ const media = [
     .mente-legenda { gap: .6rem; }
     .cruscotto-ancora { width: min(100%, 30vh) !important; }
     .strumento svg { max-width: min(150px, 12vh) !important; }
-    .cruscotto-layout { row-gap: .5rem !important; }
+    .cruscotto-layout { row-gap: .4rem !important; }
+    .cruscotto-head .come-si-usa { margin-top: 0; padding-block: .3rem; }
+    .cruscotto-chiusa .h3 { font-size: 1.15rem; }
+    .cruscotto-chiusa { margin-top: .2rem !important; gap: .4rem; }
+    .allenamento button { padding: .4rem .85rem; }
   }
   /* hero: titolo per tutti, due strade */
   .hero h1 { max-width: 13ch; }
@@ -1132,18 +1150,19 @@ const media = [
     .hero-strade a { flex-direction: column; align-items: flex-start; gap: .1rem; padding: .6rem .8rem; font-size: .92rem; }
     .h1-sotto { font-size: .5em; }
   }
-  /* ---------- PERCHÉ: il grattacielo ---------- */
-  .perche-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
-  .perche-testo { display: grid; gap: 1rem; }
-  .perche-testo h2 { max-width: 14ch; }
-  .perche-sotto { margin: .3rem 0 -.3rem; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-2); }
+  /* ---------- PERCHÉ: palazzo fermo, frasi che scorrono ---------- */
+  .perche-head { margin-bottom: clamp(1rem, 3vh, 2rem); }
+  .storia { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .storia .torre-box { grid-column: 2; grid-row: 1; position: sticky; top: max(5.5rem, 14svh); }
+  .storia .torre-svg { width: min(100%, 44svh); }
+  .passi { grid-column: 1; grid-row: 1; display: grid; gap: 30svh; padding-block: 6svh 22svh; }
+  .passo { display: grid; gap: .7rem; padding: 1.25rem 1.35rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -32px rgba(11, 18, 48, .5); opacity: .4; transform: scale(.98); transition: opacity .45s var(--respiro), transform .45s var(--respiro), border-color .45s; }
+  .passo.attivo { opacity: 1; transform: none; border-color: color-mix(in srgb, var(--terracotta) 35%, var(--linea)); }
+  .passo h3 { font-size: clamp(1.25rem, 1rem + .9vw, 1.7rem); letter-spacing: -0.025em; line-height: 1.15; }
   .limiti { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: lim; }
-  .limiti li { counter-increment: lim; position: relative; padding: .55rem 0 .55rem 2.2rem; border-bottom: 1px solid var(--linea); line-height: 1.45; }
-  .limiti li::before { content: counter(lim, decimal-leading-zero); position: absolute; left: 0; top: .78rem; font-family: var(--f-mono); font-size: .72rem; color: var(--emozione); }
+  .limiti li { counter-increment: lim; position: relative; padding: .5rem 0 .5rem 2.2rem; border-top: 1px solid var(--linea); line-height: 1.45; }
+  .limiti li::before { content: counter(lim, decimal-leading-zero); position: absolute; left: 0; top: .72rem; font-family: var(--f-mono); font-size: .72rem; color: var(--emozione); }
   .limiti strong { font-family: var(--f-display); color: var(--inchiostro); }
-  .risposta { display: grid; gap: .7rem; padding: 1.1rem 1.25rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -30px rgba(11, 18, 48, .5); }
-  .risposta p { margin: 0; }
-  .risposta strong { color: var(--terracotta); }
   .esperienze { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
   .esperienze li { padding: .3rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--terracotta) 9%, #fff); color: var(--terracotta); font-family: var(--f-display); font-weight: 600; font-size: .85rem; }
   .torre-box { margin: 0; display: grid; gap: .75rem; justify-items: center; }
@@ -1164,20 +1183,13 @@ const media = [
   .torre-didascalia { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; text-align: center; color: var(--emozione); transition: color .4s; min-height: 2.6em; max-width: 26ch; }
   .torre-box.stabile .torre-didascalia { color: var(--fisiologia); }
   @media (max-width: 860px) {
-    .perche-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .perche-testo { display: contents; }
-    .perche-testo > * { order: 3; }
-    .perche-testo > .eyebrow, .perche-testo > h2, .perche-testo > .lead { order: 1; }
-    .torre-box { order: 2; margin-block: .5rem; }
-    .torre-svg { width: min(78vw, 300px); }
-  }
-  @media (min-width: 1024px) and (max-height: 960px) {
-    .perche-testo { gap: .6rem; }
-    .risposta { padding: .8rem 1rem; gap: .5rem; }
-    .perche-sotto { display: none; }
-    .esperienze li { padding: .2rem .6rem; font-size: .8rem; }
-    .limiti li { padding-block: .4rem; }
-    .torre-svg { width: min(100%, 52vh); }
+    /* telefono: il palazzo resta in alto, le frasi gli passano sotto */
+    .storia { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .storia .torre-box { grid-column: 1; position: sticky; top: 4.4rem; z-index: 3; background: var(--bg); padding: .4rem 0 .6rem; gap: .2rem; box-shadow: 0 18px 18px -18px var(--bg); }
+    .torre-svg { width: min(64vw, 33svh); }
+    .torre-didascalia { font-size: .9rem; min-height: 2.5em; }
+    .passi { grid-column: 1; grid-row: 2; gap: 26svh; padding-block: 4svh 30svh; }
+    .passo { padding: 1rem 1.05rem; }
   }
   /* grattacielo: etichette e legenda per leggere la metafora */
   .etichetta-risultati path { fill: none; stroke: var(--grafite); stroke-width: 1.5; }
@@ -1188,12 +1200,29 @@ const media = [
   .torre-box.con-piani:not(.con-fondamenta) .etichetta-base { opacity: 1; }
   .etichetta-fondamenta { opacity: 0; transition: opacity .5s; fill: var(--inchiostro); }
   .torre-box.con-fondamenta .etichetta-fondamenta { opacity: 1; }
-  .torre-legenda { display: grid; gap: .45rem; margin: 0; width: min(100%, 380px); font-size: .84rem; }
-  .torre-legenda div { display: grid; grid-template-columns: 7.5rem 1fr; gap: .6rem; align-items: baseline; }
-  .torre-legenda dt { display: inline-flex; align-items: center; gap: .45rem; font-family: var(--f-display); font-weight: 700; color: var(--inchiostro); }
-  .torre-legenda dd { margin: 0; color: var(--fg-2); line-height: 1.35; }
-  .leg-palazzo { width: 10px; height: 14px; border-radius: 2px; background: var(--cruscotto); }
-  .leg-fondamenta { width: 16px; height: 10px; border-radius: 2px; background: linear-gradient(var(--pensiero) 0 25%, var(--emozione) 25% 50%, var(--corpo) 50% 75%, var(--fisiologia) 75%); }
-  @media (min-width: 1024px) and (max-height: 960px) { .torre-legenda { font-size: .78rem; gap: .3rem; } .torre-svg { width: min(100%, 40vh); } .torre-box { gap: .4rem; } .torre-didascalia { min-height: 0; font-size: .95rem; } }
-  @media (max-width: 860px) { .torre-legenda div { grid-template-columns: 1fr; gap: .1rem; } }
+  /* cruscotto: senza / con allenamento */
+  .allenamento { grid-column: 1 / -1; justify-self: start; display: inline-grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; border-radius: 999px; background: rgba(255, 255, 255, .06); border: 1px solid var(--linea-scura); }
+  .allenamento button { border: 0; border-radius: 999px; padding: .5rem .95rem; background: transparent; color: var(--testo-scuro-2); font-family: var(--f-display); font-weight: 700; font-size: .85rem; cursor: pointer; transition: background-color .3s, color .3s; }
+  .allenamento button[aria-pressed="true"] { background: var(--testo-scuro); color: var(--cruscotto); }
+  .allenamento button[data-allenato="si"][aria-pressed="true"] { background: #2EE6D6; }
+  .pressione-lab { font-family: var(--f-display) !important; font-weight: 600; letter-spacing: 0 !important; text-transform: none !important; font-size: .9rem !important; color: var(--testo-scuro-2); }
+  .pressione-lab span { color: var(--testo-scuro); }
+  @media (max-width: 860px) { .allenamento { justify-self: stretch; } .allenamento button { padding: .55rem .5rem; font-size: .82rem; } }
+  /* ---------- CHI SONO: linea del tempo ---------- */
+  .percorso { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(.8rem, 1.6vw, 1.5rem); margin: 0; padding: 0; list-style: none; }
+  .percorso::before { content: ''; position: absolute; left: 0; right: 0; top: .55rem; height: 2px; background: var(--linea); }
+  .tappa-p { position: relative; display: grid; gap: .45rem; align-content: start; padding-top: 1.9rem; }
+  .tappa-p::before { content: ''; position: absolute; left: 0; top: .1rem; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2.5px solid var(--terracotta); }
+  .tappa-p:last-child::before { background: var(--terracotta); box-shadow: 0 0 0 5px color-mix(in srgb, var(--terracotta) 18%, transparent); }
+  .tappa-quando { font-family: var(--f-mono); font-size: .74rem; font-weight: 600; letter-spacing: .04em; color: var(--terracotta); }
+  .tappa-p h3 { font-size: clamp(1.05rem, .95rem + .4vw, 1.25rem); letter-spacing: -0.02em; }
+  .tappa-p .muted { font-size: .9rem; line-height: 1.45; }
+  .chi-link { margin-top: clamp(1.5rem, 4vh, 2.5rem); display: inline-flex; }
+  @media (min-width: 1024px) { .chi-sezione { min-height: 100svh; display: grid; align-content: center; } }
+  @media (max-width: 980px) {
+    .percorso { grid-template-columns: minmax(0, 1fr); gap: 0; padding-left: 1.6rem; }
+    .percorso::before { left: 6px; right: auto; top: .6rem; bottom: .6rem; width: 2px; height: auto; }
+    .tappa-p { padding: 0 0 1.1rem; gap: .2rem; }
+    .tappa-p::before { left: -1.6rem; top: .15rem; }
+  }
 </style>

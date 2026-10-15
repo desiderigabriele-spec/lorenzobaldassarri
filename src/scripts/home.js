@@ -274,8 +274,14 @@ const LETTURE = {
 const strumenti = [...document.querySelectorAll('[data-strumento]')];
 const base = { pensiero: 50, emozione: 50, corpo: 50, fisiologia: 50 };
 let scelto = 'pensiero';
-// quanto un piano fuori asse trascina gli altri
-const TRASCINA = 0.55;
+let allenato = false;
+const bottoniAllenamento = [...document.querySelectorAll('[data-allenato]')];
+function impostaAllenamento(si) {
+  allenato = si;
+  bottoniAllenamento.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.allenato === 'si') === si)));
+  aggiornaCruscotto();
+}
+bottoniAllenamento.forEach((b) => b.addEventListener('click', () => impostaAllenamento(b.dataset.allenato === 'si')));
 // verde → ambra → rosso in base alla distanza dal centro
 // sfumatura continua: azzurro al centro, poi verdolino, giallo, arancione, rosso
 const SCALA = [[0, 178], [0.12, 140], [0.3, 58], [0.5, 30], [0.72, 0]];
@@ -293,8 +299,10 @@ function aggiornaCruscotto() {
   let somma = 0;
   const nomiFuori = [];
   for (const id of Object.keys(base)) {
-    let v = base[id];
-    for (const altro of Object.keys(base)) if (altro !== id) v += (base[altro] - 50) * TRASCINA;
+    // senza allenamento: il piano mosso va fino in fondo e trascina molto gli altri
+    // con allenamento: il piano regge di più e gli altri quasi non si muovono
+    let v = 50 + (base[id] - 50) * (allenato ? 0.55 : 1);
+    for (const altro of Object.keys(base)) if (altro !== id) v += (base[altro] - 50) * (allenato ? 0.1 : 0.6);
     valori[id] = clamp(v / 100) * 100;
   }
   strumenti.forEach((s) => {
@@ -321,9 +329,11 @@ function aggiornaCruscotto() {
   const tuttiVerdi = Object.values(valori).every((v) => Math.abs(v - 50) / 50 < 0.18);
   dettaglio.classList.toggle('equilibrio', tuttiVerdi);
   dettaglio.classList.toggle('allarme', nomiFuori.length > 1);
-  if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto in equilibrio: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
+  const spinto = Object.values(base).some((v) => Math.abs(v - 50) > 30);
+  if (allenato && spinto) dettaglio.textContent = 'Con allenamento il piano regge e gli altri restano in equilibrio. Per questo li alleno insieme.';
+  else if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto in equilibrio: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
   else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} fuori asse: guarda, si spostano anche gli altri.`;
-  else dettaglio.textContent = 'Un piano fuori asse trascina gli altri. Per questo li alleno insieme.';
+  else dettaglio.textContent = 'Senza allenamento, un piano fuori asse trascina tutti gli altri.';
 }
 function scegli(id) {
   scelto = id;
@@ -358,9 +368,11 @@ function animaPiano(id, a, durata = 1.8) {
 function guidaCruscotto() {
   demoTween?.kill();
   for (const id of Object.keys(base)) base[id] = 50;
+  impostaAllenamento(false);
   scegli('pensiero');
   const sez = document.getElementById('cruscotto');
   const ascolta = (el, tipo, fn) => { el.addEventListener(tipo, fn); return () => el.removeEventListener(tipo, fn); };
+  const conAllenamento = document.querySelector('[data-allenato="si"]');
   guida({
     chiave: 'cruscotto',
     zona: sez,
@@ -368,20 +380,20 @@ function guidaCruscotto() {
       {
         bersaglio: '[data-strumento="emozione"]', testo: 'Tocca un piano, per esempio Emozione', gesto: 'tocca',
         attendi: (avanti) => { const via = strumenti.map((x) => ascolta(x, 'click', avanti)); return () => via.forEach((f) => f()); },
-        demo: () => { scegli('emozione'); setTimeout(() => strumenti.find((x) => x.dataset.strumento === 'emozione')?.click(), 50); }, demoDopo: 4500,
+        demo: () => { strumenti.find((x) => x.dataset.strumento === 'emozione')?.click(); }, demoDopo: 4500,
       },
       {
-        bersaglio: '.pressione', testo: 'Ora trascina la barra verso destra, fino al rosso', gesto: 'trascina',
+        bersaglio: '.pressione input', testo: 'Trascina la barra verso destra, fino al rosso', gesto: 'trascina',
         attendi: (avanti) => osserva(() => base[scelto] >= 84, avanti),
         demo: () => animaPiano(scelto, 94, 2), demoDopo: 5000,
       },
-      { bersaglio: '.cruscotto-grid', testo: 'Guarda: il piano è in rosso e trascina anche gli altri, che cambiano colore', durata: 3200 },
+      { bersaglio: '.cruscotto-grid', testo: 'Senza allenamento, il piano in rosso trascina anche gli altri', durata: 3200 },
       {
-        bersaglio: '.pressione', testo: 'Ora riportala al centro, sull’azzurro', gesto: 'indietro',
-        attendi: (avanti) => osserva(() => Math.abs(base[scelto] - 50) < 8, avanti),
-        demo: () => animaPiano(scelto, 50, 1.6), demoDopo: 5000,
+        bersaglio: '[data-allenato="si"]', testo: 'Ora tocca “Con allenamento”', gesto: 'tocca',
+        attendi: (avanti) => ascolta(conAllenamento, 'click', avanti),
+        demo: () => conAllenamento.click(), demoDopo: 4500,
       },
-      { bersaglio: '.cruscotto-grid', testo: 'Tutto in equilibrio. Per questo alleno i quattro piani insieme.', durata: 3000 },
+      { bersaglio: '.cruscotto-grid', testo: 'Stessa spinta: il piano regge e gli altri restano in equilibrio. Per questo li alleno insieme.', durata: 4000 },
     ],
     onFine: () => { demoTween?.kill(); },
   });
@@ -499,9 +511,9 @@ if (torreBox) {
   let ampiezza = 0;
   let testo = '';
   function disegnaTorre(p) {
-    const costruiti = clamp(p / 0.45) * pianiTorre.length;
+    const costruiti = clamp(0.25 + p / 0.5) * pianiTorre.length;
     pianiTorre.forEach((el, k) => el.classList.toggle('su', k < costruiti));
-    const fondamenta = clamp((p - 0.52) / 0.33);
+    const fondamenta = clamp((p - 0.5) / 0.25);
     fondi.forEach((el, k) => el.classList.toggle('su', fondamenta > k / fondi.length + 0.01));
     ampiezza = (costruiti / pianiTorre.length) * 4.5 * (1 - fondamenta);
     torreBox.classList.toggle('instabile', ampiezza > 2.2);
@@ -515,9 +527,20 @@ if (torreBox) {
     if (nuovo !== testo) { testo = nuovo; fase.textContent = nuovo; }
   }
   disegnaTorre(prog);
+  // le frasi accanto al palazzo guidano la costruzione; la frase più vicina al centro è quella attiva
+  const passi = [...document.querySelectorAll('.passo')];
+  const segnaPasso = () => {
+    const centro = window.innerHeight * (window.innerWidth <= 860 ? 0.68 : 0.5);
+    let migliore = null, dist = Infinity;
+    passi.forEach((el) => { const r = el.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - centro); if (d < dist) { dist = d; migliore = el; } });
+    passi.forEach((el) => el.classList.toggle('attivo', el === migliore));
+  };
+  segnaPasso();
+  window.addEventListener('scroll', segnaPasso, { passive: true });
+  if (ridotto) passi.forEach((el) => el.classList.add('attivo'));
   if (!ridotto) {
     ScrollTrigger.create({
-      trigger: torreBox, start: 'top 85%', end: 'bottom 25%', scrub: 0.6,
+      trigger: '.passi', start: 'top 60%', end: 'bottom 75%', scrub: 0.5,
       onUpdate: (st) => { prog = st.progress; disegnaTorre(prog); },
     });
     const oscilla = (t) => {

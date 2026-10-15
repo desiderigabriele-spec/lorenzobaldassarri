@@ -128,18 +128,29 @@ h3, .h3 { font-size: clamp(1.25rem, 1rem + 0.9vw, 1.6rem); letter-spacing: -0.02
 p { text-wrap: pretty; }
 .muted { color: var(--fg-2); }
 
-.mono, .eyebrow, .dato {
+.mono, .dato {
   font-family: var(--f-mono);
   font-feature-settings: 'zero' 1;
 }
-.eyebrow {
-  display: inline-flex; align-items: center; gap: .6rem;
-  font-size: .75rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--fg-2);
+/* etichette di sezione: pillole colorate, ben visibili (non note grigie) */
+.eyebrow, .etichetta {
+  --et: var(--tocco, var(--accent));
+  justify-self: start; align-self: start; width: fit-content;
+  display: inline-flex; align-items: center; gap: .55rem; margin: 0;
+  padding: .38rem .85rem .38rem .7rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--et) 13%, transparent);
+  color: color-mix(in srgb, var(--et) 72%, var(--fg));
+  font-family: var(--f-display); font-weight: 700; font-size: .86rem; letter-spacing: -0.005em; line-height: 1.2;
 }
+.etichetta::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--et); flex: none; }
+.etichetta-rischio { --et: var(--emozione); }
+.etichetta-rischio::before { content: '!'; width: 1.15rem; height: 1.15rem; display: grid; place-items: center; color: #fff; font-size: .72rem; font-weight: 800; }
+.etichetta-metodo { --et: var(--terracotta); }
+.etichetta-ok { --et: var(--fisiologia); }
+.etichetta-ok::before { content: '✓'; width: 1.15rem; height: 1.15rem; display: grid; place-items: center; color: #fff; font-size: .7rem; font-weight: 800; }
 .eyebrow::before {
-  content: ''; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent);
+  content: ''; width: 7px; height: 7px; border-radius: 50%; flex: none;
+  background: var(--et);
   box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 50%, transparent);
   animation: spia 4s var(--respiro) infinite;
 }
@@ -267,8 +278,6 @@ main > section.sezione:not(:first-of-type):not(.pista)::before {
   width: 46px; height: 5px; border-radius: 5px; transform: translateX(-50%);
   background: var(--tocco);
 }
-main > section.sezione:not(:first-of-type):not(.pista) .eyebrow::before { background: var(--tocco); }
-main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-mix(in srgb, var(--tocco) 55%, var(--fg)); font-weight: 600; }
 
 .sezione-head { display: grid; gap: 1.25rem; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); max-width: 46rem; }
 .sezione-head.center { margin-inline: auto; text-align: center; justify-items: center; }
@@ -325,7 +334,7 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
 .brand-testo { display: grid; gap: .2rem; line-height: 1.1; min-width: 0; }
 .site-header[data-on="cruscotto"] .brand-mark, .site-header[data-on="cruscotto"] .brand-nome { color: var(--testo-scuro); }
 .footer-logo { display: block; width: min(100%, 15rem); aspect-ratio: 1027 / 254; color: var(--testo-scuro); margin-bottom: 1.75rem; }
-.brand-nome { display: block; height: 1.15rem; width: calc(1.15rem * 13.76); color: var(--cruscotto); }
+.brand-nome { display: block; height: .82rem; width: calc(.82rem * 13.76); color: var(--cruscotto); }
 .brand-ruolo { font-family: var(--f-mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; white-space: nowrap; }
 .nav { display: flex; align-items: center; gap: .2rem; }
 .nav > a, .nav-apri {
@@ -387,7 +396,7 @@ main > section.sezione:not(:first-of-type):not(.pista) .eyebrow { color: color-m
   .header-cta { display: none; }
   .header-bar { height: 3.6rem; padding-left: 1.1rem; }
   .brand-mark { width: 1.85rem; height: 2.37rem; }
-  .brand-nome { height: .98rem; width: calc(.98rem * 13.76); }
+  .brand-nome { height: .72rem; width: calc(.72rem * 13.76); }
 }
 @media (max-width: 480px) {
   .ruolo-lungo { display: none; }
