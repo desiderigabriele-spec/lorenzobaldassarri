@@ -48,8 +48,6 @@ void main(){
   sfera *= (1.0 + n*(0.035 + uPressure*0.18) + n2*uPressure*0.05) * (1.0 + uBreath*0.24);
   // sotto pressione i quattro piani si separano; a riposo tornano una sfera sola
   int g = int(aRingIdx + 0.5);
-  vec3 dir = vec3(-0.75, 0.6, 0.0);
-  if (g == 1) dir = vec3(0.75, 0.6, 0.0); else if (g == 2) dir = vec3(-0.75, -0.6, 0.0); else if (g == 3) dir = vec3(0.75, -0.6, 0.0);
   float sep = smoothstep(0.08, 0.75, uPressure);
   sfera = sfera * (1.0 - sep*0.58);
 
@@ -74,13 +72,21 @@ void main(){
   p = mix(p, pt, uTrack);
 
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  // sulla sfera ogni quarto dello schermo è un piano, con il colore della sua etichetta
+  // (Pensiero in alto a sinistra, Emozione in alto a destra, Corpo e Fisiologia sotto)
+  vec4 centro = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+  int q = (mv.x >= centro.x ? 1 : 0) + (mv.y < centro.y ? 2 : 0);
+  float libero = (1.0 - uRing) * (1.0 - uTrack);
+  int gs = libero > 0.5 ? q : g;
+  vec3 dir = vec3(-0.75, 0.6, 0.0);
+  if (gs == 1) dir = vec3(0.75, 0.6, 0.0); else if (gs == 2) dir = vec3(-0.75, -0.6, 0.0); else if (gs == 3) dir = vec3(0.75, -0.6, 0.0);
   // la separazione avviene nello spazio dello schermo: ogni piano va verso la sua etichetta
-  mv.xy += dir.xy * sep * 0.95 * uScala * (1.0 - uRing) * (1.0 - uTrack);
+  mv.xy += dir.xy * sep * 0.95 * uScala * libero;
   gl_Position = projectionMatrix * mv;
   gl_PointSize = uSize * uPR * (0.5 + aRand*0.9) / -mv.z;
   vRand = aRand;
   vec3 c = uPiani[0];
-  if (g == 1) c = uPiani[1]; else if (g == 2) c = uPiani[2]; else if (g == 3) c = uPiani[3];
+  if (gs == 1) c = uPiani[1]; else if (gs == 2) c = uPiani[2]; else if (gs == 3) c = uPiani[3];
   vCol = c;
 }`;
 

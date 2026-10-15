@@ -40,6 +40,9 @@ const jsonLd = {
   ],
 };
 
+// frasi che la persona dice a sé stessa: in equilibrio / sotto pressione (stesso ordine dei piani)
+const frasiCalme = ['Sono concentrato', 'Carico giusto', 'Sciolto', 'Respiro calmo'];
+
 const icone = {
   atleti: 'M12 3l2.4 5 5.6.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.6-.8z',
   squadre: 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3.3 2.7-6 6-6s6 2.7 6 6m-2.4-5.6A6 6 0 0 1 22 20',
@@ -248,10 +251,11 @@ const media = [
       <div class="mente-testo">
         <p class="eyebrow" data-reveal>I quattro piani · prova adesso</p>
         <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
-        <p class="lead" data-reveal>Questa sfera sei tu. Ogni colore è un piano. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
+        <p class="lead" data-reveal>Questa sfera sei tu: ogni colore è una parte di te. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
         <button type="button" class="come-si-usa" data-guida="mente"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
       <div class="mente-stage">
+        <p class="mente-stato" data-mente-stato aria-live="polite">In equilibrio: i piani lavorano insieme</p>
         <div class="mente-ancora" data-ancora>
           <div class="gesto" aria-hidden="true">
             <svg class="gesto-cursore" viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6L9.6 20z" /></svg>
@@ -259,7 +263,7 @@ const media = [
             <span class="gesto-anello"></span>
             <span class="gesto-label"><span class="l1">Muovi veloce</span><span class="l2">Ora fermati</span></span>
           </div>
-          {piani.map((p, i) => <span class={`angolo a${i + 1} p-${p.id}`} aria-hidden="true">{p.nome}</span>)}
+          {piani.map((p, i) => <span class={`angolo a${i + 1} p-${p.id}`} aria-hidden="true"><b>{p.nome}</b><span data-frase={i}>{frasiCalme[i]}</span></span>)}
         </div>
         <button type="button" class="tieni" data-tieni aria-describedby="mente-titolo">
           <span class="tieni-riempi" aria-hidden="true"></span>
@@ -1158,6 +1162,7 @@ const media = [
   .passi { grid-column: 1; grid-row: 1; display: grid; gap: 30svh; padding-block: 6svh 22svh; }
   .passo { display: grid; gap: .7rem; padding: 1.25rem 1.35rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -32px rgba(11, 18, 48, .5); opacity: .4; transform: scale(.98); transition: opacity .45s var(--respiro), transform .45s var(--respiro), border-color .45s; }
   .passo.attivo { opacity: 1; transform: none; border-color: color-mix(in srgb, var(--terracotta) 35%, var(--linea)); }
+  .passo .etichetta:not(.etichetta-rischio):not(.etichetta-ok) { --et: var(--terracotta); }
   .passo h3 { font-size: clamp(1.25rem, 1rem + .9vw, 1.7rem); letter-spacing: -0.025em; line-height: 1.15; }
   .limiti { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: lim; }
   .limiti li { counter-increment: lim; position: relative; padding: .5rem 0 .5rem 2.2rem; border-top: 1px solid var(--linea); line-height: 1.45; }
@@ -1183,13 +1188,19 @@ const media = [
   .torre-didascalia { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; text-align: center; color: var(--emozione); transition: color .4s; min-height: 2.6em; max-width: 26ch; }
   .torre-box.stabile .torre-didascalia { color: var(--fisiologia); }
   @media (max-width: 860px) {
-    /* telefono: il palazzo resta in alto, le frasi gli passano sotto */
-    .storia { grid-template-columns: minmax(0, 1fr); gap: 0; }
-    .storia .torre-box { grid-column: 1; position: sticky; top: 4.4rem; z-index: 3; background: var(--bg); padding: .4rem 0 .6rem; gap: .2rem; box-shadow: 0 18px 18px -18px var(--bg); }
-    .torre-svg { width: min(64vw, 33svh); }
-    .torre-didascalia { font-size: .9rem; min-height: 2.5em; }
-    .passi { grid-column: 1; grid-row: 2; gap: 26svh; padding-block: 4svh 30svh; }
-    .passo { padding: 1rem 1.05rem; }
+    /* telefono: palazzo fermo in alto, sotto entra una scheda alla volta mentre scorri */
+    .storia { display: block; position: relative; height: 360svh; }
+    .storia .torre-box { position: sticky; top: 4.6rem; z-index: 2; height: 44svh; display: grid; place-items: center; padding: 0; background: none; box-shadow: none; }
+    .storia .torre-svg { height: 44svh; width: calc(44svh * 320 / 440); max-width: 100%; }
+    .torre-didascalia { display: none; }
+    .passi { position: sticky; top: calc(4.6rem + 44svh + .4rem); display: grid; gap: 0; padding: 0; height: calc(100svh - 4.6rem - 44svh - 1rem); }
+    .passo { grid-area: 1 / 1; align-self: start; padding: .9rem 1rem; gap: .45rem; opacity: 0; transform: translateY(28px); pointer-events: none; transition: opacity .4s var(--respiro), transform .45s var(--uscita); }
+    .passo.attivo { opacity: 1; transform: none; pointer-events: auto; }
+    .passo h3 { font-size: 1.12rem; }
+    .passo .muted { font-size: .86rem; line-height: 1.4; }
+    .limiti li { padding-block: .3rem; }
+    .limiti li .muted { display: none; }
+    .esperienze li { padding: .22rem .6rem; font-size: .78rem; }
   }
   /* grattacielo: etichette e legenda per leggere la metafora */
   .etichetta-risultati path { fill: none; stroke: var(--grafite); stroke-width: 1.5; }
@@ -1224,5 +1235,22 @@ const media = [
     .percorso::before { left: 6px; right: auto; top: .6rem; bottom: .6rem; width: 2px; height: auto; }
     .tappa-p { padding: 0 0 1.1rem; gap: .2rem; }
     .tappa-p::before { left: -1.6rem; top: .15rem; }
+  }
+  /* sfera: le etichette sono frasi che la persona dice a sé stessa */
+  .angolo { display: grid; gap: .05rem; align-items: start; padding: .35rem .7rem .4rem; border-radius: 14px; border: 1.5px solid var(--c); background: #fff; box-shadow: 0 10px 22px -16px rgba(11, 18, 48, .45); max-width: 46%; line-height: 1.2; transition: transform .4s var(--uscita); }
+  .angolo::before { display: none; }
+  .angolo b { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--c); font-weight: 600; }
+  .angolo [data-frase] { font-family: var(--f-display); font-weight: 700; font-size: .92rem; letter-spacing: -0.01em; color: var(--inchiostro); }
+  .a2, .a4 { text-align: right; justify-items: end; }
+  .mente.sotto-pressione .a1 { transform: translate(-6px, -6px); } .mente.sotto-pressione .a2 { transform: translate(6px, -6px); }
+  .mente.sotto-pressione .a3 { transform: translate(-6px, 6px); } .mente.sotto-pressione .a4 { transform: translate(6px, 6px); }
+  .mente.sotto-pressione .angolo [data-frase] { color: var(--c); }
+  .mente-stato { justify-self: center; text-align: center; font-family: var(--f-display); font-weight: 800; font-size: clamp(1rem, .9rem + .4vw, 1.2rem); letter-spacing: -0.02em; color: var(--fisiologia); transition: color .3s; }
+  .mente.sotto-pressione .mente-stato { color: var(--emozione); }
+  @media (max-width: 860px) {
+    .angolo { padding: .28rem .55rem .32rem; max-width: 48%; }
+    .angolo [data-frase] { font-size: .8rem; }
+    .angolo b { font-size: .56rem; }
+    .mente-stato { font-size: .95rem; }
   }
 </style>

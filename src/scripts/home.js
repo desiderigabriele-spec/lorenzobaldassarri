@@ -40,6 +40,16 @@ const valP = document.querySelector('[data-pressione-val]');
 let heroVisibile = false;
 if (mente) new IntersectionObserver(([v]) => { heroVisibile = v.isIntersecting; if (v.intersectionRatio > 0.35) mente.classList.add('vista'); }, { threshold: [0, 0.35] }).observe(mente);
 
+const FRASI = [['Sono concentrato', 'E se sbaglio?'], ['Carico giusto', 'Ho un nodo allo stomaco'], ['Sciolto', 'Spalle rigide'], ['Respiro calmo', 'Cuore a mille']];
+const frasiEl = [...document.querySelectorAll('[data-frase]')];
+const statoMente = document.querySelector('[data-mente-stato]');
+let sottoPressione = false;
+function impostaFrasi(su) {
+  sottoPressione = su;
+  mente?.classList.toggle('sotto-pressione', su);
+  frasiEl.forEach((el) => { el.textContent = FRASI[+el.dataset.frase][su ? 1 : 0]; });
+  if (statoMente) statoMente.textContent = su ? 'Sotto pressione: ogni parte va per conto suo' : 'In equilibrio: i piani lavorano insieme';
+}
 let fase = 0;
 let picco = 0;
 let quieteDa = 0;
@@ -105,6 +115,10 @@ function tick(ora) {
     linea.style.stroke = p > 0.45 ? 'var(--terracotta)' : 'var(--inchiostro)';
     if (barraP) barraP.style.transform = `scaleX(${Math.max(0.02, p).toFixed(3)})`;
     if (valP) valP.textContent = `${Math.round(p * 100)}%`;
+
+    // le frasi della persona cambiano con la pressione (con un po' di isteresi per non sfarfallare)
+    if (!sottoPressione && p > 0.45) impostaFrasi(true);
+    else if (sottoPressione && p < 0.3) impostaFrasi(false);
 
     // "Ecco. La calma si allena." quando torni quieto dopo un picco
     if (p > 0.42) { mente?.classList.add('provato'); picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: i piani si separano…'; } }
@@ -527,21 +541,37 @@ if (torreBox) {
     if (nuovo !== testo) { testo = nuovo; fase.textContent = nuovo; }
   }
   disegnaTorre(prog);
-  // le frasi accanto al palazzo guidano la costruzione; la frase più vicina al centro è quella attiva
+  // PC: la frase più vicina al centro dello schermo è quella attiva e guida la costruzione
+  // telefono: palazzo e scheda restano fermi; lo scorrimento sceglie la scheda (una ogni quarto di sezione)
   const passi = [...document.querySelectorAll('.passo')];
+  const telefono = window.matchMedia('(max-width: 860px)');
+  const attiva = (k) => passi.forEach((el, j) => el.classList.toggle('attivo', j === k));
   const segnaPasso = () => {
-    const centro = window.innerHeight * (window.innerWidth <= 860 ? 0.68 : 0.5);
-    let migliore = null, dist = Infinity;
-    passi.forEach((el) => { const r = el.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - centro); if (d < dist) { dist = d; migliore = el; } });
-    passi.forEach((el) => el.classList.toggle('attivo', el === migliore));
+    if (telefono.matches) return;
+    const centro = window.innerHeight * 0.5;
+    let migliore = 0, dist = Infinity;
+    passi.forEach((el, j) => { const r = el.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - centro); if (d < dist) { dist = d; migliore = j; } });
+    attiva(migliore);
   };
+  attiva(0);
   segnaPasso();
   window.addEventListener('scroll', segnaPasso, { passive: true });
-  if (ridotto) passi.forEach((el) => el.classList.add('attivo'));
+  if (ridotto && !telefono.matches) passi.forEach((el) => el.classList.add('attivo'));
+  const mmTorre = gsap.matchMedia();
+  mmTorre.add('(max-width: 860px)', () => {
+    const st = ScrollTrigger.create({
+      trigger: '.storia', start: 'top 74px', end: 'bottom bottom',
+      onUpdate: (x) => { attiva(Math.min(passi.length - 1, Math.floor(x.progress * passi.length))); prog = ridotto ? 1 : x.progress; disegnaTorre(prog); },
+    });
+    return () => st.kill();
+  });
   if (!ridotto) {
-    ScrollTrigger.create({
-      trigger: '.passi', start: 'top 60%', end: 'bottom 75%', scrub: 0.5,
-      onUpdate: (st) => { prog = st.progress; disegnaTorre(prog); },
+    mmTorre.add('(min-width: 861px)', () => {
+      const st = ScrollTrigger.create({
+        trigger: '.passi', start: 'top 60%', end: 'bottom 75%', scrub: 0.5,
+        onUpdate: (x) => { prog = x.progress; disegnaTorre(prog); },
+      });
+      return () => st.kill();
     });
     const oscilla = (t) => {
       const angolo = ampiezza * Math.sin(t / 1000 * 2.4) + ampiezza * 0.25 * Math.sin(t / 1000 * 5.3);
