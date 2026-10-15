@@ -33,3 +33,12 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [x] **Logo MindUP**: SVG ufficiale in `public/logo/mindup-enhancement-psychology.svg`; per gli sfondi chiari c'è una variante con i grigi scuriti (`public/img/mindup-logo-chiaro.svg`).
 - [x] **"Creatore della Psicologia del Potenziamento®"**: confermato dall'articolo su *Scienza & Sport* (2021), dove Lorenzo è indicato come "ideatore del mental training 'Protocollo Funzionale per Sportivi' e della Psicologia del Potenziamento". Resta da verificare l'uso del marchio ®.
 - [x] **Logo LB**: SVG ufficiali in `public/logo/` (simbolo e completo, bianco / blu notte / nero), usati in header, favicon, footer e schermata d'ingresso.
+
+## Testi semplificati della Home (revisione "da ragazzino")
+- [ ] **Chiacchierata iniziale**: la Home dice "20 minuti al telefono o in video". Confermare durata e se è gratuita (se sì, si può scrivere "gratuita": convince molto)
+- [ ] **Tempi di risposta**: "Risposta entro un giorno lavorativo" compare in hero e in chiusura. Confermare che è sostenibile
+- [ ] **Costi**: la FAQ "Quanto costa?" oggi dice "te lo dico subito, al primo contatto". Se Lorenzo vuole, indicare una cifra o una fascia
+- [ ] **Frequenza**: la FAQ dice "all'inizio una volta a settimana, poi più di rado". Confermare
+- [ ] **Colloqui online e ricetta**: le FAQ dicono che online funziona come in studio e che non serve la ricetta del medico. Confermare
+- [ ] **"Sul campo"**: la sezione con le foto da scattare è stata tolta dalla Home; rimetterla quando ci sono le foto vere
+- [ ] **Numeri "Esperienza"**: 15+ anni di psicoterapia, 20+ anni di calcio, 3 anni in Formula 1, docente a Parma dal 2017

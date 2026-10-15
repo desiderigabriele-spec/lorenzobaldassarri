@@ -40,6 +40,18 @@ const jsonLd = {
   ],
 };
 
+// "Ti riconosci?": situazioni comuni, ognuna legata a una delle 4 parti di te
+const situazioni = [
+  { testo: 'Prima di un esame o di una gara mi blocco', parte: 'corpo' },
+  { testo: 'La notte la testa non si spegne', parte: 'pensiero' },
+  { testo: 'So cosa fare, ma nel momento giusto non ci riesco', parte: 'pensiero' },
+  { testo: 'Mi sento sempre in allarme', parte: 'fisiologia' },
+  { testo: 'Dopo un errore non riesco a ripartire', parte: 'emozione' },
+  { testo: 'Sono stanco anche quando riposo', parte: 'fisiologia' },
+  { testo: 'Ho paura di deludere gli altri', parte: 'emozione' },
+  { testo: 'Ho spalle e collo sempre contratti', parte: 'corpo' },
+];
+
 // frasi che la persona dice a sé stessa: in equilibrio / sotto pressione (stesso ordine dei piani)
 const frasiCalme = ['Sono concentrato', 'Carico giusto', 'Sciolto', 'Respiro calmo'];
 
@@ -53,27 +65,27 @@ const icone = {
 const autorita = ['Formula Medicine 2013–16', 'Academy toscana F.I.R.', 'Università di Parma', 'KM2025 · Università di Siena', 'Radio Bianconera', 'RTV38', 'Scienza & Sport'];
 
 const numeri = [
-  { to: 15, suffix: '+', label: 'anni di studio clinico' },
-  { to: 4, suffix: '', label: 'piani misurati, insieme' },
-  { to: 20, suffix: '+', label: 'anni nel calcio, prima della psicologia' },
-  { to: 3, suffix: '', label: 'anni nel paddock con Formula Medicine' },
+  { valore: '15+', label: 'anni di psicoterapia a Montecatini Terme' },
+  { valore: '20+', label: 'anni di calcio, da giocatore e allenatore' },
+  { valore: '3', label: 'anni in Formula 1 con Formula Medicine' },
+  { valore: 'Dal 2017', label: "docente all'Università di Parma" },
 ];
 
 // "Chi sono": il percorso, studi e incarichi insieme
 const percorso = [
-  { quando: 'Prima', titolo: 'Il campo', testo: "Oltre vent'anni da calciatore, poi allenatore di Scuola Calcio." },
-  { quando: '2010–2014', titolo: 'Psicoterapia funzionale', testo: 'Lauree in Psicologia clinica (Firenze, Urbino), specializzazione SEF, master in psicologia dello sport.' },
-  { quando: '2011', titolo: 'Lo studio', testo: 'Psicologo e psicoterapeuta a Montecatini Terme: ansia, stress, momenti difficili.' },
-  { quando: '2013–2016', titolo: 'Il paddock', testo: 'Area mental di Formula Medicine: piloti di F1 e DTM, Serie A, olimpionici.' },
-  { quando: '2017', titolo: 'Università ed Eljos', testo: "Docente all'Università di Parma, co-fondatore del Gruppo Eljos." },
-  { quando: '2021 → oggi', titolo: 'MindUP', testo: 'Co-founder e creatore della Psicologia del Potenziamento®.' },
+  { quando: 'Prima', titolo: 'Il campo', testo: "Vent'anni da calciatore, poi allenatore dei bambini." },
+  { quando: '2010–2014', titolo: 'Gli studi', testo: 'Psicologia clinica, poi la specializzazione in psicoterapia.' },
+  { quando: 'Dal 2011', titolo: 'Lo studio', testo: 'A Montecatini Terme: ansia, stress, momenti difficili.' },
+  { quando: '2013–2016', titolo: 'La Formula 1', testo: 'Preparazione mentale di piloti di F1, calciatori di Serie A, atleti olimpici.' },
+  { quando: 'Dal 2017', titolo: "L'università", testo: "Insegno all'Università di Parma." },
+  { quando: 'Dal 2021', titolo: 'Il mio metodo', testo: 'Ho creato la Psicologia del Potenziamento® e co-fondato MindUP.' },
 ];
 
 const giri = [
-  { giro: 'Giro 1', titolo: 'Conoscersi', testo: 'Un primo colloquio. Ti ascolto e capisco il contesto.' },
-  { giro: 'Giro 2', titolo: 'Misurare', testo: 'Valutazione sui quattro piani, con dati dove servono.' },
-  { giro: 'Giro 3', titolo: 'Allenare', testo: 'Un piano su misura, in seduta e sul campo.' },
-  { giro: 'Giro 4', titolo: 'Verificare', testo: 'Misuriamo i progressi. Si corregge la traiettoria.' },
+  { titolo: 'Ci conosciamo', testo: 'Mi racconti cosa succede. Io ascolto, senza giudicare.' },
+  { titolo: 'Capiamo', testo: 'Guardiamo insieme testa, emozioni, corpo e respiro. Se serve, con strumenti che misurano lo stress.' },
+  { titolo: 'Ci alleniamo', testo: 'Esercizi su misura, in studio, online o sul campo.' },
+  { titolo: 'Controlliamo', testo: 'Vediamo cosa è migliorato e aggiustiamo il percorso.' },
 ];
 
 const domande = [
@@ -82,29 +94,34 @@ const domande = [
     r: ['I pensieri corrono', 'Sale la paura di sbagliare', 'I muscoli si irrigidiscono', 'Il cuore accelera'],
   },
   {
-    q: 'Dopo un errore, cosa ti trattiene?',
-    r: ['Ci ripenso di continuo', 'Rabbia o sconforto', 'Il gesto si blocca', 'Mi manca il fiato'],
+    q: 'Quando sbagli qualcosa, cosa ti resta addosso?',
+    r: ['Ci ripenso di continuo', 'Rabbia o sconforto', 'Mi blocco', 'Mi manca il fiato'],
   },
   {
     q: 'La notte prima di un momento importante…',
     r: ['La testa non si spegne', 'Sono agitato', 'Il corpo non si rilassa', 'Dormo male, battito veloce'],
   },
   {
-    q: 'Nel momento decisivo ti capita di…',
-    r: ['Pensare troppo', 'Avere paura del risultato', 'Contrarre il movimento', 'Respirare corto'],
+    q: 'Nel momento importante ti capita di…',
+    r: ['Pensare troppo', 'Avere paura di sbagliare', 'Irrigidirti', 'Respirare corto'],
   },
   {
-    q: 'Cosa ti piacerebbe allenare?',
-    r: ['Concentrazione', 'Gestione delle emozioni', 'Scioltezza', 'Recupero ed energia'],
+    q: 'Cosa vorresti migliorare?',
+    r: ['Restare concentrato', 'Gestire ansia e paura', 'Sentirmi più sciolto', 'Dormire e recuperare meglio'],
   },
 ];
 
 const faq = [
-  { q: 'Psicologo dello sport o mental coach?', a: "Lo psicologo dello sport è un professionista sanitario iscritto all'Albo, con formazione clinica. Il titolo di mental coach non è regolamentato. Lavoro sulla prestazione con gli strumenti e le tutele della psicologia." },
-  { q: 'È solo per professionisti?', a: 'No. Lavoro con atleti di ogni livello, ragazzi, famiglie, manager. La pressione non guarda la categoria.' },
-  { q: 'Lavori con i minorenni?', a: 'Sì, sempre con il consenso dei genitori, che coinvolgo nel percorso. Nessun dato o immagine dei ragazzi viene reso pubblico.' },
-  { q: 'Quanto dura un percorso?', a: "Dipende dall'obiettivo. Dopo il primo colloquio e la valutazione ti propongo un piano chiaro, con tempi e verifiche." },
-  { q: 'Performance o psicoterapia: che differenza c’è?', a: 'Il percorso di performance allena risorse verso un obiettivo. La psicoterapia cura una sofferenza. Se serve, lo valutiamo insieme dal primo colloquio.' },
+  { q: 'Devo stare molto male per andare dallo psicologo?', a: 'No. Si va anche per stare meglio, per capire cosa succede o per prepararsi a un momento importante. Come si va dal medico sportivo senza essere infortunati.' },
+  { q: 'Quanto costa?', a: 'Dipende dal tipo di percorso. Te lo dico subito, al primo contatto e prima di iniziare: nessuna sorpresa.' },
+  { q: 'Quanto dura? Ogni quanto ci vediamo?', a: "All'inizio di solito ci si vede una volta a settimana, poi più di rado. Dopo il primo colloquio ti propongo un piano chiaro, con tempi e verifiche." },
+  { q: 'Online funziona come in studio?', a: 'Sì. Per molte persone è anche più comodo. Puoi scegliere tu, e cambiare quando vuoi.' },
+  { q: 'Quello che dico resta tra noi?', a: 'Sì. Lo psicologo è tenuto per legge al segreto professionale.' },
+  { q: 'Serve la ricetta del medico?', a: 'No. Puoi scrivermi o chiamarmi direttamente.' },
+  { q: 'E se non mi trovo bene?', a: 'Me lo dici, senza problemi. Il primo colloquio serve anche a questo: capire se possiamo lavorare bene insieme.' },
+  { q: 'Psicologo dello sport o mental coach?', a: "Lo psicologo dello sport è un professionista sanitario iscritto all'Albo, con formazione clinica. Il mental coach no: è un titolo non regolamentato." },
+  { q: 'Lavori con i ragazzi?', a: 'Sì, sempre con il consenso dei genitori, che coinvolgo nel percorso. Nessun dato o immagine dei ragazzi viene reso pubblico.' },
+  { q: 'Sport o psicoterapia: che differenza c’è?', a: 'Nello sport alleniamo le tue risorse per un obiettivo. La psicoterapia aiuta quando c’è una sofferenza. Se non sai quale ti serve, lo capiamo insieme al primo colloquio.' },
 ];
 
 const media = [
@@ -115,7 +132,7 @@ const media = [
 ---
 <Base
   title="Dott. Lorenzo Baldassarri – Psicologo, Psicoterapeuta e Psicologo dello sport a Montecatini Terme"
-  description="Psicoterapia funzionale e psicologia dello sport a Montecatini Terme e online. Ansia, stress, momenti difficili, pressione da prestazione: lavoro su pensieri, emozioni, corpo e respiro insieme."
+  description="Psicologo e psicoterapeuta a Montecatini Terme e online. Quando ansia, stress o pressione ti bloccano, lavoriamo insieme su testa, emozioni, corpo e respiro. Per stare meglio e dare il meglio."
   jsonLd={jsonLd}
 >
   <canvas class="tela-3d" aria-hidden="true"></canvas>
@@ -124,17 +141,18 @@ const media = [
   <section class="sezione hero" data-theme="carta" aria-labelledby="hero-titolo">
     <div class="wrap hero-grid">
       <div class="hero-testo">
-        <p class="hero-ruolo mono" data-reveal>Psicoterapia funzionale<span class="solo-desk"> · Montecatini Terme e online</span></p>
+        <p class="hero-ruolo mono" data-reveal>Psicologo e psicoterapeuta<span class="solo-desk"> · Montecatini Terme e online</span></p>
         <h1 id="hero-titolo" data-reveal style="--d:.08s">Ritrova il tuo <span class="evidenza">equilibrio.</span><span class="h1-sotto">In terapia, in gara, al lavoro.</span></h1>
-        <p class="lead" data-reveal style="--d:.16s">Ansia, stress, momenti difficili, pressione da prestazione: lavoro su pensieri, emozioni, corpo e respiro insieme.</p>
+        <p class="lead" data-reveal style="--d:.16s">Quando ansia, stress o pressione ti bloccano, lavoriamo insieme su testa, emozioni, corpo e respiro. Per stare meglio e dare il meglio.</p>
         <nav class="hero-strade" aria-label="Da dove vuoi partire" data-reveal style="--d:.2s">
-          <a href="/psicoterapia"><span class="mono">Per me</span> Psicoterapia <span aria-hidden="true">→</span></a>
-          <a href="/psicologo-dello-sport"><span class="mono">Per lo sport</span> Prestazione <span aria-hidden="true">→</span></a>
+          <a href="/psicoterapia"><span class="mono">Psicoterapia</span> Voglio stare meglio <span aria-hidden="true">→</span></a>
+          <a href="/psicologo-dello-sport"><span class="mono">Sport e lavoro</span> Voglio dare il meglio <span aria-hidden="true">→</span></a>
         </nav>
         <div class="hero-cta" data-reveal style="--d:.24s">
-          <a class="btn btn-primario" href="/contatti" data-cta>Prenota una call</a>
-          <a class="btn btn-secondario solo-desk-flex" href="#perche">Scopri il metodo <span class="freccia" aria-hidden="true">↓</span></a>
+          <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
+          <a class="btn btn-secondario solo-desk-flex" href="#riconosci">Come funziona <span class="freccia" aria-hidden="true">↓</span></a>
         </div>
+        <p class="rassicura" data-reveal style="--d:.28s"><span>In studio o online</span><span>Risposta entro un giorno lavorativo</span><span>Segreto professionale</span></p>
         <Credenziali classe="hero-cred" />
         <p class="fiducia mono" data-reveal style="--d:.32s">Albo Psicologi Toscana n. {contatti.albo} · Docente Università di Parma</p>
       </div>
@@ -143,7 +161,32 @@ const media = [
         <FotoGuida tipo="ritratto" src={contatti.foto} alt="Il Dott. Lorenzo Baldassarri nel suo studio di Montecatini Terme" classe="foto-hero" fuoco="50% 22%" eager guida={['Verticale 4:5, mezzo busto', 'Sguardo verso sinistra (verso il titolo)', 'Luce laterale morbida, sfondo neutro']} />
         <span class="badge badge-1"><span class="mono">dal 2011</span> Psicologo · Psicoterapeuta</span>
         <span class="badge badge-2"><span class="mono">Creatore</span> Psicologia del Potenziamento®</span>
-        <span class="badge badge-3"><span class="mono">2013–16</span> Formula Medicine</span>
+        <span class="badge badge-3"><span class="mono">2013–16</span> Formula 1 con Formula Medicine</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · TI RICONOSCI? -->
+  <section class="sezione riconosci-sezione" id="riconosci" data-theme="carta" aria-labelledby="riconosci-titolo">
+    <div class="wrap">
+      <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Ti riconosci?</p>
+        <h2 id="riconosci-titolo" data-reveal>Tocca le frasi che ti somigliano.</h2>
+      </div>
+      <div class="situazioni" role="group" aria-label="Situazioni in cui ti riconosci">
+        {situazioni.map((x, i) => (
+          <button type="button" class={`situazione p-${x.parte}`} aria-pressed="false" data-parte={x.parte} data-reveal style={`--d:${i * 0.04}s`}>
+            <span class="situazione-punto" aria-hidden="true"></span>{x.testo}
+          </button>
+        ))}
+      </div>
+      <div class="riconosci-esito" data-riconosci-esito aria-live="polite" hidden>
+        <p class="riconosci-frase">Capita a tantissime persone. E ci si può lavorare.</p>
+        <p class="riconosci-parti muted" data-riconosci-parti></p>
+        <div class="riconosci-azioni">
+          <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
+          <a class="link-freccia" href="#perche">Come ci lavoriamo <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -153,8 +196,8 @@ const media = [
     <div class="wrap">
       <div class="sezione-head chi-head">
         <p class="eyebrow" data-reveal>Chi sono</p>
-        <h2 id="chi-titolo" data-reveal>Dal campo alla clinica, fino alla Formula 1.</h2>
-        <p class="lead" data-reveal>Psicologo e psicoterapeuta dal 2011. Prima ancora, calciatore: so cosa vuol dire giocarsi tutto in pochi secondi.</p>
+        <h2 id="chi-titolo" data-reveal>Ho giocato, ho studiato, ho lavorato con i campioni. Ora sono qui per te.</h2>
+        <p class="lead" data-reveal>Mi chiamo Lorenzo. Dal 2011 aiuto ragazzi, adulti, atleti e manager a stare meglio e a dare il meglio quando la pressione sale.</p>
       </div>
       <ol class="percorso" role="list">
         {percorso.map((t, i) => (
@@ -173,9 +216,9 @@ const media = [
   <section class="sezione perche" id="perche" data-theme="carta" aria-labelledby="perche-titolo">
     <div class="wrap">
       <div class="sezione-head perche-head">
-        <p class="eyebrow" data-reveal>Psicologia funzionale</p>
+        <p class="eyebrow" data-reveal>Il mio metodo</p>
         <h2 id="perche-titolo" data-reveal>Perché a volte capire non basta.</h2>
-        <p class="lead" data-reveal>Molti percorsi lavorano soprattutto su un piano: pensieri, comportamenti o passato. Funzionano, ma a volte capisci tutto e il corpo resta in allarme.</p>
+        <p class="lead" data-reveal>Puoi capire benissimo cosa ti succede e stare male lo stesso. Perché ansia e stress non stanno solo nella testa: stanno anche nelle emozioni, nel corpo e nel respiro.</p>
       </div>
       <div class="storia">
         <figure class="torre-box">
@@ -204,41 +247,42 @@ const media = [
           <g class="oscilla-segni" aria-hidden="true"><path d="M58 120 q -10 22 0 44" /><path d="M262 120 q 10 22 0 44" /></g>
           <g class="etichetta-risultati" aria-hidden="true">
             <path d="M232 60 h8 v236 h-8" />
-            <text x="248" y="170">I tuoi</text><text x="248" y="186">risultati</text>
+            <text x="248" y="170">I tuoi</text><text x="248" y="186">obiettivi</text>
           </g>
-          <text class="etichetta-base" x="160" y="352" text-anchor="middle" aria-hidden="true">Base sottile: un piano solo</text>
+          <text class="etichetta-base" x="160" y="352" text-anchor="middle" aria-hidden="true">Base stretta: una parte sola</text>
           <text class="etichetta-fondamenta" x="62" y="381" text-anchor="end" aria-hidden="true">Fondamenta</text>
         </svg>
-          <figcaption id="torre-didascalia" class="torre-didascalia" aria-live="polite"><span data-fase>Questo palazzo sono i risultati che vuoi.</span></figcaption>
+          <figcaption id="torre-didascalia" class="torre-didascalia" aria-live="polite"><span data-fase>Questo palazzo sono i tuoi obiettivi.</span></figcaption>
         </figure>
         <div class="passi">
           <article class="passo" data-passo="0">
             <p class="etichetta">Il palazzo</p>
-            <h3>Sono i risultati che vuoi.</h3>
-            <p class="muted">Stare meglio, sentirti più sereno, rendere al meglio sotto pressione. Più il palazzo sale, più ottieni.</p>
+            <h3>Il palazzo sono i tuoi obiettivi.</h3>
+            <p class="muted">Stare sereno, dormire bene, dare il meglio. Più il palazzo sale, più ottieni.</p>
           </article>
           <article class="passo" data-passo="1">
-            <p class="etichetta etichetta-rischio">Il rischio di un piano solo</p>
-            <h3>Su una base sottile, più sale e più oscilla.</h3>
+            <p class="etichetta etichetta-rischio">Il rischio</p>
+            <h3>Se lavori su una parte sola, la base è stretta.</h3>
+            <p class="muted">Funziona per un po’, poi alla prima difficoltà traballa:</p>
             <ol class="limiti" role="list">
-              <li><strong>Un cambiamento in superficie.</strong> <span class="muted">Va meglio finché segui la tecnica, poi torna come prima.</span></li>
-              <li><strong>Poca flessibilità.</strong> <span class="muted">Funziona lì, non quando la situazione cambia.</span></li>
-              <li><strong>Le ricadute.</strong> <span class="muted">Basta un imprevisto e si perde.</span></li>
+              <li><strong>Cambia solo la superficie.</strong> <span class="muted">Va meglio finché segui la tecnica, poi torna come prima.</span></li>
+              <li><strong>Funziona solo in un caso.</strong> <span class="muted">Se la situazione cambia, non basta più.</span></li>
+              <li><strong>Si torna indietro.</strong> <span class="muted">Basta un imprevisto e si perde quello che hai fatto.</span></li>
             </ol>
           </article>
           <article class="passo" data-passo="2">
             <p class="etichetta etichetta-metodo">Le fondamenta</p>
-            <h3>La Psicologia Funzionale costruisce le fondamenta.</h3>
-            <p class="muted">Lavora sui funzionamenti di fondo da cui nascono pensieri, emozioni e sintomi, su tutti e quattro i piani. E recupera le Esperienze di Base del Sé:</p>
+            <h3>Io costruisco le fondamenta.</h3>
+            <p class="muted">Lavoriamo su tutte e 4 le parti di te, insieme, alle radici di quello che senti. E ritrovi capacità che hai già:</p>
             <ul class="esperienze" role="list">
-              <li>Calma</li><li>Contatto</li><li>Forza</li><li>Tenerezza</li><li>Contenimento</li>
+              <li>Calma</li><li>Forza</li><li>Sentirti al sicuro</li><li>Stare bene con gli altri</li>
             </ul>
           </article>
           <article class="passo" data-passo="3">
             <p class="etichetta etichetta-ok">Il risultato</p>
-            <h3>Ora il palazzo resta in piedi, anche sotto pressione.</h3>
-            <p class="muted">Un cambiamento che regge anche quando la situazione cambia: in terapia, in gara, al lavoro.</p>
-            <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
+            <h3>Così il palazzo regge, anche quando la vita spinge forte.</h3>
+            <p class="muted">Il metodo si chiama Psicologia Funzionale: una psicoterapia che lavora su mente e corpo insieme.</p>
+            <a class="link-freccia" href="/metodo">Approfondisci il metodo <span aria-hidden="true">→</span></a>
           </article>
         </div>
       </div>
@@ -249,13 +293,13 @@ const media = [
   <section class="sezione mente" id="mente" data-theme="carta" data-stato="mente" aria-labelledby="mente-titolo">
     <div class="wrap mente-grid">
       <div class="mente-testo">
-        <p class="eyebrow" data-reveal>I quattro piani · prova adesso</p>
-        <h2 id="mente-titolo" data-reveal>La tua mente, sotto pressione.</h2>
-        <p class="lead" data-reveal>Questa sfera sei tu: ogni colore è una parte di te. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto il pulsante</strong>: i piani si separano. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
+        <p class="eyebrow" data-reveal>Prova tu · 10 secondi</p>
+        <h2 id="mente-titolo" data-reveal>Cosa ti succede sotto pressione?</h2>
+        <p class="lead" data-reveal>Questa sfera sei tu. <strong class="hint-fine evidenziatore">Muovi il cursore veloce</strong><strong class="hint-touch evidenziatore">Tieni premuto</strong>: è come quando sei sotto pressione, ogni parte di te va per conto suo. <strong class="hint-fine evidenziatore e2">Fermati</strong><strong class="hint-touch evidenziatore e2">Lascia</strong>: tornano insieme.</p>
         <button type="button" class="come-si-usa" data-guida="mente"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
       <div class="mente-stage">
-        <p class="mente-stato" data-mente-stato aria-live="polite">In equilibrio: i piani lavorano insieme</p>
+        <p class="mente-stato" data-mente-stato aria-live="polite">In equilibrio: le tue parti lavorano insieme</p>
         <div class="mente-ancora" data-ancora>
           <div class="gesto" aria-hidden="true">
             <svg class="gesto-cursore" viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6L9.6 20z" /></svg>
@@ -271,7 +315,7 @@ const media = [
           <span class="tieni-testo">Tieni premuto</span>
         </button>
         <div class="pressometro" aria-hidden="true">
-          <span class="mono">Pressione</span>
+          <span class="mono">Quanta pressione senti</span>
           <span class="pressometro-barra"><span data-pressione-barra></span></span>
           <span class="mono pressometro-val" data-pressione-val>0%</span>
         </div>
@@ -284,7 +328,7 @@ const media = [
             <line x1="0" y1="60" x2="1000" y2="60" class="tel-asse" />
             <path class="tel-linea" d="M0 60 L1000 60" />
           </svg>
-          <p class="tel-msg mono" aria-live="polite"><span class="hint-fine">In attesa: muoviti, poi fermati.</span><span class="hint-touch">In attesa: tieni premuto, poi lascia.</span></p>
+          <p class="tel-msg mono" aria-live="polite"><span class="hint-fine">Muoviti veloce, poi fermati.</span><span class="hint-touch">Tieni premuto, poi lascia.</span></p>
         </div>
       </div>
       <div class="mente-legenda">
@@ -296,7 +340,7 @@ const media = [
             </li>
           ))}
         </ol>
-        <p class="mente-sintesi" data-reveal>Il mio lavoro è tenerli insieme, <span class="evidenza">anche quando la pressione sale.</span></p>
+        <p class="mente-sintesi" data-reveal>Il mio lavoro è tenerle insieme, <span class="evidenza">anche quando la pressione sale.</span></p>
       </div>
     </div>
   </section>
@@ -306,16 +350,17 @@ const media = [
   <section class="sezione respiro" id="respiro" data-theme="carta" data-stato="respiro" aria-labelledby="respiro-titolo">
     <div class="wrap respiro-grid">
       <div class="respiro-testo">
-        <p class="eyebrow" data-reveal>Piano fisiologico</p>
-        <h2 id="respiro-titolo" data-reveal>Trenta secondi. Prova.</h2>
-        <p class="lead" data-reveal>Inspira per 4, espira per 6. Il respiro lungo rallenta il battito: è il primo strumento che si allena.</p>
+        <p class="eyebrow" data-reveal>Prova tu · 30 secondi</p>
+        <h2 id="respiro-titolo" data-reveal>Calmati in 30 secondi.</h2>
+        <p class="lead" data-reveal>Inspira contando fino a 4, butta fuori l’aria contando fino a 6. Quando espiri più a lungo, il cuore rallenta. È il primo esercizio che insegno.</p>
         <div class="respiro-azioni" data-reveal>
           <button class="btn btn-primario" type="button" data-respiro-start>Inizia <span class="mono" style="opacity:.8">30 s</span></button>
           <button class="btn btn-secondario" type="button" data-respiro-stop hidden>Interrompi</button>
         </div>
         <div class="respiro-fine" hidden>
-          <p class="h3">Hai appena allenato il piano fisiologico.</p>
-          <a class="link-freccia" href="#cruscotto">Scopri gli altri tre <span aria-hidden="true">→</span></a>
+          <p class="h3">Come ti senti?</p>
+          <p class="muted">Questo era un esercizio. In un percorso ne impari tanti, su misura per te.</p>
+          <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
         </div>
       </div>
       <div class="respiro-stage" data-ancora>
@@ -335,9 +380,9 @@ const media = [
   <section class="sezione cruscotto" id="cruscotto" data-theme="cruscotto" data-stato="cruscotto" aria-labelledby="cruscotto-titolo">
     <div class="wrap cruscotto-layout">
       <div class="sezione-head cruscotto-head">
-        <p class="eyebrow" data-reveal>Il metodo · quattro piani</p>
-        <h2 id="cruscotto-titolo" data-reveal>Non basta pensare positivo.</h2>
-        <p class="lead" data-reveal>Porta un piano al rosso e guarda gli altri: lo seguono. Poi attiva l’allenamento e riprova.</p>
+        <p class="eyebrow" data-reveal>Cosa cambia lavorandoci</p>
+        <h2 id="cruscotto-titolo" data-reveal>Una parte va in tilt? Si trascina dietro le altre.</h2>
+        <p class="lead" data-reveal>Sposta una parte fino al rosso: guarda, peggiorano anche le altre. Poi tocca «Dopo il percorso» e riprova.</p>
         <button type="button" class="come-si-usa" data-guida="cruscotto"><span aria-hidden="true">?</span> Come si usa</button>
       </div>
 
@@ -366,40 +411,20 @@ const media = [
 
       <div class="pressione">
         <div class="allenamento" role="group" aria-label="Allenamento">
-          <button type="button" data-allenato="no" aria-pressed="true">Senza allenamento</button>
-          <button type="button" data-allenato="si" aria-pressed="false">Con allenamento</button>
+          <button type="button" data-allenato="no" aria-pressed="true">Oggi</button>
+          <button type="button" data-allenato="si" aria-pressed="false">Dopo il percorso</button>
         </div>
-        <label for="pressione" class="mono pressione-lab">Stai regolando: <span data-piano-scelto>Pensiero</span></label>
-        <input id="pressione" type="range" min="0" max="100" value="50" step="1" aria-valuetext="Pensiero in equilibrio" />
+        <label for="pressione" class="mono pressione-lab">Stai muovendo: <span data-piano-scelto>Testa</span></label>
+        <input id="pressione" type="range" min="0" max="100" value="50" step="1" aria-valuetext="Testa in equilibrio" />
         <output class="mono pressione-out" for="pressione">In equilibrio</output>
         <button type="button" class="pressione-reset mono" data-equilibrio>Riporta tutto al centro</button>
       </div>
 
-      <p id="cruscotto-dettaglio" class="cruscotto-dettaglio" aria-live="polite">Tutto in equilibrio: i quattro piani lavorano insieme.</p>
+      <p id="cruscotto-dettaglio" class="cruscotto-dettaglio" aria-live="polite">Tutto in equilibrio: le tue parti lavorano insieme.</p>
       <div class="cruscotto-chiusa">
         <p class="h3" data-reveal>Il pensiero positivo muove una lancetta.<br /><span class="accento">Io alleno tutte e quattro.</span></p>
         <a class="link-freccia" href="/metodo">Il metodo in dettaglio <span aria-hidden="true">→</span></a>
       </div>
-    </div>
-  </section>
-
-  <!-- 3 · AUTORITÀ + NUMERI -->
-  <section class="sezione autorita-sezione" data-theme="carta" aria-label="Esperienze e numeri">
-    <div class="nastro" aria-hidden="true">
-      <div class="nastro-scorre mono">
-        {[...autorita, ...autorita].map((a) => <span>{a}</span>)}
-      </div>
-    </div>
-    <ul class="sr-only" role="list">{autorita.map((a) => <li>{a}</li>)}</ul>
-    <div class="wrap">
-      <ul class="numeri" role="list">
-        {numeri.map((n, i) => (
-          <li class="numero" data-reveal style={`--d:${i * 0.08}s`}>
-            <span class="numero-val display"><span data-conta={n.to}>{n.to}</span>{n.suffix}</span>
-            <span class="numero-lab">{n.label}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
@@ -408,7 +433,7 @@ const media = [
     <div class="wrap">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Come lavoro</p>
-        <h2 id="giri-titolo" data-reveal>Prima ti ascolto. Poi misuro. Poi alleniamo.</h2>
+        <h2 id="giri-titolo" data-reveal>Come funziona, passo dopo passo.</h2>
       </div>
       <ol class="giri" role="list">
         {giri.map((g, i) => (
@@ -421,6 +446,52 @@ const media = [
           </li>
         ))}
       </ol>
+      <aside class="prima-volta" data-reveal aria-labelledby="prima-volta-t">
+        <p id="prima-volta-t" class="etichetta etichetta-ok">La prima volta</p>
+        <p>Il primo colloquio si fa in studio a Montecatini Terme o online. <b>Parli tu, al tuo ritmo.</b> Alla fine sai se e come posso aiutarti. Non devi preparare niente.</p>
+        <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 9 · FIDUCIA: numeri, nomi e media -->
+  <section class="sezione autorita-sezione media-sezione" data-theme="carta" aria-labelledby="fiducia-titolo">
+    <div class="wrap">
+      <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Esperienza</p>
+        <h2 id="fiducia-titolo" data-reveal>Chi si è già fidato.</h2>
+      </div>
+      <ul class="numeri" role="list">
+        {numeri.map((n, i) => (
+          <li class="numero" data-reveal style={`--d:${i * 0.08}s`}>
+            <span class="numero-val display">{n.valore}</span>
+            <span class="numero-lab">{n.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="nastro" aria-hidden="true">
+      <div class="nastro-scorre mono">
+        {[...autorita, ...autorita].map((a) => <span>{a}</span>)}
+      </div>
+    </div>
+    <ul class="sr-only" role="list">{autorita.map((a) => <li>{a}</li>)}</ul>
+    <div class="wrap">
+      <p class="fiducia-media h3" data-reveal>Ne ho parlato in TV, all’università e sui giornali.</p>
+      <p class="scorri mono" aria-hidden="true">Scorri <span>→</span></p>
+      <ul class="griglia-3" role="list">
+        {media.map((m, i) => (
+          <li data-reveal style={`--d:${i * 0.08}s`}>
+            <a class="scheda media-scheda" href={m.href} target="_blank" rel="noopener">
+              <span class="mono muted media-tipo">{m.tipo}</span>
+              <span class="h3">{m.titolo}</span>
+              <span class="muted">{m.testo}</span>
+              <span class="media-freccia" aria-hidden="true">↗</span>
+              <span class="sr-only">(si apre in una nuova scheda)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -428,9 +499,9 @@ const media = [
   <section class="sezione quiz-sezione" data-theme="carta" id="autovalutazione" aria-labelledby="quiz-titolo">
     <div class="wrap quiz-grid">
       <div class="sezione-head">
-        <p class="eyebrow" data-reveal>Autovalutazione</p>
-        <h2 id="quiz-titolo" data-reveal>Come ti cambia la pressione?</h2>
-        <p class="lead" data-reveal>Cinque tocchi. Nessun dato personale. Non è un test diagnostico.</p>
+        <p class="eyebrow" data-reveal>Mini test · 1 minuto</p>
+        <h2 id="quiz-titolo" data-reveal>Tu come reagisci sotto pressione?</h2>
+        <p class="lead" data-reveal>5 domande. Nessun dato personale. Non è una diagnosi: è un primo sguardo su di te.</p>
       </div>
       <div class="quiz scheda" data-reveal>
         <div class="quiz-barra" aria-hidden="true"><span></span></div>
@@ -452,9 +523,9 @@ const media = [
             ))}
           </ul>
           <p class="h3 quiz-titolo-esito"></p>
-          <p class="muted">Lavoriamo sul piano più sollecitato, senza trascurare gli altri tre.</p>
+          <p class="muted" data-quiz-esercizio></p>
           <div class="quiz-azioni">
-            <a class="btn btn-primario" href="/contatti" data-cta>Prenota una call</a>
+            <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
             <button type="button" class="btn btn-secondario" data-quiz-reset>Rifai</button>
           </div>
         </div>
@@ -462,54 +533,15 @@ const media = [
     </div>
   </section>
 
-  <!-- SUL CAMPO: le foto da scattare -->
-  <section class="sezione campo-sezione" data-theme="carta" aria-labelledby="campo-titolo">
-    <div class="wrap">
-      <div class="sezione-head">
-        <p class="eyebrow" data-reveal>Sul campo</p>
-        <h2 id="campo-titolo" data-reveal>Dove succede il lavoro.</h2>
-        <p class="lead" data-reveal>Studio, campo, paddock, aula: le stesse quattro leve, in posti diversi.</p>
-        <p class="scorri mono" aria-hidden="true">Scorri <span>→</span></p>
-      </div>
-      <div class="galleria">
-        <FotoGuida tipo="studio" classe="g1" titolo="Foto da scattare · In studio" guida={['Verticale, Lorenzo in ascolto', 'Luce naturale dalla finestra', 'Nessun paziente riconoscibile']} />
-        <FotoGuida tipo="campo" classe="g2" titolo="Foto da scattare · A bordo campo" guida={['Orizzontale, con staff o atleti di spalle', 'Luce del pomeriggio', 'Liberatoria per chi è riconoscibile']} />
-        <FotoGuida tipo="box" classe="g3" titolo="Foto da scattare · Ai box" guida={['Orizzontale, casco o monoposto in primo piano', 'Lorenzo a fuoco sullo sfondo', 'Autorizzazione del team']} />
-        <FotoGuida tipo="palco" classe="g4" titolo="Foto da scattare · In aula o sul palco" guida={['Orizzontale, mentre parla', 'Slide con un grafico visibile', 'Pubblico sfocato']} />
-      </div>
-    </div>
-  </section>
-
-  <!-- 9 · MEDIA -->
-  <section class="sezione media-sezione" data-theme="carta" aria-labelledby="media-titolo">
-    <div class="wrap">
-      <div class="sezione-head">
-        <p class="eyebrow" data-reveal>Media e interventi</p>
-        <h2 id="media-titolo" data-reveal>Dove ne ho parlato.</h2>
-        <p class="scorri mono" aria-hidden="true">Scorri <span>→</span></p>
-      </div>
-      <ul class="griglia-3" role="list">
-        {media.map((m, i) => (
-          <li data-reveal style={`--d:${i * 0.08}s`}>
-            <a class="scheda media-scheda" href={m.href} target="_blank" rel="noopener">
-              <span class="mono muted media-tipo">{m.tipo}</span>
-              <span class="h3">{m.titolo}</span>
-              <span class="muted">{m.testo}</span>
-              <span class="media-freccia" aria-hidden="true">↗</span>
-              <span class="sr-only">(si apre in una nuova scheda)</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+  {/* SUL CAMPO: tornerà quando ci saranno le foto vere (vedi DA-CONFERMARE.md) */}
 
   <!-- 10 · DOMANDE -->
   <section class="sezione faq-sezione" data-theme="carta" aria-labelledby="faq-titolo">
     <div class="wrap faq-grid">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Domande</p>
-        <h2 id="faq-titolo" data-reveal>Prima di iniziare.</h2>
+        <h2 id="faq-titolo" data-reveal>Hai dei dubbi? È normale.</h2>
+        <p class="lead" data-reveal>Qui trovi le risposte alle domande più comuni. Se la tua non c'è, <a href="/contatti">scrivimi</a>: ti rispondo io.</p>
       </div>
       <div class="faq">
         {faq.map((f) => (
@@ -526,9 +558,9 @@ const media = [
   <section class="sezione porte-sezione" data-theme="carta" aria-labelledby="porte-titolo" id="porte">
     <div class="wrap">
       <div class="sezione-head">
-        <p class="eyebrow" data-reveal>Chi sei?</p>
-        <h2 id="porte-titolo" data-reveal>Scegli la tua porta.</h2>
-        <p class="lead" data-reveal>Scegli il percorso che fa per te: il sito ti porta alle informazioni giuste.</p>
+        <p class="eyebrow" data-reveal>Da dove partiamo?</p>
+        <h2 id="porte-titolo" data-reveal>Scegli quello che ti somiglia.</h2>
+        <p class="lead" data-reveal>Ti porto alle informazioni giuste per te.</p>
       </div>
       <div class="porte" role="group" aria-label="Scegli il tuo profilo">
         {porte.map((p, i) => (
@@ -552,9 +584,13 @@ const media = [
     <div class="wrap chiusura-grid">
       <div class="chiusura-ancora" data-ancora aria-hidden="true"></div>
       <div class="chiusura-testo">
-        <h2 id="chiusura-titolo" data-reveal>Parliamone.</h2>
-        <p class="lead" data-reveal>Venti minuti per capire se e come posso esserti utile.</p>
-        <a class="btn btn-primario" href="/contatti" data-cta data-reveal>Prenota una call</a>
+        <h2 id="chiusura-titolo" data-reveal>Il primo passo è una chiacchierata.</h2>
+        <p class="lead" data-reveal>20 minuti al telefono o in video: mi racconti cosa ti succede, io ti dico se e come posso aiutarti.</p>
+        <div class="chiusura-azioni" data-reveal>
+          <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
+          <a class="btn btn-secondario" href={`https://wa.me/${contatti.whatsapp}`} target="_blank" rel="noopener">Scrivimi su WhatsApp</a>
+        </div>
+        <p class="rassicura" data-reveal><span>Risposta entro un giorno lavorativo</span><span>Montecatini Terme o online</span><span>Segreto professionale</span></p>
       </div>
     </div>
   </section>
@@ -853,7 +889,8 @@ const media = [
   .media-freccia { position: absolute; right: 1.5rem; top: 1.4rem; }
 
   /* ---------- FAQ ---------- */
-  .faq-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start; }
+  .faq-grid .sezione-head { position: sticky; top: 7rem; }
   .faq { border-top: 1px solid var(--linea); }
   .faq-voce { border-bottom: 1px solid var(--linea); }
   .faq-voce summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.35rem 0; cursor: pointer; font-family: var(--f-display); font-weight: 600; font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); letter-spacing: -0.015em; }
@@ -863,7 +900,7 @@ const media = [
   .faq-segno::after { transform: rotate(90deg); }
   .faq-voce[open] .faq-segno::after { transform: rotate(0deg); }
   .faq-voce p { padding-bottom: 1.4rem; max-width: 58ch; }
-  @media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; gap: 0; } }
+  @media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; gap: 0; } .faq-grid .sezione-head { position: static; } }
 
   /* ---------- CHIUSURA ---------- */
   .chiusura { min-height: 90svh; display: grid; align-content: center; }
@@ -1131,6 +1168,13 @@ const media = [
   @media (prefers-reduced-motion: reduce) { .badge { animation: none; } }
   /* PC con schermo basso (es. 1366×768): tutto entra comunque */
   @media (min-width: 1024px) and (max-height: 960px) {
+    .hero { padding-top: max(5.4rem, 11vh); padding-bottom: 3vh; }
+    .hero .hero-strade { flex-wrap: nowrap; }
+    .hero .hero-strade a { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: .45rem; row-gap: 0; padding: .45rem .95rem; }
+    .hero .hero-strade a .mono { grid-column: 1 / -1; }
+    .faq-voce summary { padding-block: .8rem; font-size: 1.02rem; }
+    .hero h1 { font-size: min(clamp(2.6rem, 1.4rem + 6vw, 6.2rem), 9.2vh); }
+    .h1-sotto { margin-top: .2em; }
     .mente-ancora { width: min(520px, 40vh); }
     .legenda li { padding: .3rem 0; }
     .mente-legenda { gap: .6rem; }
@@ -1253,4 +1297,36 @@ const media = [
     .angolo b { font-size: .56rem; }
     .mente-stato { font-size: .95rem; }
   }
+  /* rassicurazioni sotto i bottoni */
+  .rassicura { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .82rem; color: var(--fg-2); margin-top: -.2rem; }
+  .rassicura span { display: inline-flex; align-items: center; gap: .35rem; }
+  .rassicura span::before { content: '✓'; color: var(--fisiologia); font-weight: 800; }
+  @media (max-width: 860px) { .rassicura { font-size: .74rem; gap: .2rem .7rem; order: 3; } }
+  /* ---------- TI RICONOSCI? ---------- */
+  .situazioni { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 62rem; }
+  .situazione { display: inline-flex; align-items: center; gap: .55rem; text-align: left; padding: .7rem 1rem; border-radius: 999px; border: 1.5px solid var(--linea); background: #fff; color: var(--inchiostro); font-family: var(--f-display); font-weight: 600; font-size: clamp(.92rem, .86rem + .25vw, 1.05rem); letter-spacing: -0.01em; cursor: pointer; transition: border-color .3s, background-color .3s, color .3s, transform .3s var(--respiro); }
+  .situazione:hover { border-color: var(--c); transform: translateY(-2px); }
+  .situazione-punto { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; transition: transform .3s; }
+  .situazione[aria-pressed="true"] { background: var(--c); border-color: var(--c); color: #fff; }
+  .situazione[aria-pressed="true"] .situazione-punto { background: #fff; transform: scale(1.2); }
+  .riconosci-esito { margin-top: clamp(1.25rem, 3vh, 2rem); display: grid; gap: .6rem; padding: 1.25rem 1.4rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); box-shadow: 0 18px 40px -30px rgba(11, 18, 48, .5); max-width: 46rem; animation: riconosci-entra .5s var(--uscita); }
+  .riconosci-frase { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.1rem, 1rem + .5vw, 1.35rem); letter-spacing: -0.02em; line-height: 1.25; }
+  .riconosci-azioni { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.4rem; margin-top: .3rem; }
+  @keyframes riconosci-entra { from { opacity: 0; transform: translateY(10px); } }
+  @media (min-width: 1024px) { .riconosci-sezione { min-height: 100svh; display: grid; align-content: center; } }
+  @media (max-width: 860px) { .situazione { width: 100%; border-radius: 16px; padding: .65rem .9rem; } .riconosci-esito { padding: 1rem; } }
+  /* sfera: una sola barra semplice, niente numeri tecnici */
+  .pressometro { grid-template-columns: auto 1fr; }
+  .pressometro-val, .tel-testa, .tel-svg { display: none !important; }
+  .pressometro-barra span { background: linear-gradient(90deg, var(--fisiologia), #E8B53A 55%, var(--emozione)); }
+  .pressometro .mono { text-transform: none; letter-spacing: 0; font-family: var(--f-display); font-weight: 600; font-size: .85rem; }
+  /* come lavoro: la prima volta */
+  .prima-volta { margin-top: clamp(1.5rem, 4vh, 2.5rem); display: grid; gap: .7rem; justify-items: start; padding: 1.25rem 1.4rem; border-radius: var(--radius); background: #fff; border: 1px solid var(--linea); max-width: 46rem; box-shadow: 0 18px 40px -30px rgba(11, 18, 48, .5); }
+  .prima-volta p:not(.etichetta) { font-size: 1.02rem; }
+  /* fiducia: numeri, nomi, media insieme */
+  .autorita-sezione .nastro { margin-block: clamp(1.5rem, 4vh, 2.5rem); }
+  .autorita-sezione .numeri { margin-top: 0; }
+  .numero-val { font-size: clamp(2.4rem, 1.8rem + 2.6vw, 4.2rem); }
+  .fiducia-media { margin-bottom: 1rem; }
+  .chiusura-azioni { display: flex; flex-wrap: wrap; gap: .6rem; }
 </style>

@@ -31,57 +31,57 @@ export const identita = {
 // Le cinque "porte": una per pubblico, una sola azione principale ciascuna.
 export const porte = [
   {
+    id: 'psicoterapia',
+    href: '/psicoterapia',
+    menu: 'Psicoterapia',
+    porta: 'Voglio stare meglio',
+    sotto: 'Psicoterapia',
+    riga: 'Ansia e stress che pesano ogni giorno. Nello studio di Montecatini Terme o online.',
+    cta: { label: 'Prenota il primo colloquio', href: '/contatti?per=psicoterapia' },
+  },
+  {
     id: 'atleti',
     href: '/psicologo-dello-sport',
     menu: 'Atleti e famiglie',
-    porta: 'Gareggio',
+    porta: 'Faccio sport (o mio figlio)',
     sotto: 'Atleti e famiglie',
     riga: 'Concentrazione, paura di sbagliare, pressione della gara. Dal giovanile al professionismo.',
-    cta: { label: 'Prenota una call', href: '/contatti?per=atleti' },
+    cta: { label: 'Prenota il primo colloquio', href: '/contatti?per=atleti' },
   },
   {
     id: 'squadre',
     href: '/squadre-e-societa',
     menu: 'Squadre e società',
-    porta: 'Guido un gruppo',
+    porta: 'Alleno una squadra',
     sotto: 'Squadre e società',
     riga: 'Psicologo di società, formazione di staff, progetti per i settori giovanili.',
     cta: { label: 'Richiedi una proposta', href: '/contatti?per=squadre' },
   },
   {
+    id: 'motorsport',
+    href: '/motorsport',
+    menu: 'Motorsport',
+    porta: 'Corro in auto o in moto',
+    sotto: 'Motorsport',
+    riga: 'Dal kart alla Formula: il metodo è nato qui.',
+    cta: { label: 'Prenota il primo colloquio', href: '/contatti?per=motorsport' },
+  },
+  {
     id: 'aziende',
     href: '/aziende-e-leader',
     menu: 'Aziende e leader',
-    porta: "Guido un'azienda",
+    porta: "Guido un'azienda o un team",
     sotto: 'Aziende e leader',
     riga: 'Lucidità, energia e decisioni sotto pressione, con un metodo nato in pista.',
     cta: { label: 'Richiedi una proposta', href: '/contatti?per=aziende' },
   },
-  {
-    id: 'motorsport',
-    href: '/motorsport',
-    menu: 'Motorsport',
-    porta: 'Corro in pista',
-    sotto: 'Motorsport',
-    riga: 'Dal kart alla Formula: il metodo è nato qui.',
-    cta: { label: 'Prenota una call', href: '/contatti?per=motorsport' },
-  },
-  {
-    id: 'psicoterapia',
-    href: '/psicoterapia',
-    menu: 'Psicoterapia',
-    porta: 'Cerco aiuto per me',
-    sotto: 'Psicoterapia',
-    riga: 'Ansia e stress che pesano ogni giorno. Nello studio di Montecatini Terme o online.',
-    cta: { label: 'Prenota una prima visita', href: '/contatti?per=psicoterapia' },
-  },
 ];
 
 export const piani = [
-  { id: 'pensiero', nome: 'Pensiero', piano: 'Cognitivo', esempio: 'Concentrazione, decisioni, dialogo interno.' },
-  { id: 'emozione', nome: 'Emozione', piano: 'Emotivo', esempio: 'Paura di sbagliare, rabbia, fiducia.' },
-  { id: 'corpo', nome: 'Corpo', piano: 'Muscolare-posturale', esempio: 'Tensione, postura, scioltezza del gesto.' },
-  { id: 'fisiologia', nome: 'Fisiologia', piano: 'Fisiologico', esempio: 'Battito, respiro, variabilità cardiaca (HRV).' },
+  { id: 'pensiero', nome: 'Testa', piano: 'Cognitivo', esempio: 'Pensieri, concentrazione, decisioni.' },
+  { id: 'emozione', nome: 'Emozioni', piano: 'Emotivo', esempio: 'Paura, rabbia, fiducia.' },
+  { id: 'corpo', nome: 'Corpo', piano: 'Muscolare-posturale', esempio: 'Tensione, postura, scioltezza.' },
+  { id: 'fisiologia', nome: 'Respiro', piano: 'Fisiologico', esempio: 'Fiato, battito, energia.' },
 ];
 
 // Contenuti delle pagine-porta di performance
@@ -99,7 +99,7 @@ export const paginePorta = {
       { piano: 'corpo', titolo: 'Scioltezza', testo: 'Sciogliere la tensione che irrigidisce il gesto.' },
       { piano: 'fisiologia', titolo: 'Recupero', testo: 'Respiro e battito al servizio della prestazione.' },
     ],
-    formati: ['Percorso individuale', 'Valutazione sui quattro piani', 'Incontri per genitori'],
+    formati: ['Percorso individuale', 'Valutazione di testa, emozioni, corpo e respiro', 'Incontri per genitori'],
     prove: [
       { dato: '20+', testo: 'anni nel calcio, da giocatore e allenatore di Scuola Calcio' },
       { dato: '2013–16', testo: 'responsabile area mental in Formula Medicine' },

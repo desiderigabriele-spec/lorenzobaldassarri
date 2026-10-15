@@ -1,14 +1,14 @@
 ---
 // Banda di chiusura con una sola azione principale
 interface Props { titolo?: string; testo?: string; tema?: 'carta' | 'cruscotto'; }
-const { titolo = 'Parliamone.', testo = 'Venti minuti per capire se e come posso esserti utile.', tema = 'cruscotto' } = Astro.props;
+const { titolo = 'Il primo passo è una chiacchierata.', testo = '20 minuti al telefono o in video: mi racconti cosa ti succede, io ti dico se e come posso aiutarti.', tema = 'cruscotto' } = Astro.props;
 ---
 <section class="sezione banda" data-theme={tema}>
   <div class="wrap banda-grid">
     <h2 data-reveal>{titolo}</h2>
     <div class="banda-dx" data-reveal>
       <p class="lead">{testo}</p>
-      <a class="btn btn-primario" href="/contatti" data-cta>Prenota una call</a>
+      <a class="btn btn-primario" href="/contatti" data-cta>Prenota il primo colloquio</a>
     </div>
   </div>
 </section>

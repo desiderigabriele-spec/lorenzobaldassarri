@@ -48,7 +48,7 @@ function impostaFrasi(su) {
   sottoPressione = su;
   mente?.classList.toggle('sotto-pressione', su);
   frasiEl.forEach((el) => { el.textContent = FRASI[+el.dataset.frase][su ? 1 : 0]; });
-  if (statoMente) statoMente.textContent = su ? 'Sotto pressione: ogni parte va per conto suo' : 'In equilibrio: i piani lavorano insieme';
+  if (statoMente) statoMente.textContent = su ? 'Sotto pressione: ogni parte va per conto suo' : 'In equilibrio: le tue parti lavorano insieme';
 }
 let fase = 0;
 let picco = 0;
@@ -121,13 +121,13 @@ function tick(ora) {
     else if (sottoPressione && p < 0.3) impostaFrasi(false);
 
     // "Ecco. La calma si allena." quando torni quieto dopo un picco
-    if (p > 0.42) { mente?.classList.add('provato'); picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: i piani si separano…'; } }
+    if (p > 0.42) { mente?.classList.add('provato'); picco = ora; quieteDa = 0; if (!mostrato) { msg.classList.remove('calma'); msg.textContent = 'Sotto pressione: ogni parte va per conto suo…'; } }
     if (picco && p < 0.06) {
       if (!quieteDa) quieteDa = ora;
       if (ora - quieteDa > 900 && !mostrato) {
         mostrato = true;
         msg.classList.add('calma');
-        msg.textContent = 'Ecco: i quattro piani tornano insieme. La calma si allena.';
+        msg.textContent = 'Ecco: le tue parti tornano insieme. La calma si allena.';
         setTimeout(() => { mostrato = false; picco = 0; }, 5000);
       }
     }
@@ -154,12 +154,12 @@ function guidaMente() {
   const scende = (avanti) => osserva(() => !tenuto && segnali.pressione < 0.12, avanti);
   const passi = touch ? [
     { bersaglio: '[data-tieni]', testo: 'Tieni premuto questo pulsante', gesto: 'tieni', attendi: sale, demo: () => { dimostra = true; }, demoDopo: 4500 },
-    { bersaglio: '.mente-ancora', testo: 'Guarda la sfera: sotto pressione i quattro piani si separano', durata: 2600 },
+    { bersaglio: '.mente-ancora', testo: 'Guarda la sfera: sotto pressione ogni parte di te va per conto suo', durata: 2600 },
     { bersaglio: '[data-tieni]', testo: 'Ora lascia il pulsante: tornano insieme', gesto: 'tocca', entra: () => { dimostra = false; }, attendi: scende },
     { bersaglio: '.mente-ancora', testo: 'Visto? La calma si allena. Ora prova quando vuoi.', durata: 2600 },
   ] : [
     { bersaglio: '.mente-ancora', testo: 'Muovi il mouse veloce sopra la sfera', gesto: 'muovi', attendi: sale, demo: () => { dimostra = true; }, demoDopo: 4500 },
-    { bersaglio: '.mente-ancora', testo: 'Visto? Sotto pressione i quattro piani si separano', durata: 2400 },
+    { bersaglio: '.mente-ancora', testo: 'Visto? Sotto pressione ogni parte di te va per conto suo', durata: 2400 },
     { bersaglio: '.mente-ancora', testo: 'Ora fermati: lascia il mouse immobile', entra: () => { dimostra = false; }, attendi: scende },
     { bersaglio: '.mente-ancora', testo: 'Tornano insieme: la calma si allena.', durata: 2400 },
   ];
@@ -203,18 +203,7 @@ try { const s = sessionStorage.getItem('lb-porta'); if (s) segnaPorta(s, false);
 /* ======================================================================
    5 · NUMERI che contano (una volta sola)
    ====================================================================== */
-document.querySelectorAll('[data-conta]').forEach((el) => {
-  const fine = Number(el.dataset.conta);
-  if (ridotto) return;
-  el.textContent = '0';
-  ScrollTrigger.create({
-    trigger: el, start: 'top 88%', once: true,
-    onEnter: () => {
-      const o = { v: 0 };
-      gsap.to(o, { v: fine, duration: 1.6, ease: 'power2.out', onUpdate: () => { el.textContent = String(Math.round(o.v)); } });
-    },
-  });
-});
+// i numeri restano fermi sul valore vero: niente "0+" prima di scorrere
 
 /* ======================================================================
    6 · RESPIRA CON ME (3 cicli: inspira 4 s, espira 6 s)
@@ -344,10 +333,10 @@ function aggiornaCruscotto() {
   dettaglio.classList.toggle('equilibrio', tuttiVerdi);
   dettaglio.classList.toggle('allarme', nomiFuori.length > 1);
   const spinto = Object.values(base).some((v) => Math.abs(v - 50) > 30);
-  if (allenato && spinto) dettaglio.textContent = 'Con allenamento il piano regge e gli altri restano in equilibrio. Per questo li alleno insieme.';
-  else if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto in equilibrio: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
-  else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} fuori asse: guarda, si spostano anche gli altri.`;
-  else dettaglio.textContent = 'Senza allenamento, un piano fuori asse trascina tutti gli altri.';
+  if (allenato && spinto) dettaglio.textContent = 'Dopo il percorso la parte regge e le altre restano tranquille. Per questo le alleno insieme.';
+  else if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto in equilibrio: le tue parti lavorano insieme.' : 'Quasi in equilibrio: riportala verso il centro.';
+  else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} in tilt: guarda, si spostano anche le altre.`;
+  else dettaglio.textContent = 'Oggi una parte in tilt si trascina dietro tutte le altre.';
 }
 function scegli(id) {
   scelto = id;
@@ -392,7 +381,7 @@ function guidaCruscotto() {
     zona: sez,
     passi: [
       {
-        bersaglio: '[data-strumento="emozione"]', testo: 'Tocca un piano, per esempio Emozione', gesto: 'tocca',
+        bersaglio: '[data-strumento="emozione"]', testo: 'Tocca una parte, per esempio Emozioni', gesto: 'tocca',
         attendi: (avanti) => { const via = strumenti.map((x) => ascolta(x, 'click', avanti)); return () => via.forEach((f) => f()); },
         demo: () => { strumenti.find((x) => x.dataset.strumento === 'emozione')?.click(); }, demoDopo: 4500,
       },
@@ -401,13 +390,13 @@ function guidaCruscotto() {
         attendi: (avanti) => osserva(() => base[scelto] >= 84, avanti),
         demo: () => animaPiano(scelto, 94, 2), demoDopo: 5000,
       },
-      { bersaglio: '.cruscotto-grid', testo: 'Senza allenamento, il piano in rosso trascina anche gli altri', durata: 3200 },
+      { bersaglio: '.cruscotto-grid', testo: 'Guarda: la parte in rosso si trascina dietro anche le altre', durata: 3200 },
       {
-        bersaglio: '[data-allenato="si"]', testo: 'Ora tocca “Con allenamento”', gesto: 'tocca',
+        bersaglio: '[data-allenato="si"]', testo: 'Ora tocca “Dopo il percorso”', gesto: 'tocca',
         attendi: (avanti) => ascolta(conAllenamento, 'click', avanti),
         demo: () => conAllenamento.click(), demoDopo: 4500,
       },
-      { bersaglio: '.cruscotto-grid', testo: 'Stessa spinta: il piano regge e gli altri restano in equilibrio. Per questo li alleno insieme.', durata: 4000 },
+      { bersaglio: '.cruscotto-grid', testo: 'Stessa spinta: la parte regge e le altre restano tranquille. Per questo le alleno insieme.', durata: 4000 },
     ],
     onFine: () => { demoTween?.kill(); },
   });
@@ -495,7 +484,15 @@ if (quiz) {
       bar.style.transform = 'scaleX(0)';
       requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transform = `scaleX(${(punti[k] + 0.4) / (domande.length + 0.4)})`; }));
     });
-    esitoQuiz.querySelector('.quiz-titolo-esito').textContent = `Il piano più sollecitato: ${piani[top].nome}.`;
+    esitoQuiz.querySelector('.quiz-titolo-esito').textContent = `La parte di te più sotto pressione: ${piani[top].nome}.`;
+    const ESERCIZI = [
+      'Un esercizio da provare: scrivi su un foglio i pensieri che girano, poi scegli un solo primo passo concreto.',
+      'Un esercizio da provare: dai un nome a quello che senti ("è paura", "è rabbia"). Dargli un nome aiuta a gestirlo.',
+      'Un esercizio da provare: stringi forte i pugni per 5 secondi, poi lascia andare. Senti la differenza.',
+      'Un esercizio da provare: il respiro 4–6 qui sopra, per 30 secondi.',
+    ];
+    const es = esitoQuiz.querySelector('[data-quiz-esercizio]');
+    if (es) es.textContent = `${ESERCIZI[top]} In un percorso lavoriamo su questa parte, senza trascurare le altre.`;
     mostra(esitoQuiz);
     esitoQuiz.querySelector('.quiz-titolo-esito').setAttribute('tabindex', '-1');
     esitoQuiz.querySelector('.quiz-titolo-esito').focus({ preventScroll: true });
@@ -534,10 +531,10 @@ if (torreBox) {
     torreBox.classList.toggle('stabile', fondamenta >= 0.99);
     torreBox.classList.toggle('con-piani', costruiti >= 1);
     torreBox.classList.toggle('con-fondamenta', fondamenta > 0);
-    const nuovo = fondamenta >= 0.99 ? 'Ora il palazzo poggia su tutto: sale e resta in piedi, anche sotto pressione.'
-      : fondamenta > 0 ? 'La Psicologia Funzionale costruisce le fondamenta sui quattro piani…'
-      : costruiti >= 3 ? 'Lavorare su un piano solo è come costruire su una base sottile: più sale, più oscilla.'
-      : 'Questo palazzo sono i risultati che vuoi. Scorri e guarda.';
+    const nuovo = fondamenta >= 0.99 ? 'Con le fondamenta su tutte e 4 le parti di te, il palazzo resta in piedi.'
+      : fondamenta > 0 ? 'Arrivano le fondamenta: testa, emozioni, corpo, respiro…'
+      : costruiti >= 3 ? 'Su una base stretta, più sale e più traballa.'
+      : 'Questo palazzo sono i tuoi obiettivi. Scorri e guarda.';
     if (nuovo !== testo) { testo = nuovo; fase.textContent = nuovo; }
   }
   disegnaTorre(prog);
@@ -581,3 +578,20 @@ if (torreBox) {
     requestAnimationFrame(oscilla);
   }
 }
+
+/* ======================================================================
+   TI RICONOSCI? — le frasi toccate accendono il messaggio e la prenotazione
+   ====================================================================== */
+const situazioni = [...document.querySelectorAll('.situazione')];
+const esitoRiconosci = document.querySelector('[data-riconosci-esito]');
+const partiRiconosci = document.querySelector('[data-riconosci-parti]');
+const NOMI_PARTI = Object.fromEntries(piani.map((p) => [p.id, p.nome]));
+situazioni.forEach((b) => b.addEventListener('click', () => {
+  b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
+  const scelte = situazioni.filter((x) => x.getAttribute('aria-pressed') === 'true');
+  if (!esitoRiconosci) return;
+  esitoRiconosci.hidden = scelte.length === 0;
+  const parti = [...new Set(scelte.map((x) => NOMI_PARTI[x.dataset.parte]))];
+  if (partiRiconosci) partiRiconosci.textContent = parti.length ? `Le parti di te coinvolte: ${parti.join(', ')}. Più sotto vedi come lavorano insieme.` : '';
+}));
+

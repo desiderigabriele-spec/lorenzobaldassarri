@@ -130,8 +130,8 @@ function avvia(radice) {
     pulisci();
     const call = document.createElement('button');
     call.type = 'button'; call.className = 'grande grande-call';
-    call.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></svg><span>Prenota una call conoscitiva<small>Scegli tu quando: meno di un minuto</small></span>';
-    call.addEventListener('click', () => { pulisci(); tu('Prenota una call conoscitiva'); modulo(); });
+    call.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></svg><span>Prenota il primo colloquio<small>Scegli tu quando: meno di un minuto</small></span>';
+    call.addEventListener('click', () => { pulisci(); tu('Prenota il primo colloquio'); modulo(); });
     const a = document.createElement('a');
     a.className = 'grande grande-wa';
     a.href = wa('Ciao Lorenzo, ti scrivo dal tuo sito.');
@@ -147,13 +147,13 @@ function avvia(radice) {
 
   async function modulo() {
     const r = {};
-    await lui('Perfetto, organizziamo una call. Di cosa vorresti parlare?');
+    await lui('Perfetto, organizziamo il primo colloquio. Di cosa vorresti parlare?');
     r.per = await chiediScelta(['Sono un atleta o un genitore', 'Squadra o società sportiva', 'Azienda o ruolo da leader', 'Motorsport', 'Supporto psicologico per me', 'Altro']);
     await lui('Raccontami in due righe di cosa hai bisogno.');
     r.bisogno = await chiediTesto({ segnaposto: 'Per esempio: ansia prima delle gare', lungo: true, opzionale: true });
     await lui('Come ti chiami?');
     r.nome = await chiediTesto({ segnaposto: 'Nome e cognome', autocompl: 'name' });
-    await lui(`Piacere, ${r.nome.split(' ')[0]}. Dove preferisci fare la call?`);
+    await lui(`Piacere, ${r.nome.split(' ')[0]}. Come preferisci fare il colloquio?`);
     r.modo = await chiediScelta(['Telefono', 'Videochiamata WhatsApp', 'Email per accordarci']);
     if (r.modo.startsWith('Email')) {
       await lui('Lasciami la tua email.');
@@ -171,13 +171,13 @@ function avvia(radice) {
   function riepilogo(r) {
     const card = document.createElement('div');
     card.className = 'msg msg-riepilogo';
-    const righe = [['Motivo', r.per], ['Richiesta', r.bisogno || 'Ne parliamo a voce'], ['Nome', r.nome], ['Call', `${r.modo} · ${r.recapito}`], ['Quando', r.quando]];
+    const righe = [['Motivo', r.per], ['Richiesta', r.bisogno || 'Ne parliamo a voce'], ['Nome', r.nome], ['Colloquio', `${r.modo} · ${r.recapito}`], ['Quando', r.quando]];
     const dl = document.createElement('dl');
     righe.forEach(([k, v]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); });
     card.append(dl);
     corpo.append(card); scorri();
 
-    const testo = ['Ciao Lorenzo, ti scrivo dal tuo sito per prenotare una call conoscitiva.', ...righe.map(([k, v]) => `${k}: ${v}`)].join('\n');
+    const testo = ['Ciao Lorenzo, ti scrivo dal tuo sito per prenotare il primo colloquio.', ...righe.map(([k, v]) => `${k}: ${v}`)].join('\n');
     pulisci();
     const consenso = document.createElement('label');
     consenso.className = 'chat-consenso';
@@ -194,7 +194,7 @@ function avvia(radice) {
     invia.addEventListener('click', async (e) => {
       if (!consenso.querySelector('input').checked) { e.preventDefault(); errore.textContent = 'Per inviare serve il consenso al trattamento dei dati.'; return; }
       pulisci();
-      await lui('Grazie! Su WhatsApp trovi il messaggio già scritto: premi Invia e ti richiamo io per fissare la call.');
+      await lui('Grazie! Su WhatsApp trovi il messaggio già scritto: premi Invia e ti richiamo io per fissare il colloquio.');
       const ancora = document.createElement('button');
       ancora.type = 'button'; ancora.className = 'salta'; ancora.textContent = 'Nuova richiesta';
       ancora.addEventListener('click', () => { corpo.replaceChildren(); pulisci(); benvenuto(); });

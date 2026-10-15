@@ -6,9 +6,9 @@ import { piani } from '../data/sito.js';
 
 const fasi = [
   { n: '01', t: 'Ascolto', d: 'Obiettivi, contesto, storia sportiva o professionale.' },
-  { n: '02', t: 'Valutazione', d: 'Una lettura dei quattro piani, con biofeedback, neurofeedback e pedane propriocettive digitali dove servono.' },
-  { n: '03', t: 'Allenamento', d: 'Tecniche mirate per ogni piano, in seduta e sul campo.' },
-  { n: '04', t: 'Monitoraggio', d: 'I dati psicofisiologici rendono visibili i progressi: la traiettoria si corregge in corsa.' },
+  { n: '02', t: 'Valutazione', d: 'Guardiamo testa, emozioni, corpo e respiro. Dove serve, con strumenti che misurano: biofeedback, neurofeedback, pedane propriocettive.' },
+  { n: '03', t: 'Allenamento', d: 'Esercizi mirati per ogni parte, in seduta e sul campo.' },
+  { n: '04', t: 'Monitoraggio', d: 'Le misure rendono visibili i progressi: il percorso si aggiusta strada facendo.' },
 ];
 // Le tre qualità di ogni funzione (Psicologia Funzionale, Rispoli): cosa si allena davvero
 const qualita = [
@@ -23,12 +23,12 @@ const fonti = [
   { quando: '2025', cosa: 'KM2025 · Università di Siena', d: 'Invited talk all’Industry Day sul motorsport.', href: 'https://www.iiakm.org/conference/KM2025/pdfs/KM2025_Industry-Day-Invited-Talk_BALDASSARRI.pdf' },
 ];
 ---
-<Base title="Il metodo: Psicologia del Potenziamento® — Lorenzo Baldassarri" description="Oltre l'empowerment cognitivo: un metodo integrato che allena pensiero, emozione, corpo e fisiologia, con dati e monitoraggio continuo." path="/metodo" headerOn="cruscotto">
+<Base title="Il metodo: Psicologia del Potenziamento® — Lorenzo Baldassarri" description="Oltre l'empowerment cognitivo: un metodo che allena insieme testa, emozioni, corpo e respiro, con misure e controlli continui." path="/metodo" headerOn="cruscotto">
   <section class="sezione page-hero" data-theme="cruscotto">
     <div class="wrap">
       <p class="eyebrow" data-reveal>Psicologia del Potenziamento®</p>
       <h1 data-reveal style="--d:.08s">Oltre il pensiero positivo.</h1>
-      <p class="lead" data-reveal style="--d:.16s">Un metodo integrato nato nel motorsport: allena insieme pensiero, emozione, corpo e fisiologia. Con dati, non con slogan.</p>
+      <p class="lead" data-reveal style="--d:.16s">Un metodo nato nel motorsport: allena insieme testa, emozioni, corpo e respiro. Con misure, non con slogan.</p>
       <p class="mono firma-metodo" data-reveal style="--d:.2s">Creato dal Dott. Lorenzo Baldassarri · sviluppato con MindUP Enhancement Psychology®</p>
       <Battito tono="cruscotto" />
     </div>
@@ -39,7 +39,7 @@ const fonti = [
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>La tesi</p>
         <h2 data-reveal>Cambiare i pensieri non basta.</h2>
-        <p class="lead" data-reveal>Molti approcci lavorano solo sul piano cognitivo. Sotto pressione però si muovono quattro piani insieme. Se ne alleni uno, gli altri tre ti riportano indietro.</p>
+        <p class="lead" data-reveal>Capire cosa ti succede è importante. Ma sotto pressione si muovono quattro parti di te insieme: se ne alleni una sola, le altre tre ti riportano indietro.</p>
       </div>
       <ul class="piani" role="list">
         {piani.map((p, i) => (

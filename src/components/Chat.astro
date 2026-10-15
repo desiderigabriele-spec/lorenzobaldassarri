@@ -29,7 +29,7 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
     <p class="chat-nota">Non inserire informazioni sulla tua salute: ne parleremo di persona. In caso di emergenza chiama il 112.</p>
   </section>
 
-  <button type="button" class="chat-bolla" data-chat-apri aria-expanded="false" aria-controls="chat-pannello" aria-label="Contatta Lorenzo: prenota una call o scrivi su WhatsApp">
+  <button type="button" class="chat-bolla" data-chat-apri aria-expanded="false" aria-controls="chat-pannello" aria-label="Contatta Lorenzo: prenota il primo colloquio o scrivi su WhatsApp">
     <picture>
       <source srcset={voltoWebp} type="image/webp" />
       <img src={volto} alt="" width="64" height="64" />
@@ -38,7 +38,7 @@ const voltoWebp = volto.replace(/\.jpe?g$/, '.webp');
       <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" /></svg>
     </span>
   </button>
-  <p class="chat-invito" data-chat-invito hidden>Prenota una call con me</p>
+  <p class="chat-invito" data-chat-invito hidden>Prenota un colloquio con me</p>
 </div>
 
 <style is:global>
