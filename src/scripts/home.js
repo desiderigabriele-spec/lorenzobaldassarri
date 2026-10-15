@@ -119,29 +119,42 @@ function tick(ora) {
     }
   }
   requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
 
-/* Guida della sfera: mostra il gesto e fa reagire davvero la sfera */
+/* Guida della sfera: aspetta il tuo gesto; se non arriva, lo mostra lei */
 const touch = window.matchMedia('(pointer: coarse)').matches;
+// osserva una condizione a ogni fotogramma, finché diventa vera
+function osserva(cond, poi) {
+  let id = 0;
+  let da = 0;
+  const giro = (t) => {
+    if (cond()) { if (!da) da = t; if (t - da > 350) { poi(); return; } } else da = 0;
+    id = requestAnimationFrame(giro);
+  };
+  id = requestAnimationFrame(giro);
+  return () => cancelAnimationFrame(id);
+}
 function guidaMente() {
+  const sale = (avanti) => osserva(() => segnali.pressione > 0.55, avanti);
+  const scende = (avanti) => osserva(() => !tenuto && segnali.pressione < 0.12, avanti);
   const passi = touch ? [
-    { bersaglio: '[data-tieni]', testo: 'Tieni premuto questo pulsante', gesto: 'tieni', durata: 2600, entra: () => { dimostra = true; } },
+    { bersaglio: '[data-tieni]', testo: 'Tieni premuto questo pulsante', gesto: 'tieni', attendi: sale, demo: () => { dimostra = true; }, demoDopo: 4500 },
     { bersaglio: '.mente-ancora', testo: 'Guarda la sfera: sotto pressione i quattro piani si separano', durata: 2600 },
-    { bersaglio: '[data-tieni]', testo: 'Ora lascia: tornano insieme', gesto: 'tocca', durata: 2600, entra: () => { dimostra = false; } },
-    { bersaglio: '.mente-ancora', testo: 'Tocca a te!', durata: 1600 },
+    { bersaglio: '[data-tieni]', testo: 'Ora lascia il pulsante: tornano insieme', gesto: 'tocca', entra: () => { dimostra = false; }, attendi: scende },
+    { bersaglio: '.mente-ancora', testo: 'Visto? La calma si allena. Ora prova quando vuoi.', durata: 2600 },
   ] : [
-    { bersaglio: '.mente-ancora', testo: 'Muovi il cursore veloce sopra la sfera', gesto: 'muovi', durata: 3000, entra: () => { dimostra = true; } },
+    { bersaglio: '.mente-ancora', testo: 'Muovi il mouse veloce sopra la sfera', gesto: 'muovi', attendi: sale, demo: () => { dimostra = true; }, demoDopo: 4500 },
     { bersaglio: '.mente-ancora', testo: 'Visto? Sotto pressione i quattro piani si separano', durata: 2400 },
-    { bersaglio: '.mente-ancora', testo: 'Ora fermati: tornano insieme', durata: 2800, entra: () => { dimostra = false; } },
-    { bersaglio: '.mente-ancora', testo: 'Prova tu: muovi il mouse', durata: 1600 },
+    { bersaglio: '.mente-ancora', testo: 'Ora fermati: lascia il mouse immobile', entra: () => { dimostra = false; }, attendi: scende },
+    { bersaglio: '.mente-ancora', testo: 'Tornano insieme: la calma si allena.', durata: 2400 },
   ];
-  guida({ chiave: 'mente', passi, onFine: () => { dimostra = false; } });
+  guida({ chiave: 'mente', zona: mente, passi, onFine: () => { dimostra = false; } });
 }
 if (mente) {
   if (!giaVista('mente') && !ridotto) quandoVisibile(mente, () => setTimeout(guidaMente, 700));
   mente.querySelector('[data-guida="mente"]')?.addEventListener('click', (e) => { e.stopPropagation(); setTimeout(guidaMente, 50); });
 }
-}
-requestAnimationFrame(tick);
 
 /* ======================================================================
    3 · SCENA 3D (caricata dopo il primo disegno, solo se c'è WebGL)
@@ -264,11 +277,16 @@ let scelto = 'pensiero';
 // quanto un piano fuori asse trascina gli altri
 const TRASCINA = 0.55;
 // verde → ambra → rosso in base alla distanza dal centro
+// sfumatura continua: azzurro al centro, poi verdolino, giallo, arancione, rosso
+const SCALA = [[0, 178], [0.12, 140], [0.3, 58], [0.5, 30], [0.72, 0]];
 function coloreStato(d) {
-  // stesse soglie delle scritte: verde in equilibrio, poi ambra, poi rosso
-  if (d < 0.18) return 'hsl(168 78% 52%)';
-  const t = Math.min(1, (d - 0.18) / 0.42);
-  return `hsl(${(44 - 44 * t).toFixed(0)} 95% ${(60 + 4 * t).toFixed(0)}%)`;
+  let h = 0;
+  for (let k = 1; k < SCALA.length; k++) {
+    const [d0, h0] = SCALA[k - 1];
+    const [d1, h1] = SCALA[k];
+    if (d <= d1) { h = h0 + (h1 - h0) * ((d - d0) / (d1 - d0)); break; }
+  }
+  return `hsl(${Math.max(0, h).toFixed(0)} 90% 58%)`;
 }
 function aggiornaCruscotto() {
   const valori = {};
@@ -287,6 +305,7 @@ function aggiornaCruscotto() {
     const l = LETTURE[id];
     const stato = d < 0.18 ? l.giusto : (v > 50 ? l.alto : l.basso);
     s.style.setProperty('--stato', coloreStato(d));
+    s.style.setProperty('--bagliore', d.toFixed(2));
     s.querySelector('.lancetta').style.transform = `rotate(${-90 + (v / 100) * 180}deg)`;
     s.querySelector('[data-val]').textContent = stato;
     s.classList.toggle('fuori', d >= 0.4);
@@ -302,7 +321,7 @@ function aggiornaCruscotto() {
   const tuttiVerdi = Object.values(valori).every((v) => Math.abs(v - 50) / 50 < 0.18);
   dettaglio.classList.toggle('equilibrio', tuttiVerdi);
   dettaglio.classList.toggle('allarme', nomiFuori.length > 1);
-  if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto verde: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
+  if (nomiFuori.length === 0) dettaglio.textContent = tuttiVerdi ? 'Tutto in equilibrio: i quattro piani lavorano insieme.' : 'Quasi in equilibrio: riportalo verso il centro.';
   else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} fuori asse: guarda, si spostano anche gli altri.`;
   else dettaglio.textContent = 'Un piano fuori asse trascina gli altri. Per questo li alleno insieme.';
 }
@@ -337,16 +356,32 @@ function animaPiano(id, a, durata = 1.8) {
   } });
 }
 function guidaCruscotto() {
+  demoTween?.kill();
   for (const id of Object.keys(base)) base[id] = 50;
   scegli('pensiero');
+  const sez = document.getElementById('cruscotto');
+  const ascolta = (el, tipo, fn) => { el.addEventListener(tipo, fn); return () => el.removeEventListener(tipo, fn); };
   guida({
     chiave: 'cruscotto',
+    zona: sez,
     passi: [
-      { bersaglio: '[data-strumento="emozione"]', testo: 'Tocca un piano, per esempio Emozione', gesto: 'tocca', durata: 2400, entra: () => setTimeout(() => scegli('emozione'), 900) },
-      { bersaglio: '.pressione input', testo: 'Spostalo: troppo in là diventa rosso', gesto: 'trascina', durata: 2800, entra: () => animaPiano('emozione', 94, 2) },
-      { bersaglio: '.cruscotto-grid', testo: 'Guarda: anche gli altri piani cambiano colore', durata: 2800 },
-      { bersaglio: '[data-equilibrio]', testo: 'Riportalo al centro: tutto torna verde', gesto: 'tocca', durata: 2800, entra: () => animaPiano('emozione', 50, 1.6) },
-      { bersaglio: '.cruscotto-grid', testo: 'Tocca a te!', durata: 1600 },
+      {
+        bersaglio: '[data-strumento="emozione"]', testo: 'Tocca un piano, per esempio Emozione', gesto: 'tocca',
+        attendi: (avanti) => { const via = strumenti.map((x) => ascolta(x, 'click', avanti)); return () => via.forEach((f) => f()); },
+        demo: () => { scegli('emozione'); setTimeout(() => strumenti.find((x) => x.dataset.strumento === 'emozione')?.click(), 50); }, demoDopo: 4500,
+      },
+      {
+        bersaglio: '.pressione', testo: 'Ora trascina la barra verso destra, fino al rosso', gesto: 'trascina',
+        attendi: (avanti) => osserva(() => base[scelto] >= 84, avanti),
+        demo: () => animaPiano(scelto, 94, 2), demoDopo: 5000,
+      },
+      { bersaglio: '.cruscotto-grid', testo: 'Guarda: il piano è in rosso e trascina anche gli altri, che cambiano colore', durata: 3200 },
+      {
+        bersaglio: '.pressione', testo: 'Ora riportala al centro, sull’azzurro', gesto: 'indietro',
+        attendi: (avanti) => osserva(() => Math.abs(base[scelto] - 50) < 8, avanti),
+        demo: () => animaPiano(scelto, 50, 1.6), demoDopo: 5000,
+      },
+      { bersaglio: '.cruscotto-grid', testo: 'Tutto in equilibrio. Per questo alleno i quattro piani insieme.', durata: 3000 },
     ],
     onFine: () => { demoTween?.kill(); },
   });
@@ -471,9 +506,12 @@ if (torreBox) {
     ampiezza = (costruiti / pianiTorre.length) * 4.5 * (1 - fondamenta);
     torreBox.classList.toggle('instabile', ampiezza > 2.2);
     torreBox.classList.toggle('stabile', fondamenta >= 0.99);
-    const nuovo = fondamenta >= 0.99 ? 'Con le fondamenta sui quattro piani: sale e resta stabile.'
-      : fondamenta > 0 ? 'Arrivano le fondamenta: pensiero, emozione, corpo, fisiologia…'
-      : costruiti < 1 ? 'Scorri: costruiamo.' : 'Più sale, più oscilla: manca la base.';
+    torreBox.classList.toggle('con-piani', costruiti >= 1);
+    torreBox.classList.toggle('con-fondamenta', fondamenta > 0);
+    const nuovo = fondamenta >= 0.99 ? 'Ora il palazzo poggia su tutto: sale e resta in piedi, anche sotto pressione.'
+      : fondamenta > 0 ? 'La Psicologia Funzionale costruisce le fondamenta sui quattro piani…'
+      : costruiti >= 3 ? 'Lavorare su un piano solo è come costruire su una base sottile: più sale, più oscilla.'
+      : 'Questo palazzo sono i risultati che vuoi. Scorri e guarda.';
     if (nuovo !== testo) { testo = nuovo; fase.textContent = nuovo; }
   }
   disegnaTorre(prog);
