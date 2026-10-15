@@ -338,7 +338,25 @@ function aggiornaCruscotto() {
   else if (nomiFuori.length === 1) dettaglio.textContent = `${nomiFuori[0]} in tilt: guarda, si spostano anche le altre.`;
   else dettaglio.textContent = 'Oggi una parte in tilt si trascina dietro tutte le altre.';
 }
+// riporta al centro le parti indicate, con una breve animazione
+let tweenCentro = null;
+function riportaAlCentro(ids, durata = 0.8) {
+  tweenCentro?.kill();
+  const da = { ...base };
+  const o = { t: 0 };
+  tweenCentro = gsap.to(o, { t: 1, duration: ridotto ? 0 : durata, ease: 'power2.inOut', onUpdate: () => {
+    ids.forEach((k) => { base[k] = da[k] + (50 - da[k]) * o.t; });
+    slider.value = String(Math.round(base[scelto]));
+    aggiornaCruscotto();
+  } });
+}
 function scegli(id) {
+  // si muove una parte alla volta: cambiando parte, le altre tornano al centro
+  if (id !== scelto) {
+    demoTween?.kill();
+    const spostate = Object.keys(base).filter((k) => k !== id && Math.abs(base[k] - 50) > 0.5);
+    if (spostate.length) riportaAlCentro(spostate, 0.6);
+  }
   scelto = id;
   strumenti.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.strumento === id)));
   if (pianoScelto) pianoScelto.textContent = piani.find((x) => x.id === id).nome;
@@ -350,13 +368,7 @@ slider?.addEventListener('input', () => { toccato = true; base[scelto] = Number(
 strumenti.forEach((s) => s.addEventListener('click', () => { toccato = true; scegli(s.dataset.strumento); }));
 document.querySelector('[data-equilibrio]')?.addEventListener('click', () => {
   toccato = true;
-  const da = { ...base };
-  const o = { t: 0 };
-  gsap.to(o, { t: 1, duration: ridotto ? 0 : 0.8, ease: 'power2.inOut', onUpdate: () => {
-    for (const id of Object.keys(base)) base[id] = da[id] + (50 - da[id]) * o.t;
-    slider.value = String(Math.round(base[scelto]));
-    aggiornaCruscotto();
-  } });
+  riportaAlCentro(Object.keys(base));
 });
 let demoTween = null;
 function animaPiano(id, a, durata = 1.8) {
