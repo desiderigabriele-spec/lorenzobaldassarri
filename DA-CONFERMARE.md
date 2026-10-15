@@ -42,3 +42,9 @@ Tutti i valori tra `[ ]` nel sito, più le scelte che richiedono l'ok di Lorenzo
 - [ ] **Colloqui online e ricetta**: le FAQ dicono che online funziona come in studio e che non serve la ricetta del medico. Confermare
 - [ ] **"Sul campo"**: la sezione con le foto da scattare è stata tolta dalla Home; rimetterla quando ci sono le foto vere
 - [ ] **Numeri "Esperienza"**: 15+ anni di psicoterapia, 20+ anni di calcio, 3 anni in Formula 1, docente a Parma dal 2017
+
+## Recensioni (sezione "Lo dicono loro.")
+- [ ] **Foto delle persone**: oggi ci sono le iniziali. Servono le foto con il permesso di usarle (es. quelle già pubblicate su mindup.live/reviews.php): vanno in `public/img/recensioni/` e si collegano dal campo `foto` in `src/data/recensioni.js`
+- [ ] **Consenso**: confermare che ogni persona ha autorizzato la pubblicazione di nome, ruolo e testo anche sul sito personale di Lorenzo
+- [ ] **Regole deontologiche sulla pubblicità sanitaria**: le testimonianze sono un punto delicato per uno psicologo, soprattutto quelle che parlano di terapia o sintomi (Balsimelli cita "la terapia dello stress cronico", Moriconi ansia e malesseri fisici). Valutare con Lorenzo/Ordine se tenerle tutte o solo quelle di performance (sport e aziende)
+- [ ] Le "frasi in evidenza" di ogni scheda sono estratte parola per parola dai testi; corretti solo i refusi evidenti

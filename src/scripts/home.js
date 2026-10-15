@@ -639,3 +639,121 @@ situazioni.forEach((b) => b.addEventListener('click', () => {
   }
 }));
 
+
+/* ======================================================================
+   RECENSIONI — nastro infinito: scorre da solo, si ferma col bottone,
+   passandoci sopra o trascinandolo; "Leggi tutta" apre la recensione intera
+   ====================================================================== */
+const binarioRec = document.querySelector('[data-rec-binario]');
+const nastroRec = document.querySelector('[data-rec-nastro]');
+if (binarioRec && nastroRec) {
+  const bottonePlay = document.querySelector('[data-rec-play]');
+  const testoPlay = document.querySelector('[data-rec-play-testo]');
+  const dialogo = document.querySelector('[data-rec-dialog]');
+  const corpoDialogo = document.querySelector('[data-rec-dialog-corpo]');
+  const VEL = 38; // px al secondo
+  let x = 0;
+  let periodo = 1;
+  let passo = 400;
+  let inCorsa = !ridotto;
+  let sopra = false;
+  let visibile = false;
+  let tween = null;
+
+  const misura = () => {
+    const schede = nastroRec.children;
+    const n = schede.length / 2;
+    periodo = schede[n].offsetLeft - schede[0].offsetLeft;
+    passo = schede[1].offsetLeft - schede[0].offsetLeft;
+  };
+  const avvolgi = () => {
+    while (x <= -periodo) x += periodo;
+    while (x > 0) x -= periodo;
+  };
+  const disegna = () => { avvolgi(); nastroRec.style.transform = `translate3d(${x}px,0,0)`; };
+  const aggiornaPlay = () => {
+    bottonePlay.classList.toggle('ferma', !inCorsa);
+    testoPlay.textContent = inCorsa ? 'Ferma' : 'Fai scorrere';
+    bottonePlay.setAttribute('aria-label', inCorsa ? 'Ferma lo scorrimento' : 'Fai scorrere le recensioni');
+  };
+  misura();
+  window.addEventListener('resize', () => { misura(); disegna(); });
+  aggiornaPlay();
+
+  let prima = performance.now();
+  const giro = (ora) => {
+    const dt = Math.min(0.05, (ora - prima) / 1000);
+    prima = ora;
+    if (inCorsa && !sopra && !trascino && !tween && visibile && !dialogo.open) { x -= VEL * dt; disegna(); }
+    requestAnimationFrame(giro);
+  };
+  requestAnimationFrame(giro);
+  new IntersectionObserver(([v]) => { visibile = v.isIntersecting; }).observe(binarioRec);
+
+  bottonePlay.addEventListener('click', () => { inCorsa = !inCorsa; aggiornaPlay(); });
+  const sposta = (verso) => {
+    inCorsa = false; aggiornaPlay();
+    tween?.kill();
+    // si ferma sempre a filo di una scheda
+    const arrivo = Math.round((x - verso * passo) / passo) * passo;
+    const stato = { x };
+    tween = gsap.to(stato, { x: arrivo, duration: ridotto ? 0 : 0.6, ease: 'power3.out', onUpdate: () => { x = stato.x; disegna(); }, onComplete: () => { tween = null; } });
+  };
+  document.querySelector('[data-rec-prec]')?.addEventListener('click', () => sposta(-1));
+  document.querySelector('[data-rec-succ]')?.addEventListener('click', () => sposta(1));
+
+  // col mouse: passandoci sopra si ferma
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    binarioRec.addEventListener('mouseenter', () => { sopra = true; });
+    binarioRec.addEventListener('mouseleave', () => { sopra = false; });
+  }
+  binarioRec.addEventListener('focusin', () => { sopra = true; });
+  binarioRec.addEventListener('focusout', () => { sopra = false; });
+
+  // trascinamento con dito o mouse
+  let trascino = false;
+  let inizio = null;
+  let appenaTrascinato = false;
+  binarioRec.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    tween?.kill(); tween = null;
+    inizio = { px: e.clientX, py: e.clientY, x, id: e.pointerId };
+  });
+  binarioRec.addEventListener('pointermove', (e) => {
+    if (!inizio || e.pointerId !== inizio.id) return;
+    const dx = e.clientX - inizio.px;
+    if (!trascino) {
+      if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(e.clientY - inizio.py)) return;
+      trascino = true;
+      binarioRec.classList.add('trascina');
+      binarioRec.setPointerCapture(e.pointerId);
+    }
+    x = inizio.x + dx;
+    disegna();
+  });
+  const fineTrascino = () => {
+    if (trascino) { appenaTrascinato = true; setTimeout(() => { appenaTrascinato = false; }, 0); }
+    trascino = false; inizio = null;
+    binarioRec.classList.remove('trascina');
+  };
+  binarioRec.addEventListener('pointerup', fineTrascino);
+  binarioRec.addEventListener('pointercancel', fineTrascino);
+  binarioRec.addEventListener('click', (e) => { if (appenaTrascinato) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+  // "Leggi tutta": la recensione intera in una finestra
+  nastroRec.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-rec-apri]');
+    if (!b) return;
+    const li = b.closest('.recensione');
+    const scheda = li.querySelector('.rec-scheda').cloneNode(true);
+    scheda.querySelector('[data-rec-apri]')?.remove();
+    scheda.querySelector('.rec-nome').id = 'rec-dialog-nome';
+    corpoDialogo.className = `rec-dialog-corpo ${[...li.classList].find((c) => c.startsWith('p-')) || ''}`;
+    corpoDialogo.replaceChildren(...scheda.childNodes);
+    window.__lenis?.stop();
+    dialogo.showModal();
+  });
+  dialogo.addEventListener('close', () => { window.__lenis?.start(); });
+  dialogo.addEventListener('click', (e) => { if (e.target === dialogo) dialogo.close(); });
+  document.querySelector('[data-rec-chiudi]')?.addEventListener('click', () => dialogo.close());
+}

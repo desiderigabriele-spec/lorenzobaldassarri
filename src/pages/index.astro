@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { porte, piani, contatti, identita } from '../data/sito.js';
+import { recensioni } from '../data/recensioni.js';
 import FotoGuida from '../components/FotoGuida.astro';
 import Credenziali from '../components/Credenziali.astro';
 
@@ -139,6 +140,8 @@ const faq = [
   { q: 'Lavori con i ragazzi?', a: 'Sì, sempre con il consenso dei genitori, che coinvolgo nel percorso. Nessun dato o immagine dei ragazzi viene reso pubblico.' },
   { q: 'Sport o psicoterapia: che differenza c’è?', a: 'Nello sport alleniamo le tue risorse per un obiettivo. La psicoterapia aiuta quando c’è una sofferenza. Se non sai quale ti serve, lo capiamo insieme al primo colloquio.' },
 ];
+
+const iniziali = (nome) => nome.replace(/^Dr\.ssa\s+|^Dott\.\s+/, '').split(/\s+/).map((p) => p[0]).slice(0, 2).join('');
 
 const media = [
   { tipo: 'Convegno · 2025', titolo: 'KM2025, Industry Day', testo: 'Invited talk sul metodo, Università di Siena.', href: 'https://www.iiakm.org/conference/KM2025/pdfs/KM2025_Industry-Day-Invited-Talk_BALDASSARRI.pdf' },
@@ -489,12 +492,68 @@ const media = [
     </div>
   </section>
 
+  <!-- RECENSIONI: nastro che scorre all'infinito, si ferma e si trascina -->
+  <section class="sezione recensioni-sezione" id="recensioni" data-theme="cruscotto" aria-labelledby="recensioni-titolo">
+    <div class="wrap recensioni-head">
+      <div class="sezione-head">
+        <p class="eyebrow" data-reveal>Recensioni verificate</p>
+        <h2 id="recensioni-titolo" data-reveal>Lo dicono loro.</h2>
+        <p class="lead" data-reveal>Atleti, allenatori e manager che hanno fatto il percorso. Nomi veri, parole loro.</p>
+      </div>
+      <div class="rec-comandi" data-reveal>
+        <button type="button" class="rec-btn" data-rec-prec aria-label="Recensione precedente"><span aria-hidden="true">←</span></button>
+        <button type="button" class="rec-btn rec-play" data-rec-play aria-label="Ferma lo scorrimento">
+          <svg class="ico-pausa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+          <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+          <span data-rec-play-testo>Ferma</span>
+        </button>
+        <button type="button" class="rec-btn" data-rec-succ aria-label="Recensione successiva"><span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+    <div class="rec-binario" data-rec-binario>
+      <ul class="rec-nastro" data-rec-nastro role="list">
+        {[0, 1].map((copia) => recensioni.map((r, i) => (
+          <li class={`recensione p-${r.colore}`} aria-hidden={copia ? 'true' : undefined} inert={copia ? true : undefined} data-rec-indice={i}>
+            <article class="rec-scheda">
+              <div class="rec-top">
+                <span class="rec-ambito">{r.ambito}</span>
+                <span class="rec-virgolette" aria-hidden="true">“</span>
+              </div>
+              <p class="rec-frase">{r.frase}</p>
+              <p class="rec-testo">{r.testo}</p>
+              <button type="button" class="rec-tutto" data-rec-apri>Leggi tutta <span aria-hidden="true">→</span></button>
+              <footer class="rec-autore">
+                {r.foto
+                  ? <img class="rec-foto" src={r.foto} alt="" width="48" height="48" loading="lazy" />
+                  : <span class="rec-foto rec-iniziali" aria-hidden="true">{iniziali(r.nome)}</span>}
+                <span class="rec-chi">
+                  <span class="rec-nome">{r.nome}
+                    <svg class="rec-verificata" viewBox="0 0 24 24" role="img" aria-label="Recensione verificata"><title>Recensione verificata</title><path d="M12 1.8l2.4 1.9 3-.3 1 2.9 2.7 1.4-.6 3 1.5 2.6-2 2.3.1 3-2.9.9-1.4 2.7-3-.5L12 22.2l-2.4-1.9-3 .5-1.4-2.7-2.9-.9.1-3-2-2.3 1.5-2.6-.6-3 2.7-1.4 1-2.9 3 .3Z" /><path class="spunta" d="M7.8 12.3l2.8 2.8 5.6-5.8" /></svg>
+                  </span>
+                  <span class="rec-ruolo">{r.ruolo}</span>
+                </span>
+              </footer>
+            </article>
+          </li>
+        )))}
+      </ul>
+    </div>
+    <div class="wrap rec-piede">
+      <p class="rec-suggerimento mono" aria-hidden="true"><span class="hint-fine">Passa sopra per fermarle · trascina per scorrere</span><span class="hint-touch">Trascina per scorrere · tocca “Leggi tutta”</span></p>
+      <a class="link-freccia rec-fonte" href="https://www.mindup.live/reviews.php" target="_blank" rel="noopener">Tutte le recensioni su MindUP <span aria-hidden="true">↗</span><span class="sr-only"> (si apre in una nuova scheda)</span></a>
+    </div>
+    <dialog class="rec-dialog" data-rec-dialog aria-labelledby="rec-dialog-nome">
+      <div class="rec-dialog-corpo" data-rec-dialog-corpo></div>
+      <button type="button" class="rec-chiudi" data-rec-chiudi aria-label="Chiudi la recensione"><span aria-hidden="true">✕</span></button>
+    </dialog>
+  </section>
+
   <!-- 9 · FIDUCIA: numeri, nomi e media -->
   <section class="sezione autorita-sezione media-sezione" data-theme="carta" aria-labelledby="fiducia-titolo">
     <div class="wrap">
       <div class="sezione-head">
         <p class="eyebrow" data-reveal>Esperienza</p>
-        <h2 id="fiducia-titolo" data-reveal>Chi si è già fidato.</h2>
+        <h2 id="fiducia-titolo" data-reveal>I numeri del mio lavoro.</h2>
       </div>
       <ul class="numeri" role="list">
         {numeri.map((n, i) => (
@@ -1387,4 +1446,65 @@ const media = [
   .numero-val { font-size: clamp(2.4rem, 1.8rem + 2.6vw, 4.2rem); }
   .fiducia-media { margin-bottom: 1rem; }
   .chiusura-azioni { display: flex; flex-wrap: wrap; gap: .6rem; }
+  /* ---------- RECENSIONI ---------- */
+  .recensioni-sezione { overflow: hidden; }
+  .recensioni-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem; }
+  .recensioni-head .sezione-head { margin-bottom: 0; }
+  .rec-comandi { display: flex; gap: .5rem; }
+  .rec-btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; min-width: 3rem; height: 3rem; padding: 0 1rem; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06); color: #fff; font-family: var(--f-display); font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color .3s, border-color .3s, transform .3s var(--respiro); }
+  .rec-btn:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .45); }
+  .rec-btn:active { transform: scale(.96); }
+  .rec-btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+  .rec-play .ico-play, .rec-play.ferma .ico-pausa { display: none; }
+  .rec-play.ferma .ico-play { display: block; }
+  .rec-binario { margin-top: clamp(1.75rem, 4vh, 2.75rem); overflow: hidden; touch-action: pan-y; cursor: grab; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+  .rec-binario.trascina { cursor: grabbing; }
+  .rec-binario.trascina * { user-select: none; }
+  .rec-nastro { display: flex; gap: 1.25rem; width: max-content; margin: 0; padding: .5rem 0 1rem; list-style: none; will-change: transform; }
+  .recensione { width: min(400px, 82vw); flex: none; display: flex; }
+  .rec-scheda { position: relative; display: flex; flex-direction: column; gap: .8rem; width: 100%; padding: 1.4rem 1.4rem 1.25rem; border-radius: var(--radius); background: linear-gradient(160deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .03)); border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 30px 60px -40px rgba(0, 0, 0, .8); overflow: hidden; transition: border-color .3s, transform .4s var(--respiro); }
+  .rec-scheda::before { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--c); }
+  .recensione:hover .rec-scheda { border-color: color-mix(in srgb, var(--c) 60%, transparent); transform: translateY(-3px); }
+  .rec-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .rec-ambito { padding: .28rem .65rem; border-radius: 999px; background: color-mix(in srgb, var(--c) 22%, transparent); color: #fff; font-family: var(--f-display); font-weight: 600; font-size: .78rem; }
+  .rec-virgolette { font-family: var(--f-display); font-weight: 800; font-size: 4rem; line-height: .7; color: var(--c); margin-top: .2rem; }
+  .rec-frase { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.1rem, 1rem + .4vw, 1.3rem); line-height: 1.25; letter-spacing: -0.02em; color: #fff; text-wrap: pretty; }
+  .rec-testo { color: var(--fg-2); font-size: .95rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .rec-tutto { align-self: flex-start; padding: 0; border: 0; background: none; color: #fff; font-family: var(--f-display); font-weight: 600; font-size: .92rem; cursor: pointer; text-decoration: underline; text-decoration-color: var(--c); text-underline-offset: .3em; text-decoration-thickness: 2px; }
+  .rec-tutto:hover { color: var(--c); }
+  .rec-autore { margin-top: auto; padding-top: .9rem; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; align-items: center; gap: .8rem; }
+  .rec-foto { width: 48px; height: 48px; border-radius: 50%; flex: none; object-fit: cover; }
+  .rec-iniziali { display: grid; place-items: center; background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 45%, var(--cruscotto))); color: #fff; font-family: var(--f-display); font-weight: 700; font-size: 1rem; letter-spacing: .02em; box-shadow: 0 0 0 2px rgba(255, 255, 255, .15); }
+  .rec-chi { display: grid; gap: .1rem; min-width: 0; }
+  .rec-nome { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--f-display); font-weight: 700; color: #fff; }
+  .rec-verificata { width: 1.1rem; height: 1.1rem; flex: none; }
+  .rec-verificata path:first-of-type { fill: #3B82F6; }
+  .rec-verificata .spunta { fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .rec-ruolo { font-size: .8rem; line-height: 1.35; color: var(--fg-2); }
+  .rec-piede { margin-top: .5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem 1.5rem; }
+  .rec-suggerimento { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-2); }
+  .rec-fonte { color: #fff; }
+  /* finestra "Leggi tutta" */
+  .rec-dialog { width: min(640px, calc(100vw - 2rem)); max-height: min(86svh, 760px); padding: 0; border: 0; border-radius: calc(var(--radius) + 4px); background: #fff; color: var(--inchiostro); box-shadow: 0 40px 100px -30px rgba(11, 18, 48, .7); overflow: auto; }
+  .rec-dialog::backdrop { background: rgba(11, 18, 48, .6); backdrop-filter: blur(6px); }
+  .rec-dialog[open] { animation: rec-apri .45s var(--uscita); }
+  @keyframes rec-apri { from { opacity: 0; transform: translateY(18px) scale(.98); } }
+  .rec-dialog-corpo { display: grid; gap: 1rem; padding: clamp(1.5rem, 4vw, 2.5rem); border-top: 5px solid var(--c); }
+  .rec-dialog-corpo .rec-virgolette { display: none; }
+  .rec-dialog-corpo .rec-ambito { justify-self: start; color: var(--inchiostro); background: color-mix(in srgb, var(--c) 16%, #fff); }
+  .rec-dialog-corpo .rec-frase { color: var(--inchiostro); font-size: clamp(1.3rem, 1.1rem + .8vw, 1.7rem); }
+  .rec-dialog-corpo .rec-testo { display: block; -webkit-line-clamp: unset; color: var(--grafite); font-size: 1.05rem; line-height: 1.6; }
+  .rec-dialog-corpo .rec-autore { border-top-color: var(--linea); }
+  .rec-dialog-corpo .rec-nome { color: var(--inchiostro); }
+  .rec-dialog-corpo .rec-ruolo { color: var(--grafite); }
+  .rec-chiudi { position: absolute; top: .8rem; right: .8rem; width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid var(--linea); background: #fff; color: var(--inchiostro); font-size: 1rem; cursor: pointer; }
+  .rec-chiudi:hover { border-color: var(--inchiostro); }
+  @media (max-width: 860px) {
+    .rec-comandi { width: 100%; }
+    .rec-play { flex: 1; }
+    .rec-scheda { padding: 1.2rem 1.15rem 1.1rem; }
+    .rec-virgolette { font-size: 3.2rem; }
+  }
+  @media (min-width: 1024px) { .recensioni-sezione { min-height: 100svh; display: grid; align-content: center; } }
+  @media (min-width: 1024px) and (max-height: 960px) { .rec-testo { -webkit-line-clamp: 2; } .rec-binario { margin-top: 1.25rem; } }
 </style>
