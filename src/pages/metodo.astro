@@ -19,8 +19,8 @@ const qualita = [
 
 const fonti = [
   { quando: '2021', cosa: 'Scienza & Sport', d: '“La psicologia del potenziamento”: l’articolo che ne presenta i fondamenti. Con Andrea Giammaria, Elena Sgherri ed Erika Betti.' },
-  { quando: '2021', cosa: 'Academy Nazionali F.I.R.', d: 'Webinar “Emozioni nella performance”.', href: 'https://www.psicologidellosport.it/emozioni-nella-performance-come-le-emozioni-trasformano-i-risultati-sport/' },
-  { quando: '2025', cosa: 'KM2025 · Università di Siena', d: 'Invited talk all’Industry Day sul motorsport.', href: 'https://www.iiakm.org/conference/KM2025/pdfs/KM2025_Industry-Day-Invited-Talk_BALDASSARRI.pdf' },
+  { quando: '2021', cosa: 'Academy Nazionali F.I.R.', d: 'Webinar “Emozioni nella performance”.' },
+  { quando: '2025', cosa: 'KM2025 · Università di Siena', d: 'Invited talk all’Industry Day sul motorsport.' },
 ];
 ---
 <Base title="Il metodo: Psicologia del Potenziamento® — Lorenzo Baldassarri" description="Oltre l'empowerment cognitivo: un metodo che allena insieme testa, emozioni, corpo e respiro, con misure e controlli continui." path="/metodo" headerOn="cruscotto">
@@ -133,7 +133,7 @@ const fonti = [
         {fonti.map((f) => (
           <li data-reveal>
             <span class="mono fase-n">{f.quando}</span>
-            {f.href ? <a class="h3 link-freccia" href={f.href} target="_blank" rel="noopener">{f.cosa} <span aria-hidden="true">↗</span></a> : <span class="h3">{f.cosa}</span>}
+            <span class="h3">{f.cosa}</span>
             <p class="muted">{f.d}</p>
           </li>
         ))}

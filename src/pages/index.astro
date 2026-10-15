@@ -144,9 +144,9 @@ const faq = [
 const iniziali = (nome) => nome.replace(/^Dr\.ssa\s+|^Dott\.\s+/, '').split(/\s+/).map((p) => p[0]).slice(0, 2).join('');
 
 const media = [
-  { tipo: 'Convegno · 2025', titolo: 'KM2025, Industry Day', testo: 'Invited talk sul metodo, Università di Siena.', href: 'https://www.iiakm.org/conference/KM2025/pdfs/KM2025_Industry-Day-Invited-Talk_BALDASSARRI.pdf' },
-  { tipo: 'TV · RTV38', titolo: 'Salute e prestazione', testo: 'Ospite del programma Tada con Riccardo Paterni.', href: 'https://www.mindup.live/en/blog/67/lorenzo-baldassarri-and-riccardo-paterni-talk-about-health-and-performance-in-the-rtv38-s-tada--television-program' },
-  { tipo: 'Articolo · TagMedicina', titolo: 'Sport, relax, ansia e stress', testo: 'Perché il movimento è anche un allenamento mentale.', href: 'https://www.tagmedicina.it/2022/02/05/lo-sport-relax-ansia-stress/' },
+  { tipo: 'Convegno · 2025', titolo: 'KM2025, Industry Day', testo: 'Invited talk sul metodo, Università di Siena.' },
+  { tipo: 'TV · RTV38', titolo: 'Salute e prestazione', testo: 'Ospite del programma Tada con Riccardo Paterni.' },
+  { tipo: 'Articolo · TagMedicina', titolo: 'Sport, relax, ansia e stress', testo: 'Perché il movimento è anche un allenamento mentale.' },
 ];
 ---
 <Base
@@ -540,7 +540,6 @@ const media = [
     </div>
     <div class="wrap rec-piede">
       <p class="rec-suggerimento mono" aria-hidden="true"><span class="hint-fine">Passa sopra per fermarle · trascina per scorrere</span><span class="hint-touch">Trascina per scorrere · tocca “Leggi tutta”</span></p>
-      <a class="link-freccia rec-fonte" href="https://www.mindup.live/reviews.php" target="_blank" rel="noopener">Tutte le recensioni su MindUP <span aria-hidden="true">↗</span><span class="sr-only"> (si apre in una nuova scheda)</span></a>
     </div>
     <dialog class="rec-dialog" data-rec-dialog aria-labelledby="rec-dialog-nome">
       <div class="rec-dialog-corpo" data-rec-dialog-corpo></div>
@@ -576,13 +575,11 @@ const media = [
       <ul class="griglia-3" role="list">
         {media.map((m, i) => (
           <li data-reveal style={`--d:${i * 0.08}s`}>
-            <a class="scheda media-scheda" href={m.href} target="_blank" rel="noopener">
+            <div class="scheda media-scheda">
               <span class="mono muted media-tipo">{m.tipo}</span>
               <span class="h3">{m.titolo}</span>
               <span class="muted">{m.testo}</span>
-              <span class="media-freccia" aria-hidden="true">↗</span>
-              <span class="sr-only">(si apre in una nuova scheda)</span>
-            </a>
+            </div>
           </li>
         ))}
       </ul>
@@ -978,7 +975,6 @@ const media = [
 
   /* ---------- MEDIA ---------- */
   .media-scheda { display: grid; gap: .75rem; height: 100%; text-decoration: none; position: relative; transition: border-color .5s var(--respiro), transform .6s var(--respiro); }
-  .media-scheda:hover { border-color: var(--inchiostro); transform: translateY(-3px); }
   .media-tipo { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
   .media-freccia { position: absolute; right: 1.5rem; top: 1.4rem; }
 
